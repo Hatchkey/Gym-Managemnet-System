@@ -1,5 +1,6 @@
 <?php
 include('includes/config.php');
+include('phpqrcode/qrlib.php');
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
@@ -30,6 +31,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $postcode = $_POST['postcode'];
     $occupation = $_POST['occupation'];
     $membershipType = $_POST['membershipType'];
+    $qrText = $_POST['fullname'] . (string)time();
+    $qrCodeImage = 'qrcode/generated_qrcode.png';
+    QRcode::png($qrText, $qrCodeImage);
 
     $membershipNumber = 'CA-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
 
@@ -43,9 +47,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
     $insertQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, address, country, postcode, occupation, 
-                    membership_type, membership_number, photo, created_at) 
+                    membership_type, membership_number, photo, qrcode, created_at) 
                     VALUES ('$fullname', '$dob', '$gender', '$contactNumber', '$email', '$address', '$country', '$postcode', '$occupation', 
-                            '$membershipType', '$membershipNumber', '$uniquePhotoName', NOW())";
+                            '$membershipType', '$membershipNumber', '$uniquePhotoName', '$qrText' , NOW())";
 
     if ($conn->query($insertQuery) === TRUE) {
         $response['success'] = true;
