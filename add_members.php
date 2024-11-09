@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $postcode = $_POST['postcode'];
     $occupation = $_POST['occupation'];
     $membershipType = $_POST['membershipType'];
-    $qrText = $_POST['fullname'] . (string)time();
+    $qrText = $_POST['fullname'] . (string)time() . (string)microtime(true);
     $qrCodeImage = 'qrcode/generated_qrcode.png';
     QRcode::png($qrText, $qrCodeImage);
 
