@@ -9,20 +9,20 @@ if (!isset($_SESSION['user_id'])) {
 // $pageTitle = 'Dashboard';
 
 //counter parts
-function getTotalMembersCount()
-{
-    global $conn;
+// function getTotalMembersCount()
+// {
+//     global $conn;
 
-    $totalMembersQuery = "SELECT COUNT(*) AS totalMembers FROM members";
-    $totalMembersResult = $conn->query($totalMembersQuery);
+//     $totalMembersQuery = "SELECT COUNT(*) AS totalMembers FROM members";
+//     $totalMembersResult = $conn->query($totalMembersQuery);
 
-    if ($totalMembersResult->num_rows > 0) {
-        $totalMembersRow = $totalMembersResult->fetch_assoc();
-        return $totalMembersRow['totalMembers'];
-    } else {
-        return 0;
-    }
-}
+//     if ($totalMembersResult->num_rows > 0) {
+//         $totalMembersRow = $totalMembersResult->fetch_assoc();
+//         return $totalMembersRow['totalMembers'];
+//     } else {
+//         return 0;
+//     }
+// }
 
 function getTotalMembershipTypesCount()
 {
@@ -172,69 +172,7 @@ if ($fetchLogoResult->num_rows > 0) {
                 <div class="container-fluid">
                     <!-- Info boxes -->
 
-                    <?php if ($_SESSION['role'] == 'admin') { ?>
-                        <div class="row">
-
-                            <div class="col-12 col-sm-6 col-md-3">
-                                <div class="info-box">
-                                    <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-users"></i></span>
-
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Total Members</span>
-                                        <span class="info-box-number">
-                                            <?php echo getTotalMembersCount(); ?>
-                                        </span>
-                                    </div>
-                                    <!-- /.info-box-content -->
-                                </div>
-                                <!-- /.info-box -->
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-12 col-sm-6 col-md-3">
-                                <div class="info-box mb-3">
-                                    <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-list"></i></span>
-
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Membership Types</span>
-                                        <span class="info-box-number"><?php echo getTotalMembershipTypesCount(); ?></span>
-                                    </div>
-                                    <!-- /.info-box-content -->
-                                </div>
-                                <!-- /.info-box -->
-                            </div>
-                            <!-- /.col -->
-
-                            <!-- fix for small devices only -->
-                            <div class="clearfix hidden-md-up"></div>
-
-                            <div class="col-12 col-sm-6 col-md-3">
-                                <div class="info-box mb-3">
-                                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-hourglass-half"></i></span>
-
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Expiring Soon</span>
-                                        <span class="info-box-number"><?php echo getExpiringSoonCount(); ?></span>
-                                    </div>
-                                    <!-- /.info-box-content -->
-                                </div>
-                                <!-- /.info-box -->
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-12 col-sm-6 col-md-3">
-                                <div class="info-box mb-3">
-                                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-coins"></i></span>
-
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Total Revenue</span>
-                                        <span class="info-box-number"><?php echo getTotalRevenueWithCurrency(); ?></span>
-                                    </div>
-                                    <!-- /.info-box-content -->
-                                </div>
-                                <!-- /.info-box -->
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                    <?php } ?>
+                  
 
                     <!-- /.row -->
                     <?php if ($_SESSION['role'] == 'admin') { ?>

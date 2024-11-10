@@ -1,6 +1,7 @@
 <?php
 include('includes/config.php');
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['login'])) {
         $email = $_POST['email'];
@@ -10,32 +11,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error_message = "Email and password are required!";
         } else {
             $hashed_password = md5($password);
-            // $test = $hashed_password;
-            $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$hashed_password'";
+           // echo $hashed_password;
+            // $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$hashed_password'";
+            $sql = "SELECT * FROM members WHERE email = '$email' AND password = '$hashed_password'";
+
             $result = $conn->query($sql);
 
+            //  $hashed_password = md5($password);
             if ($result->num_rows == 1) {
                 $row = $result->fetch_assoc();
+                // Verify the user-typed password against the hashed password from the database
 
+                // Password is correct, set session variables
                 $_SESSION['user_id'] = $row['id'];
                 $_SESSION['email'] = $row['email'];
                 $_SESSION['role'] = $row['role'];
                 header("Location: dashboard.php");
-
-                // if ($_SESSION['role'] == 'admin') {
-                //     header("Location: dashboard.php");
-                //     exit();
-                // } else {
-                //     header("Location: /gym/user/dashboard.php");
-                //     exit();
-                // }
             } else {
+                // Password is incorrect
                 $error_message = "Invalid email or password!";
             }
+            // if ($result->num_rows == 1) {
+            //     $row = $result->fetch_assoc();
+
+            //     $_SESSION['user_id'] = $row['id'];
+            //     $_SESSION['email'] = $row['email'];
+            //     $_SESSION['role'] = $row['role'];
+            //     header("Location: dashboard.php");
+
+            // } else {
+            //     $error_message = "Invalid email or password!";
+            // }
+
         }
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
