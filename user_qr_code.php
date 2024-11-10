@@ -5,152 +5,41 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
 }
-
-// $pageTitle = 'Dashboard';
-
-//counter parts
-// function getTotalMembersCount()
-// {
-//     global $conn;
-
-//     $totalMembersQuery = "SELECT COUNT(*) AS totalMembers FROM members";
-//     $totalMembersResult = $conn->query($totalMembersQuery);
-
-//     if ($totalMembersResult->num_rows > 0) {
-//         $totalMembersRow = $totalMembersResult->fetch_assoc();
-//         return $totalMembersRow['totalMembers'];
-//     } else {
-//         return 0;
-//     }
-// }
-
-function getTotalMembershipTypesCount()
+function generateQrCodeForMember($conn)
 {
-    global $conn;
+    // Fetch member email and ID from session
+    $memberEmail = $_SESSION['email'];
+    $memberId = $_SESSION['user_id'];
 
-    $totalMembershipTypesQuery = "SELECT COUNT(*) AS totalMembershipTypes FROM membership_types";
-    $totalMembershipTypesResult = $conn->query($totalMembershipTypesQuery);
+    // Query to fetch member details
+    $memberQrCodeQuery = "SELECT email, id, qrcode FROM members WHERE email = '$memberEmail' AND id = '$memberId'";
+    $memberQrCodeResult = $conn->query($memberQrCodeQuery);
 
-    if ($totalMembershipTypesResult->num_rows > 0) {
-        $totalMembershipTypesRow = $totalMembershipTypesResult->fetch_assoc();
-        return $totalMembershipTypesRow['totalMembershipTypes'];
+    if ($memberQrCodeResult->num_rows > 0) {
+        // Fetch the data
+        $memberQrCodeRow = $memberQrCodeResult->fetch_assoc();
+
+        // Ensure 'qrcode' key exists
+        if (!empty($memberQrCodeRow['qrcode'])) {
+            // The QR code text fetched from the database
+            $text = $memberQrCodeRow['qrcode'];
+
+            // Set the file path where the QR code will be saved
+            $filePath = 'qrcode/' . $text . '.png';
+
+            // Generate and save the QR code as a PNG image
+            QRcode::png($text, $filePath);
+            return $filePath;
+        } else {
+            return "No QR code text found for User $memberId.";
+        }
     } else {
-        return 0;
+        return "No user found with the provided email and ID.";
     }
 }
 
-function getExpiringSoonCount()
-{
-    global $conn;
-
-    $expiringSoonQuery = "SELECT COUNT(*) AS expiringSoon FROM members WHERE expiry_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 7 DAY";
-    $expiringSoonResult = $conn->query($expiringSoonQuery);
-
-    if ($expiringSoonResult->num_rows > 0) {
-        $expiringSoonRow = $expiringSoonResult->fetch_assoc();
-        return $expiringSoonRow['expiringSoon'];
-    } else {
-        return 0;
-    }
-}
-
-// function getTotalRevenue()
-// {
-//     global $conn;
-
-//     $totalRevenueQuery = "SELECT SUM(total_amount) AS totalRevenue FROM renew";
-//     $totalRevenueResult = $conn->query($totalRevenueQuery);
-
-//     if ($totalRevenueResult->num_rows > 0) {
-//         $totalRevenueRow = $totalRevenueResult->fetch_assoc();
-//         return $totalRevenueRow['totalRevenue'];
-//     } else {
-//         return 0;
-//     }
-// }
-
-function getTotalRevenueWithCurrency()
-{
-    global $conn;
-
-    $currencyQuery = "SELECT currency FROM settings LIMIT 1";
-    $currencyResult = $conn->query($currencyQuery);
-
-    if ($currencyResult->num_rows > 0) {
-        $currencyRow = $currencyResult->fetch_assoc();
-        $currencySymbol = $currencyRow['currency'];
-    } else {
-        $currencySymbol = '$'; // Default currency symbol (you can change this as needed)
-    }
-
-    $totalRevenueQuery = "SELECT SUM(total_amount) AS totalRevenue FROM renew";
-    $totalRevenueResult = $conn->query($totalRevenueQuery);
-
-    if ($totalRevenueResult->num_rows > 0) {
-        $totalRevenueRow = $totalRevenueResult->fetch_assoc();
-        $totalRevenue = $totalRevenueRow['totalRevenue'];
-    } else {
-        $totalRevenue = 0;
-    }
-
-    return $currencySymbol . number_format($totalRevenue, 2);
-}
-
-function getNewMembersCount()
-{
-    global $conn;
-
-    $twentyFourHoursAgo = time() - (24 * 60 * 60);
-
-    $newMembersQuery = "SELECT COUNT(*) AS newMembersCount FROM members WHERE created_at >= FROM_UNIXTIME($twentyFourHoursAgo)";
-    $newMembersResult = $conn->query($newMembersQuery);
-
-    if ($newMembersResult) {
-        $row = $newMembersResult->fetch_assoc();
-        return $row['newMembersCount'];
-    } else {
-        return 0;
-    }
-}
-
-// Function to display the total count of new members with HTML markup
-function displayNewMembersCount()
-{
-    $newMembersCount = getNewMembersCount();
-    echo "<span class='info-box-number'>$newMembersCount</span>";
-}
-
-
-function getExpiredMembersCount()
-{
-    global $conn;
-
-    $expiredMembersQuery = "SELECT COUNT(*) AS expiredMembersCount FROM members WHERE (expiry_date IS NULL OR expiry_date < NOW())";
-    $expiredMembersResult = $conn->query($expiredMembersQuery);
-
-    if ($expiredMembersResult) {
-        $row = $expiredMembersResult->fetch_assoc();
-        return $row['expiredMembersCount'];
-    } else {
-        return 0;
-    }
-}
-
-function displayExpiredMembersCount()
-{
-    $expiredMembersCount = getExpiredMembersCount();
-    echo "<span class='info-box-number'>$expiredMembersCount</span>";
-}
-
-$fetchLogoQuery = "SELECT logo FROM settings WHERE id = 1";
-$fetchLogoResult = $conn->query($fetchLogoQuery);
-
-if ($fetchLogoResult->num_rows > 0) {
-    $settings = $fetchLogoResult->fetch_assoc();
-    $logoPath = $settings['logo'];
-} else {
-    $logoPath = 'dist/img/default-logo.png';
-}
+// Call the function
+$qrCodePath = generateQrCodeForMember($conn);
 
 ?>
 
@@ -164,59 +53,29 @@ if ($fetchLogoResult->num_rows > 0) {
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-
             <?php include('includes/pagetitle.php'); ?>
-
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
                     <!-- Info boxes -->
-
-                  
-
                     <!-- /.row -->
-                    <?php if ($_SESSION['role'] == 'admin') { ?>
-                        <div class="row">
-                            <div class="col-12 col-sm-6 col-md-3">
-                                <div class="info-box mb-3">
-                                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">New Members</span>
-                                        <span class="info-box-number"><?php displayNewMembersCount(); ?></span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-md-3">
-                                <div class="info-box mb-3">
-                                    <span class="info-box-icon bg-maroon elevation-1"><i class="fas fa-times"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Expired Membership</span>
-                                        <span class="info-box-number"><?php displayExpiredMembersCount(); ?></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    <?php } ?>
-
                     <!-- Main row -->
                     <div class="row ">
-
                         <div class="col-md-12">
-
-
-
                             <!-- Member LIST -->
-                            <?php
-                            // Fetch recently joined members
-                            $recentMembersQuery = "SELECT * FROM members ORDER BY created_at DESC LIMIT 4";
-                            $recentMembersResult = $conn->query($recentMembersQuery);
-                            ?>
-
                             <div class="card ">
                                 <!-- /.card-header -->
-                                <div class="card-body p-0 flex justify-center ">
-                                    <img src="uploads/cfg-logo.png" alt="..." class="img-thumbnail"  width="40%" height="300">
+                                <!-- <div class="card-body p-0 flex justify-center ">
+                                    <img src="uploads/cfg-logo.png" alt="..." class="img-thumbnail" width="40%" height="300">
+                                </div> -->
+                                <div class="card-body p-0 flex justify-center">
+                                    <?php if (file_exists($qrCodePath)) : ?>
+                                        <!-- Display the QR code if it was generated -->
+                                        <img src="<?php echo htmlspecialchars($qrCodePath); ?>" alt="Generated QR Code" class="img-thumbnail" width="40%" height="300">
+                                    <?php else : ?>
+                                        <!-- Fallback image or message -->
+                                        <img src="uploads/cfg-logo.png" alt="Default Logo" class="img-thumbnail" width="40%" height="300">
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
