@@ -193,6 +193,7 @@ if ($fetchLogoResult->num_rows > 0) {
 
                                 <div class="card-body p-0 flex justify-center py-1">
                                     <img src="uploads/cfg-logo.png" alt="..." class="img-thumbnail" width="35%" height="350">
+                                    <input type="text" name="qr_code" id="qr_code" hidden>
                                 </div>
                                 <div class=" flex justify-center py-2">
                                     <button type="button" class="btn btn-primary">
