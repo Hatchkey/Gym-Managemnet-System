@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sets = $_POST['sets'];
     $reps = $_POST['reps'];
     $duration_time = $_POST['duration_time'];
-
+    
 
     // $membershipNumber = 'CA-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
 
