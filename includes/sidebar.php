@@ -13,82 +13,84 @@ $countQuery = "SELECT COUNT(*) as total_types FROM membership_types";
 $countResult = $conn->query($countQuery);
 
 if ($countResult && $countResult->num_rows > 0) {
-    $totalCount = $countResult->fetch_assoc()['total_types'];
+  $totalCount = $countResult->fetch_assoc()['total_types'];
 } else {
-    $totalCount = 0;
+  $totalCount = 0;
 }
 ?>
- 
- 
- <!-- Main Sidebar Container -->
- <aside class="main-sidebar sidebar-light-blue elevation-4">
-    <!-- Brand Logo -->
-    <a href="" class="brand-link">
+
+
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-light-blue elevation-4">
+  <!-- Brand Logo -->
+  <a href="" class="brand-link">
     <img src="uploads/cfg-logo.png" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
     <span class="brand-text font-weight-light"><?php echo getSystemName(); ?></span>
-</a>
+  </a>
 
-<?php
-function getSystemName()
-{
+  <?php
+  function getSystemName()
+  {
     global $conn;
 
     $systemNameQuery = "SELECT system_name FROM settings";
     $systemNameResult = $conn->query($systemNameQuery);
 
     if ($systemNameResult->num_rows > 0) {
-        $systemNameRow = $systemNameResult->fetch_assoc();
-        return $systemNameRow['system_name'];
+      $systemNameRow = $systemNameResult->fetch_assoc();
+      return $systemNameRow['system_name'];
     } else {
-        return 'Camalig Fitness Gym';
+      return 'Camalig Fitness Gym';
     }
-}
+  }
 
-function getLogoUrl()
-{
+  function getLogoUrl()
+  {
     global $conn;
 
     $logoQuery = "SELECT logo FROM settings";
     $logoResult = $conn->query($logoQuery);
 
     if ($logoResult->num_rows > 0) {
-        $logoRow = $logoResult->fetch_assoc();
-        return $logoRow['logo'];
+      $logoRow = $logoResult->fetch_assoc();
+      return $logoRow['logo'];
     } else {
-        return 'dist/img/AdminLTELogo.png';
+      return 'dist/img/AdminLTELogo.png';
     }
-}
-?>
+  }
+  ?>
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <!-- Sidebar user panel (optional) -->
-      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-       
-        <div class="info">
-          
-        </div>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+
+      <div class="info">
+
       </div>
+    </div>
 
-      <!-- Sidebar Menu -->
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <?php
+        // Render if the login user is ADMIN
+        if ($_SESSION['role'] == 'admin') {
+        ?>
+          <!-- Admin Menu -->
           <li class="nav-item">
             <a href="dashboard.php" class="nav-link <?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-              </p>
+              <p>Dashboard</p>
             </a>
           </li>
-          
+
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link <?php echo ($current_page == 'add_type.php' || $current_page == 'view_type.php' || $current_page == 'edit_type.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-th-list"></i>
               <p>
                 Membership Types
                 <i class="fas fa-angle-left right"></i>
-                <!-- <span class="badge badge-info right"><?php echo $totalCount; ?></span> -->
               </p>
             </a>
             <ul class="nav nav-treeview">
@@ -106,7 +108,7 @@ function getLogoUrl()
               </li>
             </ul>
           </li>
-        
+
           <li class="nav-item">
             <a href="add_members.php" class="nav-link <?php echo ($current_page == 'add_members.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-users"></i>
@@ -123,7 +125,7 @@ function getLogoUrl()
 
           <li class="nav-item">
             <a href="list_renewal.php" class="nav-link <?php echo ($current_page == 'list_renewal.php' || $current_page == 'renew.php') ? 'active' : ''; ?>">
-            <i class="nav-icon fas fa-undo"></i>
+              <i class="nav-icon fas fa-undo"></i>
               <p>Renewal</p>
             </a>
           </li>
@@ -142,6 +144,41 @@ function getLogoUrl()
             </a>
           </li>
 
+
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link <?php echo ($current_page == 'add_workout.php' || $current_page == 'manage_workout.php' || $current_page == 'edit_workout.php') ? 'active' : ''; ?>">
+              <i class="nav-icon fas fa-clipboard-list"></i>
+              <p>
+                Workout Program
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="add_workout.php" class="nav-link">
+                  <i class="fas fa-circle-notch nav-icon"></i>
+                  <p>Add Workout Program</p>
+                </a>
+              </li>
+              
+              <li class="nav-item">
+                <a href="manage_workout.php" class="nav-link">
+                  <i class="fas fa-circle-notch nav-icon"></i>
+                  <p>Manage Workout List</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+
+          <li class="nav-item">
+            <a href="scanner.php" class="nav-link flex items-center <?php echo ($current_page == 'scanner.php') ? 'active' : ''; ?>">
+              <span class="nav-icon material-symbols-outlined ">
+                qr_code_scanner
+              </span>
+              <p class="">Scanner</p>
+            </a>
+          </li>
+
           <li class="nav-item">
             <a href="settings.php" class="nav-link <?php echo ($current_page == 'settings.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-cogs"></i>
@@ -156,9 +193,54 @@ function getLogoUrl()
             </a>
           </li>
 
-        </ul>
-      </nav>
-      <!-- /.sidebar-menu -->
-    </div>
-    <!-- /.sidebar -->
-  </aside>
+        <?php
+        }
+        // Render if the login user is CUSTOMER
+        elseif ($_SESSION['role'] == 'user') {
+        ?>
+          <!-- User Menu -->
+          <li class="nav-item">
+            <a href="dashboard.php" class="nav-link <?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="manage_workout.php" class="nav-link <?php echo ($current_page == 'manage_workout.php') ? 'active' : ''; ?>">
+              <i class="nav-icon fas fa-clipboard-list"></i>
+              <p>Workout Program</p>
+            </a>
+          </li>
+          <!-- Additional User Menu Item (e.g., QR code) -->
+          <li class="nav-item">
+            <a href="user_qr_code.php" class="nav-link <?php echo ($current_page == 'user_qr_code.php') ? 'active' : ''; ?>">
+              <i class="nav-icon fas fa-qrcode"></i>
+              <p>QR Code</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="user_profile.php" class="nav-link <?php echo ($current_page == 'user_profile.php') ? 'active' : ''; ?>">
+
+              <i class="fa-solid fas fa-user nav-icon"></i>
+              <p>Profile</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="logout.php" class="nav-link <?php echo ($current_page == 'logout.php') ? 'active' : ''; ?>">
+              <i class="nav-icon fas fa-power-off"></i>
+              <p>Logout</p>
+            </a>
+          </li>
+        <?php
+        }
+        ?>
+
+
+
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>
