@@ -49,10 +49,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $uniquePhotoName = 'default.jpg';
     }
 
-    $insertQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, password, address, country, postcode, occupation, 
-                    membership_type, membership_number, photo, qrcode, created_at,role) 
+    $insertQuery = "INSERT INTO users (fullname, dob, gender, contact_number, email, password, address, country, postcode, occupation, 
+                    membership_type, membership_number, photo, qrcode, created_at,role,registration_date) 
                     VALUES ('$fullname', '$dob', '$gender', '$contactNumber', '$email', '$hashedPassword' , '$address', '$country', '$postcode', '$occupation', 
-                            '$membershipType', '$membershipNumber', '$uniquePhotoName', '$qrText' , NOW(),'$defaultUserRole')";
+                            '$membershipType', '$membershipNumber', '$uniquePhotoName', '$qrText' , NOW(),'$defaultUserRole', NOW())";
 
     if ($conn->query($insertQuery) === TRUE) {
         $response['success'] = true;

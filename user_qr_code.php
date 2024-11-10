@@ -12,7 +12,7 @@ function generateQrCodeForMember($conn)
     $memberId = $_SESSION['user_id'];
 
     // Query to fetch member details
-    $memberQrCodeQuery = "SELECT email, id, qrcode FROM members WHERE email = '$memberEmail' AND id = '$memberId'";
+    $memberQrCodeQuery = "SELECT email, id, qrcode FROM users WHERE email = '$memberEmail' AND id = '$memberId'";
     $memberQrCodeResult = $conn->query($memberQrCodeQuery);
 
     if ($memberQrCodeResult->num_rows > 0) {
@@ -68,6 +68,7 @@ $qrCodePath = generateQrCodeForMember($conn);
                                 <!-- <div class="card-body p-0 flex justify-center ">
                                     <img src="uploads/cfg-logo.png" alt="..." class="img-thumbnail" width="40%" height="300">
                                 </div> -->
+                              
                                 <div class="card-body p-0 flex justify-center">
                                     <?php if (file_exists($qrCodePath)) : ?>
                                         <!-- Display the QR code if it was generated -->
