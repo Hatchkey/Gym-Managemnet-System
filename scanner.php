@@ -195,12 +195,13 @@ if ($fetchLogoResult->num_rows > 0) {
                                     <img src="uploads/cfg-logo.png" alt="..." class="img-thumbnail" width="35%" height="350">
                                     <input type="text" name="qr_code" id="qr_code" hidden>
                                 </div> -->
-                                <div id="my_camera"></div>
+                                <video id="my_camera" width="320" height="240" autoplay></video>
                                 <div class=" flex justify-center py-2">
-                                    <button onclick="take_snapshot()">
+                                    <button onclick="startScanning()">
                                         Scan
                                     </button>
                                 </div>
+                                <input type="text" id="qr_code_text" placeholder="QR Code text will appear here" readonly />
                             </div>
                         </div>
                         <!-- /.col -->
@@ -231,28 +232,57 @@ if ($fetchLogoResult->num_rows > 0) {
 
     <?php include('includes/footer.php'); ?>
 </body>
-<script type="text/javascript" src="https://cdn.rawgit.com/jhuckaby/webcamjs/1.0.25/webcam.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
 <script type="text/javascript">
-    // Set up the webcam
-    Webcam.set({
-        width: 320,
-        height: 240,
-        image_format: 'jpeg',
-        jpeg_quality: 90
-    });
+        let video = document.getElementById('my_camera');
+        let canvasElement = document.createElement('canvas');
+        let canvas = canvasElement.getContext('2d');
+        let isScanning = false;
 
-    Webcam.attach('#my_camera');
+        // Start scanning when the button is clicked
+        function startScanning() {
+            if (navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                    .then(function(stream) {
+                        // Attach the webcam stream to the video element
+                        video.srcObject = stream;
+                        video.setAttribute('playsinline', true); // Required for iOS
+                        video.play();
+                        
+                        // Start scanning once the video is playing
+                        isScanning = true;
+                        scanQRCode();
+                    })
+                    .catch(function(err) {
+                        console.log("Error: " + err);
+                    });
+            } else {
+                alert("Webcam not supported on this device.");
+            }
+        }
 
-    // Take a snapshot and display it
-    function take_snapshot() {
-        Webcam.snap(function(data_uri) {
-            // Display the snapshot in the results div
-            document.getElementById('results').innerHTML = 
-                '<img src="'+data_uri+'"/>';
-            
-            // Set the captured image as a hidden field value (to send it in the form)
-            document.getElementById('image').value = data_uri;
-        });
-    }
-</script>
+        // Scan QR code in the video stream
+        function scanQRCode() {
+            if (isScanning) {
+                // Draw the video frame to the canvas
+                canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+                let imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+                let code = jsQR(imageData.data, canvasElement.width, canvasElement.height);
+
+                if (code) {
+                    // If a QR code is found, set the text to the textbox
+                    document.getElementById('qr_code_text').value = code.data;
+                    stopScanning(); // Stop scanning after finding the QR code
+                } else {
+                    // Keep scanning
+                    requestAnimationFrame(scanQRCode);
+                }
+            }
+        }
+
+        // Stop scanning
+        function stopScanning() {
+            isScanning = false;
+            video.srcObject.getTracks().forEach(track => track.stop());
+        }
 </html>
