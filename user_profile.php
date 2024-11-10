@@ -1,6 +1,5 @@
 <?php
 include('includes/config.php');
-include('phpqrcode/qrlib.php');
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
@@ -22,42 +21,25 @@ function generateUniqueFileName($originalName)
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $fullname = $_POST['fullname'];
-    $dob = $_POST['dob'];
-    $gender = $_POST['gender'];
-    $contactNumber = $_POST['contactNumber'];
-    $email = $_POST['email'];
-    $address = $_POST['address'];
-    $country = $_POST['country'];
-    $postcode = $_POST['postcode'];
-    $occupation = $_POST['occupation'];
-    $membershipType = $_POST['membershipType'];
-    $password = $_POST['password'];
-    $qrText = $_POST['fullname'] . (string)time() . (string)microtime(true);
-    $qrCodeImage = 'qrcode/generated_qrcode.png';
-    $defaultUserRole = 'user';
-    QRcode::png($qrText, $qrCodeImage);
+    $fullname = $_POST['workout_name'];
+    $equipment_type = $_POST['equipment_type'];
+    $target_muscle = $_POST['target_muscle'];
+    $sets = $_POST['sets'];
+    $reps = $_POST['reps'];
+    $duration_time = $_POST['duration_time'];
 
-    $membershipNumber = 'CA-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
 
-    if (!empty($_FILES['photo']['name'])) {
-        $uploadedPhoto = $_FILES['photo'];
-        $uniquePhotoName = generateUniqueFileName($uploadedPhoto['name']);
+    // $membershipNumber = 'CA-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
 
-        move_uploaded_file($uploadedPhoto['tmp_name'], 'uploads/member_photos/' . $uniquePhotoName);
-    } else {
-        $uniquePhotoName = 'default.jpg';
-    }
-
-    $insertQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, password, address, country, postcode, occupation, 
-                    membership_type, membership_number, photo, qrcode, created_at,role) 
-                    VALUES ('$fullname', '$dob', '$gender', '$contactNumber', '$email', '$password' , '$address', '$country', '$postcode', '$occupation', 
-                            '$membershipType', '$membershipNumber', '$uniquePhotoName', '$qrText' , NOW(),'$defaultUserRole')";
+    $insertQuery = "INSERT INTO workout_list (workout_name,  equipment_type, target_muscle_group,sets,reps,duration_time) 
+                    VALUES ( '$fullname', '$equipment_type', '$target_muscle', '$sets', '$reps', '$duration_time')";
 
     if ($conn->query($insertQuery) === TRUE) {
         $response['success'] = true;
-        $response['message'] = 'Member added successfully! Membership Number: ' . $membershipNumber;
+        $response['message'] = 'Workout list added successfully! 
+         ';
     } else {
+        $response['success'] = false;
         $response['message'] = 'Error: ' . $conn->error;
     }
 }
@@ -75,6 +57,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php include('includes/sidebar.php'); ?>
 
         <!-- Content Wrapper. Contains page content -->
+        <!-- TODO: To be implemented -->
+
         <div class="content-wrapper">
             <?php include('includes/pagetitle.php'); ?>
 
@@ -103,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <!-- general form elements -->
                             <div class="card card-primary">
                                 <div class="card-header">
-                                    <h3 class="card-title"><i class="fas fa-keyboard"></i> Add Members Form</h3>
+                                    <h3 class="card-title"><i class="fas fa-keyboard"></i> Edit User Profile </h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
@@ -196,10 +180,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                         <div class="row mt-3">
 
-                                            <div class="col-sm-6">
+                                            <!-- <div class="col-sm-6">
                                                 <label for="photo">Member Photo</label>
                                                 <input type="file" class="form-control-file" id="photo" name="photo">
-                                            </div>
+                                            </div> -->
                                         </div>
                                         <div class="row mt-3">
 
@@ -255,5 +239,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <?php include('includes/footer.php'); ?>
 </body>
+<script type="text/javascript">
+    // Check if the success message is present
+    window.onload = function() {
+        var successMessage = document.getElementById("success-message");
+
+        if (successMessage) {
+            // Hide the success message after 2000 milliseconds (2 seconds)
+            setTimeout(function() {
+                successMessage.style.display = 'none';
+            }, 1500);
+        }
+    }
+</script>
 
 </html>
