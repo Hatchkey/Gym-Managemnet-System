@@ -12,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $hashed_password = md5($password);
            //echo $hashed_password;
             $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$hashed_password'";
-            $result = $conn->query($sql);
+            $result = $conn->query($sql); 
             if ($result->num_rows == 1) {
                 $row = $result->fetch_assoc();
                 // Check if the email also exists in the 'members' table
