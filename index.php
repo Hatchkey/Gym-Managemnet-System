@@ -10,18 +10,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (empty($email) || empty($password)) {
             $error_message = "Email and password are required!";
         } else {
-            $hashed_password = md5($password);
-           // echo $hashed_password;
-            // $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$hashed_password'";
-            $sql = "SELECT * FROM members WHERE email = '$email' AND password = '$hashed_password'";
-
+            $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$hashed_password'";
             $result = $conn->query($sql);
-
-            //  $hashed_password = md5($password);
             if ($result->num_rows == 1) {
                 $row = $result->fetch_assoc();
-                // Verify the user-typed password against the hashed password from the database
-
                 // Password is correct, set session variables
                 $_SESSION['user_id'] = $row['id'];
                 $_SESSION['email'] = $row['email'];
@@ -31,18 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Password is incorrect
                 $error_message = "Invalid email or password!";
             }
-            // if ($result->num_rows == 1) {
-            //     $row = $result->fetch_assoc();
-
-            //     $_SESSION['user_id'] = $row['id'];
-            //     $_SESSION['email'] = $row['email'];
-            //     $_SESSION['role'] = $row['role'];
-            //     header("Location: dashboard.php");
-
-            // } else {
-            //     $error_message = "Invalid email or password!";
-            // }
-
+        
         }
     }
 }
