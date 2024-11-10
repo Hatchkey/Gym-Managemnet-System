@@ -191,12 +191,13 @@ if ($fetchLogoResult->num_rows > 0) {
                                     <h3 class="card-title">Scan QR Code</h3>
                                 </div>
 
-                                <div class="card-body p-0 flex justify-center py-1">
+                                <!-- <div class="card-body p-0 flex justify-center py-1">
                                     <img src="uploads/cfg-logo.png" alt="..." class="img-thumbnail" width="35%" height="350">
                                     <input type="text" name="qr_code" id="qr_code" hidden>
-                                </div>
+                                </div> -->
+                                <div id="my_camera"></div>
                                 <div class=" flex justify-center py-2">
-                                    <button type="button" class="btn btn-primary">
+                                    <button onclick="take_snapshot()">
                                         Scan
                                     </button>
                                 </div>
@@ -230,5 +231,28 @@ if ($fetchLogoResult->num_rows > 0) {
 
     <?php include('includes/footer.php'); ?>
 </body>
+<script type="text/javascript" src="https://cdn.rawgit.com/jhuckaby/webcamjs/1.0.25/webcam.min.js"></script>
+<script type="text/javascript">
+    // Set up the webcam
+    Webcam.set({
+        width: 320,
+        height: 240,
+        image_format: 'jpeg',
+        jpeg_quality: 90
+    });
 
+    Webcam.attach('#my_camera');
+
+    // Take a snapshot and display it
+    function take_snapshot() {
+        Webcam.snap(function(data_uri) {
+            // Display the snapshot in the results div
+            document.getElementById('results').innerHTML = 
+                '<img src="'+data_uri+'"/>';
+            
+            // Set the captured image as a hidden field value (to send it in the form)
+            document.getElementById('image').value = data_uri;
+        });
+    }
+</script>
 </html>
