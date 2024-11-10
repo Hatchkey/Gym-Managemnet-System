@@ -183,6 +183,7 @@ if ($fetchLogoResult->num_rows > 0) {
                     <span class="info-box-text">Total Workout List</span>
                     <span class="info-box-number">
                       <?php echo getTotalWorkoutList(); ?>
+
                     </span>
                   </div>
                   <!-- /.info-box-content -->
@@ -202,6 +203,8 @@ if ($fetchLogoResult->num_rows > 0) {
                     <span class="info-box-text">Total Members</span>
                     <span class="info-box-number">
                       <?php echo getTotalMembersCount(); ?>
+                      <!-- <?php echo md5('admin') ?> -->
+
                     </span>
                   </div>
                   <!-- /.info-box-content -->

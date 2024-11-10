@@ -6,24 +6,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['login'])) {
         $email = $_POST['email'];
         $password = $_POST['password'];
-
         if (empty($email) || empty($password)) {
             $error_message = "Email and password are required!";
         } else {
+            $hashed_password = md5($password);
+           //echo $hashed_password;
             $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$hashed_password'";
-            $result = $conn->query($sql);
+            $result = $conn->query($sql); 
             if ($result->num_rows == 1) {
                 $row = $result->fetch_assoc();
+                // Check if the email also exists in the 'members' table
+                $member_check_sql = "SELECT * FROM members WHERE email = '$email'";
+                $member_result = $conn->query($member_check_sql);
+                $memberRow = $member_result->fetch_assoc();
                 // Password is correct, set session variables
-                $_SESSION['user_id'] = $row['id'];
-                $_SESSION['email'] = $row['email'];
-                $_SESSION['role'] = $row['role'];
-                header("Location: dashboard.php");
+                if ($member_result->num_rows == 1) {
+                    // Member is found, login successful
+                    // Set session variables
+                    $_SESSION['user_id'] = $row['id'];
+                    $_SESSION['email'] = $row['email'];
+                    $_SESSION['role'] = $memberRow['role']; 
+
+                    header("Location: dashboard.php");
+                } else {
+                    // Email is not found in the 'members' table
+                    $error_message = "Email not found in the members list!";
+                }
             } else {
                 // Password is incorrect
                 $error_message = "Invalid email or password!";
             }
-        
         }
     }
 }

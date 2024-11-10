@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $qrCodeImage = 'qrcode/generated_qrcode.png';
     $defaultUserRole = 'user';
     QRcode::png($qrText, $qrCodeImage);
-    $hashedPassword=md5($password);
+    $hashedPassword = md5($password);
     $membershipNumber = 'CA-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
 
     if (!empty($_FILES['photo']['name'])) {
@@ -49,11 +49,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $uniquePhotoName = 'default.jpg';
     }
 
-    $insertQuery = "INSERT INTO users (fullname, dob, gender, contact_number, email, password, address, country, postcode, occupation, 
-                    membership_type, membership_number, photo, qrcode, created_at,role,registration_date) 
+    $insertQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, password, address, country, postcode, occupation, 
+                    membership_type, membership_number, photo, qrcode, created_at,role) 
                     VALUES ('$fullname', '$dob', '$gender', '$contactNumber', '$email', '$hashedPassword' , '$address', '$country', '$postcode', '$occupation', 
-                            '$membershipType', '$membershipNumber', '$uniquePhotoName', '$qrText' , NOW(),'$defaultUserRole', NOW())";
+                            '$membershipType', '$membershipNumber', '$uniquePhotoName', '$qrText' , NOW(),'$defaultUserRole')";
+    $insertUserQuery = "INSERT INTO users (email, password) 
+                    VALUES ('$email', '$hashedPassword')";
 
+    if ($conn->query($insertUserQuery) === TRUE) {
+        $response['success'] = true;
+    }
     if ($conn->query($insertQuery) === TRUE) {
         $response['success'] = true;
         $response['message'] = 'Member added successfully! Membership Number: ' . $membershipNumber;
@@ -66,6 +71,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 <?php include('includes/header.php'); ?>
+
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
     <div class="wrapper">
         <?php include('includes/nav.php'); ?>
