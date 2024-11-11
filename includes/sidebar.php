@@ -58,6 +58,25 @@ if ($countResult && $countResult->num_rows > 0) {
       return 'dist/img/AdminLTELogo.png';
     }
   }
+
+  function hasUserPaid() {
+    global $conn;
+    // Assume you already have a database connection $conn
+    $paymentSql = "SELECT date FROM payment WHERE member = '" . $_SESSION['user_id'] . "' ORDER BY created_at DESC LIMIT 1";
+    $resultPayment = $conn->query($paymentSql); 
+    $rowPayment = $resultPayment->fetch_assoc();
+    
+    $paymentDate = new DateTime($rowPayment['date']);
+    $currentDate = new DateTime();
+
+    $interval = $paymentDate->diff($currentDate);
+    if ($interval->m >= 1 || $interval->y > 0) {
+        return false; // Not paid for this month
+    } else {
+        return true; // Paid for this month
+    }
+  }
+
   ?>
 
   <!-- Sidebar -->
@@ -205,17 +224,36 @@ if ($countResult && $countResult->num_rows > 0) {
               <p>Dashboard</p>
             </a>
           </li>
+          <?php
+            $isPaid = hasUserPaid(); // Check if user has paid
+          ?>
           <li class="nav-item">
-            <a href="manage_workout.php" class="nav-link <?php echo ($current_page == 'manage_workout.php') ? 'active' : ''; ?>">
+            <a href="manage_workout.php" class="nav-link 
+              <?php echo ($current_page == 'manage_workout.php') ? 'active' : ''; ?>
+              <?php echo (!$isPaid ? 'disabled' : ''); ?>"
+              <?php echo (!$isPaid ? 'style="pointer-events: none; opacity: 0.5;"' : ''); ?>>
               <i class="nav-icon fas fa-clipboard-list"></i>
               <p>Workout Program</p>
             </a>
           </li>
           <!-- Additional User Menu Item (e.g., QR code) -->
           <li class="nav-item">
-            <a href="user_qr_code.php" class="nav-link <?php echo ($current_page == 'user_qr_code.php') ? 'active' : ''; ?>">
+            <a href="user_qr_code.php" class="nav-link 
+              <?php echo ($current_page == 'user_qr_code.php') ? 'active' : ''; ?> 
+              <?php echo (!$isPaid ? 'disabled' : ''); ?>" 
+              <?php echo (!$isPaid ? 'style="pointer-events: none; opacity: 0.5;"' : ''); ?>>
               <i class="nav-icon fas fa-qrcode"></i>
               <p>QR Code</p>
+            </a>
+            <!-- <a href="user_qr_code.php" class="nav-link <?php echo ($current_page == 'user_qr_code.php') ? 'active' : ''; ?>">
+              <i class="nav-icon fas fa-qrcode"></i>
+              <p>QR Code</p>
+            </a> -->
+          </li>
+          <li class="nav-item">
+            <a href="payment.php" class="nav-link <?php echo ($current_page == 'payment.php') ? 'active' : ''; ?>">
+              <i class="nav-icon fas fa-credit-card"></i>
+              <p>Paymnent</p>
             </a>
           </li>
           <li class="nav-item">

@@ -27,7 +27,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION['email'] = $row['email'];
                     $_SESSION['role'] = $memberRow['role']; 
 
-                    header("Location: dashboard.php");
+                    $paymentSql = "SELECT date FROM payment WHERE member = '" . $row['id'] . "' ORDER BY created_at DESC LIMIT 1";
+                    $resultPayment = $conn->query($paymentSql); 
+                    $rowPayment = $resultPayment->fetch_assoc();
+
+                    $paymentDate = new DateTime($rowPayment['date']);
+                    $currentDate = new DateTime();
+
+                    $interval = $paymentDate->diff($currentDate);
+                    if ($interval->m >= 1 || $interval->y > 0) {
+                        header("Location: payment.php");
+                    } else {
+                        // User has paid for this month
+                        header("Location: dashboard.php");
+                    }
+
                 } else {
                     // Email is not found in the 'members' table
                     $error_message = "Email not found in the members list!";
