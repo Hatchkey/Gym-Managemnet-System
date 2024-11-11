@@ -6,151 +6,41 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// $pageTitle = 'Dashboard';
-
-//counter parts
-function getTotalMembersCount()
-{
+function processData($data) {
     global $conn;
+    $memberQr = "SELECT id, qrcode FROM members WHERE qrcode = '$data'";
+    $memberQrResult = $conn->query($memberQr); 
+    if ($memberQrResult->num_rows == 1) {
+        $row = $memberQrResult->fetch_assoc();
+        $memberId = $row['id'];
+        $currentDate = date('m/d/Y');
 
-    $totalMembersQuery = "SELECT COUNT(*) AS totalMembers FROM members";
-    $totalMembersResult = $conn->query($totalMembersQuery);
+        $attendance = "SELECT * FROM attendance WHERE member = '$memberId' AND date = '$currentDate'";
+        $attendanceResult = $conn->query($attendance); 
+        if ($attendanceResult->num_rows == 1) {
+            // ADD ALERT IF EXIST THEN IT SHOULD NOT INSERT AGAIN
+            // I.E. ATTENDANCE IS ALREADY RECORDED
+        } else {
+            $insertUserQuery = "INSERT INTO attendance (member, date) 
+                            VALUES ('$memberId', '$currentDate')";
+            if ($conn->query($insertUserQuery) === TRUE) {
+                $response['success'] = true;
+            }
+        }
 
-    if ($totalMembersResult->num_rows > 0) {
-        $totalMembersRow = $totalMembersResult->fetch_assoc();
-        return $totalMembersRow['totalMembers'];
-    } else {
-        return 0;
+        return "Processed: " . htmlspecialchars($data);
     }
 }
 
-function getTotalMembershipTypesCount()
-{
-    global $conn;
-
-    $totalMembershipTypesQuery = "SELECT COUNT(*) AS totalMembershipTypes FROM membership_types";
-    $totalMembershipTypesResult = $conn->query($totalMembershipTypesQuery);
-
-    if ($totalMembershipTypesResult->num_rows > 0) {
-        $totalMembershipTypesRow = $totalMembershipTypesResult->fetch_assoc();
-        return $totalMembershipTypesRow['totalMembershipTypes'];
-    } else {
-        return 0;
-    }
+// Handle the AJAX request if it is a POST request with data
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['data'])) {
+    $data = $_POST['data'];
+    echo processData($data);  // Call the function and return the result
+    exit;  // Stop further script execution after sending the response
 }
 
-function getExpiringSoonCount()
-{
-    global $conn;
-
-    $expiringSoonQuery = "SELECT COUNT(*) AS expiringSoon FROM members WHERE expiry_date BETWEEN CURDATE() AND CURDATE() + INTERVAL 7 DAY";
-    $expiringSoonResult = $conn->query($expiringSoonQuery);
-
-    if ($expiringSoonResult->num_rows > 0) {
-        $expiringSoonRow = $expiringSoonResult->fetch_assoc();
-        return $expiringSoonRow['expiringSoon'];
-    } else {
-        return 0;
-    }
-}
-
-// function getTotalRevenue()
-// {
-//     global $conn;
-
-//     $totalRevenueQuery = "SELECT SUM(total_amount) AS totalRevenue FROM renew";
-//     $totalRevenueResult = $conn->query($totalRevenueQuery);
-
-//     if ($totalRevenueResult->num_rows > 0) {
-//         $totalRevenueRow = $totalRevenueResult->fetch_assoc();
-//         return $totalRevenueRow['totalRevenue'];
-//     } else {
-//         return 0;
-//     }
-// }
-
-function getTotalRevenueWithCurrency()
-{
-    global $conn;
-
-    $currencyQuery = "SELECT currency FROM settings LIMIT 1";
-    $currencyResult = $conn->query($currencyQuery);
-
-    if ($currencyResult->num_rows > 0) {
-        $currencyRow = $currencyResult->fetch_assoc();
-        $currencySymbol = $currencyRow['currency'];
-    } else {
-        $currencySymbol = '$'; // Default currency symbol (you can change this as needed)
-    }
-
-    $totalRevenueQuery = "SELECT SUM(total_amount) AS totalRevenue FROM renew";
-    $totalRevenueResult = $conn->query($totalRevenueQuery);
-
-    if ($totalRevenueResult->num_rows > 0) {
-        $totalRevenueRow = $totalRevenueResult->fetch_assoc();
-        $totalRevenue = $totalRevenueRow['totalRevenue'];
-    } else {
-        $totalRevenue = 0;
-    }
-
-    return $currencySymbol . number_format($totalRevenue, 2);
-}
-
-function getNewMembersCount()
-{
-    global $conn;
-
-    $twentyFourHoursAgo = time() - (24 * 60 * 60);
-
-    $newMembersQuery = "SELECT COUNT(*) AS newMembersCount FROM members WHERE created_at >= FROM_UNIXTIME($twentyFourHoursAgo)";
-    $newMembersResult = $conn->query($newMembersQuery);
-
-    if ($newMembersResult) {
-        $row = $newMembersResult->fetch_assoc();
-        return $row['newMembersCount'];
-    } else {
-        return 0;
-    }
-}
-
-// Function to display the total count of new members with HTML markup
-function displayNewMembersCount()
-{
-    $newMembersCount = getNewMembersCount();
-    echo "<span class='info-box-number'>$newMembersCount</span>";
-}
-
-
-function getExpiredMembersCount()
-{
-    global $conn;
-
-    $expiredMembersQuery = "SELECT COUNT(*) AS expiredMembersCount FROM members WHERE (expiry_date IS NULL OR expiry_date < NOW())";
-    $expiredMembersResult = $conn->query($expiredMembersQuery);
-
-    if ($expiredMembersResult) {
-        $row = $expiredMembersResult->fetch_assoc();
-        return $row['expiredMembersCount'];
-    } else {
-        return 0;
-    }
-}
-
-function displayExpiredMembersCount()
-{
-    $expiredMembersCount = getExpiredMembersCount();
-    echo "<span class='info-box-number'>$expiredMembersCount</span>";
-}
-
-$fetchLogoQuery = "SELECT logo FROM settings WHERE id = 1";
-$fetchLogoResult = $conn->query($fetchLogoQuery);
-
-if ($fetchLogoResult->num_rows > 0) {
-    $settings = $fetchLogoResult->fetch_assoc();
-    $logoPath = $settings['logo'];
-} else {
-    $logoPath = 'dist/img/default-logo.png';
-}
+$selectQuery = "SELECT * FROM members INNER JOIN attendance ON attendance.member = members.id ORDER BY attendance.created_at DESC";
+$result = $conn->query($selectQuery);
 
 ?>
 
@@ -196,12 +86,10 @@ if ($fetchLogoResult->num_rows > 0) {
                                     <input type="text" name="qr_code" id="qr_code" hidden>
                                 </div> -->
                                 <video id="my_camera" width="320" height="240" autoplay></video>
-                                <div class=" flex justify-center py-2">
-                                    <button onclick="startScanning()">
-                                        Scan
-                                    </button>
+                                <input type="text" id="qr_code_text" />
+                                <div class="flex justify-center py-2">
+                                    <button onclick="startScanning()">Scan</button>
                                 </div>
-                                <input type="text" id="qr_code_text" placeholder="QR Code text will appear here" readonly />
                             </div>
                         </div>
                         <!-- /.col -->
@@ -209,6 +97,44 @@ if ($fetchLogoResult->num_rows > 0) {
                     <!-- /.row -->
                 </div><!--/. container-fluid -->
             </section>
+            <table id="example1" class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Fullname</th>
+                <th>date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $counter = 1;
+            while ($row = $result->fetch_assoc()) {
+                
+                $expiryDate = strtotime($row['expiry_date']);
+                $currentDate = time();
+                $daysDifference = floor(($expiryDate - $currentDate) / (60 * 60 * 24));
+
+                $membershipStatus = ($daysDifference < 0) ? 'Expired' : 'Active';
+
+                $membershipTypeId = $row['membership_type'];
+                $membershipTypeQuery = "SELECT type FROM membership_types WHERE id = $membershipTypeId";
+                $membershipTypeResult = $conn->query($membershipTypeQuery);
+                $membershipTypeRow = $membershipTypeResult->fetch_assoc();
+                $membershipTypeName = ($membershipTypeRow) ? $membershipTypeRow['type'] : 'Unknown';
+
+                echo "<tr>";
+                echo "<td>{$row['membership_number']}</td>";
+                echo "<td>{$row['fullname']}</td>";
+                echo "<td>{$row['date']}</td>";
+
+                echo "<td>";
+
+                echo "</tr>";
+
+                $counter++;
+            }
+            ?>
+        </tbody>
+    </table>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
@@ -234,55 +160,76 @@ if ($fetchLogoResult->num_rows > 0) {
 </body>
 <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
 <script type="text/javascript">
-        let video = document.getElementById('my_camera');
-        let canvasElement = document.createElement('canvas');
-        let canvas = canvasElement.getContext('2d');
-        let isScanning = false;
+    let video = document.getElementById('my_camera');
+    let canvasElement = document.createElement('canvas');
+    let canvas = canvasElement.getContext('2d');
+    let isScanning = false;
 
-        // Start scanning when the button is clicked
-        function startScanning() {
-            if (navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-                    .then(function(stream) {
-                        // Attach the webcam stream to the video element
-                        video.srcObject = stream;
-                        video.setAttribute('playsinline', true); // Required for iOS
-                        video.play();
-                        
-                        // Start scanning once the video is playing
+    // Start scanning when the button is clicked
+    function startScanning() {
+        if (navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+                .then(function(stream) {
+                    // Attach the webcam stream to the video element
+                    video.srcObject = stream;
+                    video.setAttribute('playsinline', true); // Required for iOS
+                    video.play();
+                    
+                    // Set canvas size to match video
+                    video.onloadedmetadata = function() {
+                        canvasElement.width = video.videoWidth;
+                        canvasElement.height = video.videoHeight;
                         isScanning = true;
                         scanQRCode();
-                    })
-                    .catch(function(err) {
-                        console.log("Error: " + err);
-                    });
+                    };
+                })
+                .catch(function(err) {
+                    console.log("Error: " + err);
+                });
+        } else {
+            alert("Webcam not supported on this device.");
+        }
+    }
+
+    // Scan QR code in the video stream
+    function scanQRCode() {
+        if (isScanning) {
+            // Draw the video frame to the canvas
+            canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+            let imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+            let code = jsQR(imageData.data, canvasElement.width, canvasElement.height);
+
+            if (code) {
+                // If a QR code is found, set the text to the textbox
+                document.getElementById('qr_code_text').value = code.data;
+
+                fetch('', {  // Send to the current PHP page
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: 'data=' + encodeURIComponent(code.data)
+                })
+                .then(response => response.text())
+                .then(result => {
+                    console.log("Response from PHP:", result);
+                })
+                .catch(error => {
+                    console.error("AJAX Error:", error);
+                });
+
+                stopScanning(); // Stop scanning after finding the QR code
             } else {
-                alert("Webcam not supported on this device.");
+                // Keep scanning
+                requestAnimationFrame(scanQRCode);
             }
         }
+    }
 
-        // Scan QR code in the video stream
-        function scanQRCode() {
-            if (isScanning) {
-                // Draw the video frame to the canvas
-                canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-                let imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
-                let code = jsQR(imageData.data, canvasElement.width, canvasElement.height);
-
-                if (code) {
-                    // If a QR code is found, set the text to the textbox
-                    document.getElementById('qr_code_text').value = code.data;
-                    stopScanning(); // Stop scanning after finding the QR code
-                } else {
-                    // Keep scanning
-                    requestAnimationFrame(scanQRCode);
-                }
-            }
-        }
-
-        // Stop scanning
-        function stopScanning() {
-            isScanning = false;
-            video.srcObject.getTracks().forEach(track => track.stop());
-        }
+    // Stop scanning
+    function stopScanning() {
+        isScanning = false;
+        video.srcObject.getTracks().forEach(track => track.stop());
+    }
+</script>
 </html>

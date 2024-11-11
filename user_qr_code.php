@@ -12,9 +12,10 @@ function generateQrCodeForMember($conn)
     $memberId = $_SESSION['user_id'];
 
     // Query to fetch member details
-    $memberQrCodeQuery = "SELECT email, id, qrcode FROM users WHERE email = '$memberEmail' AND id = '$memberId'";
+    $memberQrCodeQuery = "SELECT email, id, qrcode FROM members WHERE email = '$memberEmail'";
     $memberQrCodeResult = $conn->query($memberQrCodeQuery);
-
+    // var_dump($memberQrCodeResult->fetch_assoc());
+    // exit();
     if ($memberQrCodeResult->num_rows > 0) {
         // Fetch the data
         $memberQrCodeRow = $memberQrCodeResult->fetch_assoc();
