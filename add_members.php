@@ -49,9 +49,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $uniquePhotoName = 'default.jpg';
     }
 
-    $insertQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, password, address, country, postcode, occupation, 
+    $insertQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, address, country, postcode, occupation, 
                     membership_type, membership_number, photo, qrcode, created_at,role) 
-                    VALUES ('$fullname', '$dob', '$gender', '$contactNumber', '$email', '$hashedPassword' , '$address', '$country', '$postcode', '$occupation', 
+                    VALUES ('$fullname', '$dob', '$gender', '$contactNumber', '$email',   '$address', '$country', '$postcode', '$occupation', 
                             '$membershipType', '$membershipNumber', '$uniquePhotoName', '$qrText' , NOW(),'$defaultUserRole')";
     $insertUserQuery = "INSERT INTO users (email, password) 
                     VALUES ('$email', '$hashedPassword')";

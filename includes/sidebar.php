@@ -146,7 +146,7 @@ if ($countResult && $countResult->num_rows > 0) {
 
 
           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link <?php echo ($current_page == 'add_workout.php' || $current_page == 'manage_workout.php' || $current_page == 'edit_workout.php') ? 'active' : ''; ?>">
+            <a href="#" class="nav-link <?php echo ($current_page == 'add_workout.php' || $current_page == 'manage_workout.php' || $current_page == 'edit_workout.php'|| $current_page == 'assign_workout.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-clipboard-list"></i>
               <p>
                 Workout Program
@@ -157,14 +157,19 @@ if ($countResult && $countResult->num_rows > 0) {
               <li class="nav-item">
                 <a href="add_workout.php" class="nav-link">
                   <i class="fas fa-circle-notch nav-icon"></i>
-                  <p>Add Workout Program</p>
+                  <p>Add Workout List</p>
                 </a>
               </li>
-              
+              <li class="nav-item">
+                <a href="assign_workout.php" class="nav-link">
+                  <i class="fas fa-circle-notch nav-icon"></i>
+                  <p>Assign Workout Program</p>
+                </a>
+              </li>
               <li class="nav-item">
                 <a href="manage_workout.php" class="nav-link">
                   <i class="fas fa-circle-notch nav-icon"></i>
-                  <p>Manage Workout List</p>
+                  <p>Manage Workout Program</p>
                 </a>
               </li>
             </ul>

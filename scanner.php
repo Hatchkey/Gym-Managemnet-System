@@ -6,17 +6,18 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-function processData($data) {
+function processData($data)
+{
     global $conn;
     $memberQr = "SELECT id, qrcode FROM members WHERE qrcode = '$data'";
-    $memberQrResult = $conn->query($memberQr); 
+    $memberQrResult = $conn->query($memberQr);
     if ($memberQrResult->num_rows == 1) {
         $row = $memberQrResult->fetch_assoc();
         $memberId = $row['id'];
         $currentDate = date('m/d/Y');
 
         $attendance = "SELECT * FROM attendance WHERE member = '$memberId' AND date = '$currentDate'";
-        $attendanceResult = $conn->query($attendance); 
+        $attendanceResult = $conn->query($attendance);
         if ($attendanceResult->num_rows == 1) {
             // ADD ALERT IF EXIST THEN IT SHOULD NOT INSERT AGAIN
             // I.E. ATTENDANCE IS ALREADY RECORDED
@@ -88,7 +89,7 @@ $result = $conn->query($selectQuery);
                                 <video id="my_camera" width="320" height="240" autoplay></video>
                                 <input type="text" id="qr_code_text" />
                                 <div class="flex justify-center py-2">
-                                    <button onclick="startScanning()">Scan</button>
+                                    <button onclick="startScanning()" class="btn btn-primary">Scan</button>
                                 </div>
                             </div>
                         </div>
@@ -98,43 +99,46 @@ $result = $conn->query($selectQuery);
                 </div><!--/. container-fluid -->
             </section>
             <table id="example1" class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Fullname</th>
-                <th>date</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $counter = 1;
-            while ($row = $result->fetch_assoc()) {
-                
-                $expiryDate = strtotime($row['expiry_date']);
-                $currentDate = time();
-                $daysDifference = floor(($expiryDate - $currentDate) / (60 * 60 * 24));
+                <thead>
+                    <tr>
+                        <th>Membership #</th>
+                        <th>Fullname</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
 
-                $membershipStatus = ($daysDifference < 0) ? 'Expired' : 'Active';
+                <tbody>
+                    <?php
+                    $counter = 1;
+                    while ($row = $result->fetch_assoc()) {
 
-                $membershipTypeId = $row['membership_type'];
-                $membershipTypeQuery = "SELECT type FROM membership_types WHERE id = $membershipTypeId";
-                $membershipTypeResult = $conn->query($membershipTypeQuery);
-                $membershipTypeRow = $membershipTypeResult->fetch_assoc();
-                $membershipTypeName = ($membershipTypeRow) ? $membershipTypeRow['type'] : 'Unknown';
+                        $expiryDate = strtotime($row['expiry_date']);
+                        $currentDate = time();
+                        $daysDifference = floor(($expiryDate - $currentDate) / (60 * 60 * 24));
 
-                echo "<tr>";
-                echo "<td>{$row['membership_number']}</td>";
-                echo "<td>{$row['fullname']}</td>";
-                echo "<td>{$row['date']}</td>";
+                        $membershipStatus = ($daysDifference < 0) ? 'Expired' : 'Active';
 
-                echo "<td>";
+                        $membershipTypeId = $row['membership_type'];
+                        $membershipTypeQuery = "SELECT type FROM membership_types WHERE id = $membershipTypeId";
+                        $membershipTypeResult = $conn->query($membershipTypeQuery);
+                        $membershipTypeRow = $membershipTypeResult->fetch_assoc();
+                        $membershipTypeName = ($membershipTypeRow) ? $membershipTypeRow['type'] : 'Unknown';
 
-                echo "</tr>";
+                        echo "<tr>";
+                        echo "<td>{$row['membership_number']}</td>";
+                        echo "<td>{$row['fullname']}</td>";
+                        echo "<td>{$row['date']}</td>";
 
-                $counter++;
-            }
-            ?>
-        </tbody>
-    </table>
+
+
+                        echo "</tr>";
+
+                        $counter++;
+                    }
+                    ?>
+                </tbody>
+
+            </table>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
@@ -168,13 +172,17 @@ $result = $conn->query($selectQuery);
     // Start scanning when the button is clicked
     function startScanning() {
         if (navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+            navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'environment'
+                    }
+                })
                 .then(function(stream) {
                     // Attach the webcam stream to the video element
                     video.srcObject = stream;
                     video.setAttribute('playsinline', true); // Required for iOS
                     video.play();
-                    
+
                     // Set canvas size to match video
                     video.onloadedmetadata = function() {
                         canvasElement.width = video.videoWidth;
@@ -203,20 +211,20 @@ $result = $conn->query($selectQuery);
                 // If a QR code is found, set the text to the textbox
                 document.getElementById('qr_code_text').value = code.data;
 
-                fetch('', {  // Send to the current PHP page
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'data=' + encodeURIComponent(code.data)
-                })
-                .then(response => response.text())
-                .then(result => {
-                    console.log("Response from PHP:", result);
-                })
-                .catch(error => {
-                    console.error("AJAX Error:", error);
-                });
+                fetch('', { // Send to the current PHP page
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'data=' + encodeURIComponent(code.data)
+                    })
+                    .then(response => response.text())
+                    .then(result => {
+                        console.log("Response from PHP:", result);
+                    })
+                    .catch(error => {
+                        console.error("AJAX Error:", error);
+                    });
 
                 stopScanning(); // Stop scanning after finding the QR code
             } else {
@@ -232,4 +240,5 @@ $result = $conn->query($selectQuery);
         video.srcObject.getTracks().forEach(track => track.stop());
     }
 </script>
+
 </html>
