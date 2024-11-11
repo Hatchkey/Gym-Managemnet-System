@@ -41,7 +41,10 @@
           $pageTitle = 'Add Membership Type';
         } elseif (strpos($_SERVER['REQUEST_URI'], 'add_workout.php') !== false) {
           $pageTitle = 'Add Workout List';
-        } elseif (strpos($_SERVER['REQUEST_URI'], 'user_qr_code.php') !== false) {
+        } elseif (strpos($_SERVER['REQUEST_URI'], 'assign_workout.php') !== false) {
+          $pageTitle = 'Assign Workout Program';
+        }  
+        elseif (strpos($_SERVER['REQUEST_URI'], 'user_qr_code.php') !== false) {
           $pageTitle = 'My QR Code';
         } elseif (strpos($_SERVER['REQUEST_URI'], 'dashboard.php') !== false) {
           $pageTitle = 'Dashboard';
