@@ -81,13 +81,11 @@ $result = $conn->query($selectQuery);
                                 <div class="card-header">
                                     <h3 class="card-title">Scan QR Code</h3>
                                 </div>
+                                <div class="flex justify-center py-2">
+                                    <video id="my_camera" width="320" height="240" autoplay></video>
+                                </div>
 
-                                <!-- <div class="card-body p-0 flex justify-center py-1">
-                                    <img src="uploads/cfg-logo.png" alt="..." class="img-thumbnail" width="35%" height="350">
-                                    <input type="text" name="qr_code" id="qr_code" hidden>
-                                </div> -->
-                                <video id="my_camera" width="320" height="240" autoplay></video>
-                                <input type="text" id="qr_code_text" />
+                                <input type="text" id="qr_code_text" class="hidden" />
                                 <div class="flex justify-center py-2">
                                     <button onclick="startScanning()" class="btn btn-primary">Scan</button>
                                 </div>

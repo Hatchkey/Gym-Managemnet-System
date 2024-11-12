@@ -39,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+            <?php include('includes/pagetitle.php'); ?>
 
             <!-- Main content -->
             <section class="content">
@@ -48,62 +49,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <!-- left column -->
                         <div class="col-md-12">
 
-                            <?php if ($response['success']): ?>
-                                <div class="alert alert-success alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <h5><i class="icon fas fa-check"></i> Success</h5>
-                                    <?php echo $response['message']; ?>
-                                </div>
-                            <?php elseif (!empty($response['message'])): ?>
-                                <div class="alert alert-danger alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <h5><i class="icon fas fa-ban"></i> Error</h5>
-                                    <?php echo $response['message']; ?>
-                                </div>
-                            <?php endif; ?>
-
-                            <!-- general form elements -->
-                            <div class="card card-primary">
+                            <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title"><i class="fas fa-keyboard"></i> Add Items</h3>
+
+
+                                    <h3 class="card-title">Equipment List DataTable</h3>
+
                                 </div>
+
                                 <!-- /.card-header -->
-                                <!-- form start -->
-                                <form method="post" action="" enctype="multipart/form-data">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <label for="equipment">Equipment</label>
-                                                <input type="text" class="form-control" id="equipment" name="equipment"
-                                                    placeholder="Enter equipment name" required>
-                                            </div>
-                                            <div class="col-sm-3">
-                                                <label for="purchase">Purchase Date</label>
-                                                <input type="date" class="form-control" id="purchase" name="purchase" required>
-                                            </div>
-                                        </div>
+                                <div class="card-body">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th class=''>Equipment</th>
+                                                <th class=''>Price</th>
+                                                <th class=' '>Quantity </th>
+                                                <th>Purchase Date</th>
+
+                                                <?php if ($_SESSION['role'] == 'admin') { ?>
+                                                    <th>Actions</th>
+                                                <?php } ?>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            $counter = 1;
+                                            while ($row = $result->fetch_assoc()) {
+                                                // echo "<tr>";
 
 
-                                        <div class="row mt-3">
-                                            <div class="col-sm-6">
-                                                <label for="quantity">Quantity</label>
-                                                <input type="tel" class="form-control" id="quantity"
-                                                    name="quantity" placeholder="Enter quantity" required>
-                                            </div>
+                                                echo "<tr>";
+                                                echo "<td>{$row['id']}</td>";
+                                                echo "<td>{$row['equipment']}</td>";
+                                                echo "<td>{$row['quantity']}</td>";
+                                                echo "<td>{$row['price']}</td>";
+                                                echo "<td>{$row['purchase_date']}</td>";
+                                                echo "<td>";
+                                                // if ($_SESSION['role'] == 'admin') {
+                                                //     echo "
+                                                // <td>";
+                                                // }
+                                                // Only show edit and delete buttons for admin
+                                                if ($_SESSION['role'] == 'admin') {
+                                                    echo "
+                                                    <div class='flex gap-x-2'>
+                  <a href='edit_inventory.php?id={$row['id']}' class='btn btn-primary'><i class='fas fa-edit'></i></a>
+                                <button class='btn btn-danger' onclick='deleteMember({$row['id']})'><i class='fas fa-trash'></i></button>
+                 </div>
+            ";
+                                                }
+                                               
+                                                echo "</tr>";
+                                                $counter++;
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
 
-                                            <div class="col-sm-6">
-                                                <label for="price">Price</label>
-                                                <input type="text" class="form-control" id="price" name="price"
-                                                    placeholder="Enter price" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /.card-body -->
-
-                                    <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </div>
-                                </form>
+                                <!-- /.card-body -->
                             </div>
                             <!-- /.card -->
 
@@ -115,42 +122,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 </div><!--/. container-fluid -->
             </section>
-            <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Equipment</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Purchase Date</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $counter = 1;
-                        while ($row = $result->fetch_assoc()) {
 
-                            echo "<tr>";
-                            echo "<td>{$row['equipment']}</td>";
-                            echo "<td>{$row['quantity']}</td>";
-                            echo "<td>{$row['price']}</td>";
-                            echo "<td>{$row['purchase_date']}</td>";
-
-                            echo "<td>";
-
-                            echo "
-                                <a href='edit_inventory.php?id={$row['id']}' class='btn btn-primary'><i class='fas fa-edit'></i></a>
-                                <button class='btn btn-danger' onclick='deleteMember({$row['id']})'><i class='fas fa-trash'></i></button>
-                            </td>";
-                            echo "</tr>";
-
-                            $counter++;
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->

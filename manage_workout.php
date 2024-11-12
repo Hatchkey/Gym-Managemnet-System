@@ -1,7 +1,37 @@
 <?php
 include('includes/config.php');
 
-$selectQuery = "SELECT * FROM workout_list ORDER BY created_at DESC";
+//$selectQuery = "SELECT * FROM workout_list ORDER BY created_at DESC";
+$user_id = $_SESSION['user_id'];
+$selectQuery =
+    "SELECT 
+                    workout_lists.workout_id, 
+                    workout_lists.workout_name, 
+                    workout_lists.description, 
+                    workout_lists.target_muscle_group, 
+                    workout_program.day, 
+                    workout_program.reps, 
+                    workout_program.sets, 
+                    workout_program.id,
+                    workout_program.workout_split, 
+                    members.fullname
+                FROM 
+                    workout_lists 
+                INNER JOIN 
+                    workout_program 
+                ON 
+                    workout_lists.workout_id = workout_program.workout_id
+                INNER JOIN 
+                    members 
+                ON 
+                    workout_program.member_id = members.id
+                WHERE 
+                    workout_program.member_id = $user_id
+                ORDER BY workout_program.created_at DESC";
+
+
+
+
 $result = $conn->query($selectQuery);
 
 
@@ -51,13 +81,15 @@ if (!isset($_SESSION['user_id'])) {
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
-                                                <th>Workout Name</th>
-                                                <th>Equipment Type</th>
-                                                <th>Target Muscle Group</th>
+                                                <th>ID</th>
+                                                <th class=''>Workout Name</th>
+                                                <th class=''>Workout Split</th>
+                                                <th class=' '>Target Muscle </th>
                                                 <th>Sets</th>
                                                 <th>Reps</th>
-                                                <th>Duration Time </th>
+                                                <th>Day</th>
+                                                <th>Assign To</th>
+                                                <th>Description</th>
                                                 <?php if ($_SESSION['role'] == 'admin') { ?>
                                                     <th>Actions</th>
                                                 <?php } ?>
@@ -69,13 +101,17 @@ if (!isset($_SESSION['user_id'])) {
                                             $counter = 1;
                                             while ($row = $result->fetch_assoc()) {
                                                 echo "<tr>";
+
                                                 echo "<td>{$row['id']}</td>";
-                                                echo "<td>{$row['workout_name']}</td>";
-                                                echo "<td>{$row['equipment_type']}</td>";
+                                                echo "<td >{$row['workout_name']}</td>";
+                                                echo "<td>{$row['workout_split']}</td>";
                                                 echo "<td>{$row['target_muscle_group']}</td>";
                                                 echo "<td>{$row['sets']}</td>";
                                                 echo "<td>{$row['reps']}</td>";
-                                                echo "<td>{$row['duration_time']}</td>";
+                                                echo "<td>{$row['day']}</td>";
+                                                echo "<td>{$row['fullname']}</td>";
+                                                echo "<td>{$row['description']}</td>";
+
                                                 if ($_SESSION['role'] == 'admin') {
                                                     echo "
                                                 <td>";
@@ -85,8 +121,10 @@ if (!isset($_SESSION['user_id'])) {
                                                 // Only show edit and delete buttons for admin
                                                 if ($_SESSION['role'] == 'admin') {
                                                     echo "
-                <a href='edit_workout.php?id={$row['id']}' class='btn btn-primary'><i class='fas fa-edit'></i></a>
-                <button class='btn btn-danger' onclick='deleteMember({$row['id']})'><i class='fas fa-trash'></i></button>
+                                                    <div class='flex gap-x-2'>
+                <a href='edit_workout.php?id={$row['id']}' class='btn btn-primary '><i class='fas fa-edit'></i></a>
+                <button class='btn btn-danger' onclick='deleteWorkout({$row['id']})'><i class='fas fa-trash'></i></button>
+                 </div>
             ";
                                                 }
                                                 echo "</td>";
@@ -152,7 +190,7 @@ if (!isset($_SESSION['user_id'])) {
     </script>
 
     <script>
-        function deleteMember(id) {
+        function deleteWorkout(id) {
             if (confirm("Are you sure you want to delete this workout program?")) {
                 window.location.href = 'delete_workout.php?id=' + id;
             }

@@ -104,46 +104,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <!-- form start -->
                                 <form method="post" action="" enctype="multipart/form-data">
                                     <div class="card-body">
-                                        <!-- <div class="row">
-                                            <div class="col-sm-6">
-                                                <label for="workout_name">Workout Name</label>
-                                                <input type="text" class="form-control" id="workout_name" name="workout_name"
-                                                    placeholder="Enter workout name" required>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label for="equipment_type">Equipment Type</label>
-                                                <input type="text" class="form-control" id="equipment_type" name="equipment_type"
-                                                    placeholder="Enter equipment type" required>
-                                            </div>
-
-                                        </div>
-
-
-                                        <div class="row mt-3">
-                                            <div class="col-sm-6">
-                                                <label for="target_muscle">Target Muscle Group</label>
-                                                <input type="text" class="form-control" id="target_muscle"
-                                                    name="target_muscle" placeholder="Enter target muscle group" required>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label for="sets">Set</label>
-                                                <input type="number" class="form-control" id="sets" name="sets"
-                                                    placeholder="Enter sets" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="row mt-3">
-                                            <div class="col-sm-6">
-                                                <label for="reps">Reps</label>
-                                                <input type="string" class="form-control" id="reps" name="reps"
-                                                    placeholder="Enter reps" required>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label for="duration_time">Duration Time</label>
-                                                <input type="number" class="form-control" id="duration_time" name="duration_time"
-                                                    placeholder="Enter duration time (minutes)"  >
-                                            </div>
-                                        </div> -->
 
                                         <div class="row">
                                             <div class="col-sm-6">
@@ -220,11 +180,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <div class="card-footer">
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </div>
+                                    <!-- /.card-body -->
+
+
+                                </form>
                             </div>
-                            <!-- /.card-body -->
 
-
-                            </form>
                         </div>
                         <!-- /.card -->
 
