@@ -204,6 +204,13 @@ if ($countResult && $countResult->num_rows > 0) {
           </li>
 
           <li class="nav-item">
+            <a href="inventory.php" class="nav-link <?php echo ($current_page == 'inventory.php') ? 'active' : ''; ?>">
+            <i class="nav-icon fas fa-box"></i>
+              <p>Inventory</p>
+            </a>
+          </li>
+
+          <li class="nav-item">
             <a href="settings.php" class="nav-link <?php echo ($current_page == 'settings.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-cogs"></i>
               <p>Settings</p>
