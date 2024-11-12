@@ -31,20 +31,7 @@ include('includes/config.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
     $workoutId = $_GET['id'];
-
-    // $checkRenewQuery = "SELECT * FROM renew WHERE member_id = $workoutId";
-    // $checkRenewResult = $conn->query($checkRenewQuery);
-
-    // if ($checkRenewResult->num_rows > 0) {
-    //     $deleteRenewQuery = "DELETE FROM renew WHERE member_id = $workoutId";
-    //     if ($conn->query($deleteRenewQuery) === FALSE) {
-    //         echo "Error deleting related renew records: " . $conn->error;
-    //         exit();
-    //     }
-    // }
-
-    $deleteMemberQuery = "DELETE FROM workout_list WHERE id = $workoutId";
-
+    $deleteMemberQuery = "DELETE FROM workout_program WHERE workout_id = $workoutId";
     if ($conn->query($deleteMemberQuery) === TRUE) {
         header("Location: manage_workout.php");
         exit();

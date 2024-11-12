@@ -60,7 +60,7 @@ function getTotalWorkoutList()
 {
   global $conn;
 
-  $totalWorkOutProgramQuery = "SELECT COUNT(*) AS totalWorkoutListProg FROM workout_list";
+  $totalWorkOutProgramQuery = "SELECT COUNT(*) AS totalWorkoutListProg FROM workout_lists";
   $totalWorkOutProgramResult = $conn->query($totalWorkOutProgramQuery);
 
   if ($totalWorkOutProgramResult->num_rows > 0) {

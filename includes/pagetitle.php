@@ -43,7 +43,13 @@
           $pageTitle = 'Add Workout List';
         } elseif (strpos($_SERVER['REQUEST_URI'], 'assign_workout.php') !== false) {
           $pageTitle = 'Assign Workout Program';
-        }  
+        } elseif (strpos($_SERVER['REQUEST_URI'], 'add_equipment.php') !== false) {
+          $pageTitle = 'Add Equipment';
+        } elseif (strpos($_SERVER['REQUEST_URI'], 'inventory.php') !== false) {
+          $pageTitle = 'Equipment Inventory';
+        } elseif (strpos($_SERVER['REQUEST_URI'], 'edit_inventory.php') !== false) {
+          $pageTitle = 'Edit Equipment';
+        } 
         elseif (strpos($_SERVER['REQUEST_URI'], 'user_qr_code.php') !== false) {
           $pageTitle = 'My QR Code';
         } elseif (strpos($_SERVER['REQUEST_URI'], 'dashboard.php') !== false) {

@@ -8,20 +8,27 @@ if (!isset($_SESSION['user_id'])) {
 
 $response = array('success' => false, 'message' => '');
 
-$workOutListQuery = "SELECT id FROM workout_list";
-$workOutListResult = $conn->query($workOutListQuery);
-
+// $workOutListQuery = "SELECT id FROM workout_list";
+// $workOutListResult = $conn->query($workOutListQuery);
+$workout_list_query = "SELECT * FROM workout_lists";
+$workout_list_result = $conn->query($workout_list_query);
+$members_query = "SELECT * FROM members";
+$members_result = $conn->query($members_query);
 if (isset($_GET['id'])) {
     $workOutId = $_GET['id'];
 
-    $fetchWorkOutListQuery = "SELECT * FROM workout_list WHERE id = $workOutId";
+    $fetchWorkOutListQuery = "SELECT * FROM workout_program WHERE id = $workOutId";
     $fetchWorkoutListResult = $conn->query($fetchWorkOutListQuery);
 
     if ($fetchWorkoutListResult->num_rows > 0) {
         $workOutDetails = $fetchWorkoutListResult->fetch_assoc();
-    } else {
-        // header("Location: members_list.php");
-        // exit();
+
+        $workout_id = $workOutDetails['workout_id'];
+
+        $reps = $workOutDetails['reps'];
+        $sets = $workOutDetails['sets'];
+        $day = $workOutDetails['day'];
+        $workout_split = $workOutDetails['workout_split'];
     }
 }
 
@@ -32,30 +39,39 @@ function generateUniqueFileName($filename)
     $uniqueName = $basename . '_' . time() . '.' . $ext;
     return $uniqueName;
 }
+var_dump($_POST);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $fullname = $_POST['workout_name'];
-    $equipment_type = $_POST['equipment_type'];
-    $target_muscle = $_POST['target_muscle'];
+
+    $workout_id = $_POST['workout_id']; // Correctly fetching the workout_id
+    $assign_to = $_POST['assign_to']; // Member to assign the workout to
     $sets = $_POST['sets'];
     $reps = $_POST['reps'];
-    $duration_time = $_POST['duration_time'];
+    $day = $_POST['day'];
+    $workout_split = $_POST['workout_split'];
+    // Update query for workout_program table
+    $updateWorkoutProgramQuery = "UPDATE workout_program SET 
+        workout_id = '$workout_id',
+        day = '$day', 
+        sets = '$sets', 
+        reps = '$reps', 
+        workout_split = '$workout_split',
+        member_id = '$assign_to'  
+        WHERE workout_id ='$workout_id' ";
 
-
-
-    $updateQuery = "UPDATE workout_list SET workout_name='$fullname',  equipment_type='$equipment_type', target_muscle_group='$target_muscle', sets='$sets', reps='$reps', duration_time='$duration_time'
-                    WHERE id = $workOutId";
-
-    if ($conn->query($updateQuery) === TRUE) {
+    // Execute the update query for workout_program
+    if ($conn->query($updateWorkoutProgramQuery) === TRUE) {
+        // If successful
         $response['success'] = true;
         $response['message'] = 'Workout program updated successfully!';
-
         header("Location: manage_workout.php");
         exit();
     } else {
-        $response['message'] = 'Error: ' . $conn->error;
+        // If the update fails
+        $response['message'] = 'Error updating workout program: ' . $conn->error;
     }
 }
+
 ?>
 
 
@@ -102,56 +118,96 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <!-- form start -->
                                 <form method="post" action="" enctype="multipart/form-data">
                                     <div class="card-body">
+
+
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <label for="workout_name">Workout Name</label>
-                                                <input type="text" class="form-control" id="workout_name" name="workout_name"
-                                                    placeholder="Enter workout name" required value="<?php echo $workOutDetails['workout_name']; ?>">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label for="equipment_type">Equipment Type</label>
-                                                <input type="text" class="form-control" id="equipment_type" name="equipment_type"
-                                                    placeholder="Enter equipment type" required value="<?php echo $workOutDetails['equipment_type']; ?>">
-                                            </div>
-
-                                        </div>
+                                                <?php
 
 
-                                        <div class="row mt-3">
-                                            <div class="col-sm-6">
-                                                <label for="target_muscle">Target Muscle Group</label>
-                                                <input type="text" class="form-control" id="target_muscle"
-                                                    name="target_muscle" placeholder="Enter target muscle group" required value="<?php echo $workOutDetails['target_muscle_group']; ?>">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label for="sets">Set</label>
-                                                <input type="number" class="form-control" id="sets" name="sets"
-                                                    placeholder="Enter sets" required value="<?php echo $workOutDetails['sets']; ?>">
-                                            </div>
-                                        </div>
+                                                ?>
+                                                <select name="workout_id" id="workout_id" class="form-control" required>
+                                                    <option value="">Select Workout</option>
+                                                    <?php
+                                                    if ($workout_list_result->num_rows > 0) {
 
-                                        <div class="row mt-3">
+                                                        while ($row = $workout_list_result->fetch_assoc()) {
+                                                             
+                                                            $selected = ($row['workout_id'] == $row['workout_id']) ? 'selected' : '';
+
+                                                            echo '<option value="' . htmlspecialchars($row['workout_id']) . '" ' . $selected . '>' . htmlspecialchars($row['workout_name']) . '</option>';
+                                                        }
+                                                    } else {
+                                                        echo '<option value="">No Workouts Available</option>';
+                                                    }
+                                                    ?>
+                                                </select>
+
+                                            </div>
                                             <div class="col-sm-6">
                                                 <label for="reps">Reps</label>
                                                 <input type="string" class="form-control" id="reps" name="reps"
-                                                    placeholder="Enter reps" required value="<?php echo $workOutDetails['reps']; ?>">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label for="duration_time">Duration Time</label>
-                                                <input type="number" class="form-control" id="duration_time" name="duration_time"
-                                                    placeholder="Enter duration time (minutes)" value="<?php echo $workOutDetails['duration_time']; ?>">
+                                                    placeholder="Enter reps" required value="<?= htmlspecialchars($reps) ?>">
                                             </div>
                                         </div>
+                                        <div class="row mt-3">
 
+                                            <div class="col-sm-6">
+                                                <label for="day">Day</label>
+                                                <input type="number" class="form-control" id="day" name="day"
+                                                    placeholder="Enter day" required value="<?= htmlspecialchars($day) ?>">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label for="sets">Sets</label>
+                                                <input type="number" class="form-control" id="sets" name="sets"
+                                                    placeholder="Enter sets" required value="<?= htmlspecialchars($sets) ?>">
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col-sm-6">
+                                                <label for="assign_to">Assign To</label>
+                                                <select name="assign_to" id="assign_to" class="form-control" required>
+                                                    <option value="">Assign to member</option>
+                                                    <?php
+                                                    if ($members_result->num_rows > 0) {
+                                                        while ($row = $members_result->fetch_assoc()) {
+                                                            // Check if the current row's member ID matches the assigned member's ID
+                                                            $selected = ($row['id'] == $workOutDetails['member_id']) ? 'selected' : '';
+                                                            echo '<option value="' . htmlspecialchars($row['id']) . '" ' . $selected . '>' . htmlspecialchars($row['fullname']) . '</option>';
+                                                        }
+                                                    } else {
+                                                        echo '<option value="">No Members Available</option>';
+                                                    }
+                                                    ?>
 
+                                                </select>
+                                            </div>
 
+                                            <div class="col-sm-6 w-full">
+                                                <label for="workout_split">Workout Split</label>
 
+                                                <div class="w-full">
+
+                                                    <select name="workout_split" id="workout_split" class="form-control " required>
+                                                        <option value="">Select Workout Split</option>
+                                                        <option value="Push" <?= ($workout_split == 'Push') ? 'selected' : '' ?>>Push</option>
+                                                        <option value="Upper" <?= ($workout_split == 'Upper') ? 'selected' : '' ?>>Upper</option>
+                                                        <option value="Full Body" <?= ($workout_split == 'Full Body') ? 'selected' : '' ?>>Full Body</option>
+                                                        <option value="Chest" <?= ($workout_split == 'Chest') ? 'selected' : '' ?>>Chest</option>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        </div>
                                     </div>
-                                    <!-- /.card-body -->
 
                                     <div class="card-footer">
                                         <button type="submit" class="btn btn-primary">Submit</button>
                                     </div>
+                                    <!-- /.card-body -->
+
+
                                 </form>
                             </div>
                             <!-- /.card -->

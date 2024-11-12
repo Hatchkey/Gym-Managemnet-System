@@ -59,21 +59,22 @@ if ($countResult && $countResult->num_rows > 0) {
     }
   }
 
-  function hasUserPaid() {
+  function hasUserPaid()
+  {
     global $conn;
     // Assume you already have a database connection $conn
     $paymentSql = "SELECT date FROM payment WHERE member = '" . $_SESSION['user_id'] . "' ORDER BY created_at DESC LIMIT 1";
-    $resultPayment = $conn->query($paymentSql); 
+    $resultPayment = $conn->query($paymentSql);
     $rowPayment = $resultPayment->fetch_assoc();
-    
+
     $paymentDate = new DateTime($rowPayment['date']);
     $currentDate = new DateTime();
 
     $interval = $paymentDate->diff($currentDate);
     if ($interval->m >= 1 || $interval->y > 0) {
-        return false; // Not paid for this month
+      return false; // Not paid for this month
     } else {
-        return true; // Paid for this month
+      return true; // Paid for this month
     }
   }
 
@@ -165,7 +166,7 @@ if ($countResult && $countResult->num_rows > 0) {
 
 
           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link <?php echo ($current_page == 'add_workout.php' || $current_page == 'manage_workout.php' || $current_page == 'edit_workout.php'|| $current_page == 'assign_workout.php') ? 'active' : ''; ?>">
+            <a href="#" class="nav-link <?php echo ($current_page == 'add_workout.php' || $current_page == 'manage_workout.php' || $current_page == 'edit_workout.php' || $current_page == 'assign_workout.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-clipboard-list"></i>
               <p>
                 Workout Program
@@ -203,11 +204,37 @@ if ($countResult && $countResult->num_rows > 0) {
             </a>
           </li>
 
-          <li class="nav-item">
-            <a href="inventory.php" class="nav-link <?php echo ($current_page == 'inventory.php') ? 'active' : ''; ?>">
-            <i class="nav-icon fas fa-box"></i>
-              <p>Inventory</p>
+          <ul class="nav nav-treeview">
+            <li class="nav-item">
+              <a href="inventory.php" class="nav-link <?php echo ($current_page == 'inventory.php') ? 'active' : ''; ?>">
+                <i class="nav-icon fas fa-box"></i>
+                <p>Inventory</p>
+              </a>
+            </li>
+          </ul>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link <?php echo ($current_page == 'inventory.php' || $current_page == 'add_equipment.php' || $current_page == 'edit_inventory.php' ) ? 'active' : ''; ?>">
+              <i class="nav-icon fas fa-box"></i>
+              <p>
+                Inventory
+                <i class="fas fa-angle-left right"></i>
+              </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="add_equipment.php" class="nav-link">
+                  <i class="fas fa-circle-notch nav-icon"></i>
+                  <p>Add Equipment</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="inventory.php" class="nav-link">
+                  <i class="fas fa-circle-notch nav-icon"></i>
+                  <p>Equipment Inventory</p>
+                </a>
+              </li>
+            
+            </ul>
           </li>
 
           <li class="nav-item">
@@ -237,7 +264,7 @@ if ($countResult && $countResult->num_rows > 0) {
             </a>
           </li>
           <?php
-            $isPaid = hasUserPaid(); // Check if user has paid
+          $isPaid = hasUserPaid(); // Check if user has paid
           ?>
           <li class="nav-item">
             <a href="manage_workout.php" class="nav-link 
@@ -252,7 +279,7 @@ if ($countResult && $countResult->num_rows > 0) {
           <li class="nav-item">
             <a href="user_qr_code.php" class="nav-link 
               <?php echo ($current_page == 'user_qr_code.php') ? 'active' : ''; ?> 
-              <?php echo (!$isPaid ? 'disabled' : ''); ?>" 
+              <?php echo (!$isPaid ? 'disabled' : ''); ?>"
               <?php echo (!$isPaid ? 'style="pointer-events: none; opacity: 0.5;"' : ''); ?>>
               <i class="nav-icon fas fa-qrcode"></i>
               <p>QR Code</p>
