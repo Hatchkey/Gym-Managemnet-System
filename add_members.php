@@ -22,6 +22,7 @@ function generateUniqueFileName($originalName)
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $currentDate = date('m/d/Y');
     $fullname = $_POST['fullname'];
     $dob = $_POST['dob'];
     $gender = $_POST['gender'];
@@ -49,22 +50,72 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $uniquePhotoName = 'default.jpg';
     }
 
-    $insertQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, address, country, postcode, occupation, 
-                    membership_type, membership_number, photo, qrcode, created_at,role) 
-                    VALUES ('$fullname', '$dob', '$gender', '$contactNumber', '$email',   '$address', '$country', '$postcode', '$occupation', 
-                            '$membershipType', '$membershipNumber', '$uniquePhotoName', '$qrText' , NOW(),'$defaultUserRole')";
-    $insertUserQuery = "INSERT INTO users (email, password) 
-                    VALUES ('$email', '$hashedPassword')";
+    
+    // Use prepared statements for inserting into the users table first
+    $insertUserQuery = "INSERT INTO users (email, password) VALUES (?, ?)";
 
-    if ($conn->query($insertUserQuery) === TRUE) {
-        $response['success'] = true;
-    }
-    if ($conn->query($insertQuery) === TRUE) {
-        $response['success'] = true;
-        $response['message'] = 'Member added successfully! Membership Number: ' . $membershipNumber;
+    $stmtUser = $conn->prepare($insertUserQuery);
+    $stmtUser->bind_param("ss", $email, $hashedPassword);
+
+    // Execute the insertion into users table
+    if ($stmtUser->execute()) {
+        $lastInsertedUserId = $conn->insert_id; // Get the last inserted ID from the users table
+
+        // Now insert into the members table using the same ID for reference
+        $insertMemberQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, address, country, postcode, occupation, 
+        membership_type, membership_number, photo, qrcode, created_at, role) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
+
+        $stmtMember = $conn->prepare($insertMemberQuery);
+        $stmtMember->bind_param(
+            "ssssssssssssss",
+            $fullname,
+            $dob,
+            $gender,
+            $contactNumber,
+            $email,
+            $address,
+            $country,
+            $postcode,
+            $occupation,
+            $membershipType,
+            $membershipNumber,
+            $uniquePhotoName,
+            $qrText,
+            $defaultUserRole
+        );
+
+        if ($stmtMember->execute()) {
+            // Insert into payment table using the last inserted user ID
+            $insertPaymentQuery = "INSERT INTO payment (member, date, created_at) VALUES (?, ?, NOW())";
+            $stmtPayment = $conn->prepare($insertPaymentQuery);
+            $stmtPayment->bind_param("is", $lastInsertedUserId, $currentDate);
+
+            if ($stmtPayment->execute()) {
+                echo "Record inserted into payment successfully.";
+                $response['success'] = true;
+                $response['message'] = 'Member added successfully! Membership Number: ' . $membershipNumber;
+            } else {
+                $response['success'] = false;
+                $response['message'] = 'Error inserting into payment: ' . $stmtPayment->error;
+            }
+        } else {
+            $response['success'] = false;
+            $response['message'] = 'Error inserting into members: ' . $stmtMember->error;
+        }
+
+        // Close member statement
+        $stmtMember->close();
     } else {
-        $response['message'] = 'Error: ' . $conn->error;
+        $response['success'] = false;
+        $response['message'] = 'Error inserting into users: ' . $stmtUser->error;
     }
+
+    // Close user and payment statements
+    $stmtUser->close();
+    $stmtPayment->close();
+
+     
 }
 ?>
 

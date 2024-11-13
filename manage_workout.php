@@ -29,7 +29,6 @@ if ($_SESSION['role'] == 'admin') {
                     ON 
                         workout_program.member_id = members.id
                     ORDER BY workout_program.created_at DESC";
-
 } else {
     $selectQuery =
         "SELECT 
@@ -59,7 +58,6 @@ if ($_SESSION['role'] == 'admin') {
 }
 
 $result = $conn->query($selectQuery);
-
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
@@ -93,7 +91,6 @@ if (!isset($_SESSION['user_id'])) {
                             <div class="card">
                                 <div class="card-header">
 
-
                                     <?php if ($_SESSION['role'] == 'admin') { ?>
                                         <h3 class="card-title">Workout Program List DataTable</h3>
                                     <?php } ?>
@@ -114,7 +111,10 @@ if (!isset($_SESSION['user_id'])) {
                                                 <th>Sets</th>
                                                 <th>Reps</th>
                                                 <th>Day</th>
-                                                <th>Assign To</th>
+                                                <?php if ($_SESSION['role'] == 'admin') { ?>
+                                                    <th>Assign To</th>
+                                                <?php } ?>
+
                                                 <th>Description</th>
                                                 <?php if ($_SESSION['role'] == 'admin') { ?>
                                                     <th>Actions</th>
@@ -135,14 +135,15 @@ if (!isset($_SESSION['user_id'])) {
                                                 echo "<td>{$row['sets']}</td>";
                                                 echo "<td>{$row['reps']}</td>";
                                                 echo "<td>{$row['day']}</td>";
-                                                echo "<td>{$row['fullname']}</td>";
+                                                if ($_SESSION['role'] == 'admin') {
+                                                    echo "<td>{$row['fullname']}</td>";
+                                                }
                                                 echo "<td>{$row['description']}</td>";
 
                                                 if ($_SESSION['role'] == 'admin') {
                                                     echo "
                                                 <td>";
                                                 }
-
 
                                                 // Only show edit and delete buttons for admin
                                                 if ($_SESSION['role'] == 'admin') {

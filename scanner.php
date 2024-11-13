@@ -218,7 +218,10 @@ $result = $conn->query($selectQuery);
                     })
                     .then(response => response.text())
                     .then(result => {
+                        alert("Attendance recorded successfully");
+                        location.reload();
                         console.log("Response from PHP:", result);
+
                     })
                     .catch(error => {
                         console.error("AJAX Error:", error);
