@@ -197,9 +197,10 @@ if ($countResult && $countResult->num_rows > 0) {
 
           <li class="nav-item">
             <a href="scanner.php" class="nav-link flex items-center <?php echo ($current_page == 'scanner.php') ? 'active' : ''; ?>">
-              <span class="nav-icon material-symbols-outlined ">
+              <!-- <span class="nav-icon material-symbols-outlined ">
                 qr_code_scanner
-              </span>
+              </span> -->
+              <i class="nav-icon material-symbols-outlined ">qr_code_scanner</i>
               <p class="">Scanner</p>
             </a>
           </li>
@@ -213,7 +214,7 @@ if ($countResult && $countResult->num_rows > 0) {
             </li>
           </ul>
           <li class="nav-item has-treeview">
-            <a href="#" class="nav-link <?php echo ($current_page == 'inventory.php' || $current_page == 'add_equipment.php' || $current_page == 'edit_inventory.php' ) ? 'active' : ''; ?>">
+            <a href="#" class="nav-link <?php echo ($current_page == 'inventory.php' || $current_page == 'add_equipment.php' || $current_page == 'edit_inventory.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-box"></i>
               <p>
                 Inventory
@@ -233,7 +234,7 @@ if ($countResult && $countResult->num_rows > 0) {
                   <p>Equipment Inventory</p>
                 </a>
               </li>
-            
+
             </ul>
           </li>
 
@@ -295,13 +296,13 @@ if ($countResult && $countResult->num_rows > 0) {
               <p>Paymnent</p>
             </a>
           </li>
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="user_profile.php" class="nav-link <?php echo ($current_page == 'user_profile.php') ? 'active' : ''; ?>">
 
               <i class="fa-solid fas fa-user nav-icon"></i>
               <p>Profile</p>
             </a>
-          </li>
+          </li> -->
 
           <li class="nav-item">
             <a href="logout.php" class="nav-link <?php echo ($current_page == 'logout.php') ? 'active' : ''; ?>">

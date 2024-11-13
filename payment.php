@@ -22,8 +22,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
-
-
 <?php include('includes/header.php'); ?>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -34,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
+            <?php include('includes/pagetitle.php'); ?>
 
             <!-- Main content -->
             <section class="content">
@@ -58,50 +57,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     placeholder="Enter Card Number" required>
                                             </div>
 
+
+
+                                            <div class="col-sm-6">
+                                                <label for="cvv">Cvv</label>
+                                                <input type="text" class="form-control" id="cvv" name="cvv"
+                                                    placeholder="Enter cvv" required>
+                                            </div>
+                                        </div>
                                         <div class="row mt-3">
                                             <div class="col-sm-6">
                                                 <label for="month">Expiry month</label>
                                                 <input type="text" class="form-control" id="month"
                                                     name="month" placeholder="Enter Expiry month" required>
                                             </div>
-
                                             <div class="col-sm-6">
                                                 <label for="year">Expiry year</label>
                                                 <input type="text" class="form-control" id="year" name="year"
                                                     placeholder="Enter Expiry year" required>
                                             </div>
                                         </div>
-
-                                        <div class="row mt-3">
-                                            <div class="col-sm-6">
-                                                <label for="cvv">cvv</label>
-                                                <input type="text" class="form-control" id="cvv" name="cvv"
-                                                    placeholder="Enter cvv" required>
-                                            </div>
-                                            
-                                        </div>
                                     </div>
-                                    <!-- /.card-body -->
-
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">pay</button>
+                                        <button type="submit" class="btn btn-primary">Pay</button>
                                     </div>
                                 </form>
+                                <!-- /.card -->
                             </div>
-                            <!-- /.card -->
-
+                            <!--/.col (left) -->
                         </div>
-                        <!--/.col (left) -->
-
-                    </div>
-                    <!-- /.row -->
-
-                </div><!--/. container-fluid -->
+                        <!-- /.row -->
+                    </div><!--/. container-fluid -->
             </section>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->

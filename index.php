@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION['user_id'] = $row['id'];
                     $_SESSION['email'] = $row['email'];
                     $_SESSION['role'] = $memberRow['role']; 
-
+                    $_SESSION['member_id'] = $memberRow['id'];
                     $paymentSql = "SELECT date FROM payment WHERE member = '" . $row['id'] . "' ORDER BY created_at DESC LIMIT 1";
                     $resultPayment = $conn->query($paymentSql); 
                     $rowPayment = $resultPayment->fetch_assoc();

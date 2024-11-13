@@ -59,13 +59,13 @@ function getExpiringSoonCount()
 function getTotalWorkoutList()
 {
   global $conn;
-
-  $totalWorkOutProgramQuery = "SELECT COUNT(*) AS totalWorkoutListProg FROM workout_lists";
+  $userId = $_SESSION['member_id'];
+  $totalWorkOutProgramQuery = "SELECT COUNT(*) AS totalWorkoutProgram FROM workout_program WHERE member_id = $userId ";
   $totalWorkOutProgramResult = $conn->query($totalWorkOutProgramQuery);
 
   if ($totalWorkOutProgramResult->num_rows > 0) {
     $totalWorkoutListRow = $totalWorkOutProgramResult->fetch_assoc();
-    return $totalWorkoutListRow['totalWorkoutListProg'];
+    return $totalWorkoutListRow['totalWorkoutProgram'];
   } else {
     return 0;
   }
