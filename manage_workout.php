@@ -3,34 +3,60 @@ include('includes/config.php');
 
 //$selectQuery = "SELECT * FROM workout_list ORDER BY created_at DESC";
 $user_id = $_SESSION['user_id'];
-$selectQuery =
-    "SELECT 
-                    workout_lists.workout_id, 
-                    workout_lists.workout_name, 
-                    workout_lists.description, 
-                    workout_lists.target_muscle_group, 
-                    workout_program.day, 
-                    workout_program.reps, 
-                    workout_program.sets, 
-                    workout_program.id,
-                    workout_program.workout_split, 
-                    members.fullname
-                FROM 
-                    workout_lists 
-                INNER JOIN 
-                    workout_program 
-                ON 
-                    workout_lists.workout_id = workout_program.workout_id
-                INNER JOIN 
-                    members 
-                ON 
-                    workout_program.member_id = members.id
-                WHERE 
-                    workout_program.member_id = $user_id
-                ORDER BY workout_program.created_at DESC";
+$currUser = $_SESSION['role'];
+$email = $_SESSION['email'];
+if ($_SESSION['role'] == 'admin') {
+    $selectQuery =
+        "SELECT 
+                        workout_lists.workout_id, 
+                        workout_lists.workout_name, 
+                        workout_lists.description, 
+                        workout_lists.target_muscle_group, 
+                        workout_program.day, 
+                        workout_program.reps, 
+                        workout_program.sets, 
+                        workout_program.id,
+                        workout_program.workout_split, 
+                        members.fullname
+                    FROM 
+                        workout_lists 
+                    INNER JOIN 
+                        workout_program 
+                    ON 
+                        workout_lists.workout_id = workout_program.workout_id
+                    INNER JOIN 
+                        members 
+                    ON 
+                        workout_program.member_id = members.id
+                    ORDER BY workout_program.created_at DESC";
 
-
-
+} else {
+    $selectQuery =
+        "SELECT 
+                        workout_lists.workout_id, 
+                        workout_lists.workout_name, 
+                        workout_lists.description, 
+                        workout_lists.target_muscle_group, 
+                        workout_program.day, 
+                        workout_program.reps, 
+                        workout_program.sets, 
+                        workout_program.id,
+                        workout_program.workout_split, 
+                        members.fullname
+                    FROM 
+                        workout_lists 
+                    INNER JOIN 
+                        workout_program 
+                    ON 
+                        workout_lists.workout_id = workout_program.workout_id
+                    INNER JOIN 
+                        members 
+                    ON 
+                        workout_program.member_id = members.id
+                    WHERE 
+                        members.email = '$email'
+                    ORDER BY workout_program.created_at DESC";
+}
 
 $result = $conn->query($selectQuery);
 

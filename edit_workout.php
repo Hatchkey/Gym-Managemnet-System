@@ -40,7 +40,7 @@ function generateUniqueFileName($filename)
     return $uniqueName;
 }
 var_dump($_POST);
-
+$idToEdit = $_GET['id'];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $workout_id = $_POST['workout_id']; // Correctly fetching the workout_id
@@ -57,7 +57,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         reps = '$reps', 
         workout_split = '$workout_split',
         member_id = '$assign_to'  
-        WHERE workout_id ='$workout_id' ";
+        WHERE id ='$idToEdit' ";
+
+    // var_dump($updateWorkoutProgramQuery);
+    // exit();
 
     // Execute the update query for workout_program
     if ($conn->query($updateWorkoutProgramQuery) === TRUE) {
