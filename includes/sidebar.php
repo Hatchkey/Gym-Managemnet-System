@@ -293,7 +293,7 @@ if ($countResult && $countResult->num_rows > 0) {
           <li class="nav-item">
             <a href="payment.php" class="nav-link <?php echo ($current_page == 'payment.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-credit-card"></i>
-              <p>Paymnent</p>
+              <p>Payment</p>
             </a>
           </li>
           <!-- <li class="nav-item">

@@ -114,26 +114,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             </div>
                                         </div>
                                     </div>
-
-
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                </form>
 
                             </div>
 
                         </div>
-                        <!-- /.card-body -->
-
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                        </form>
                     </div>
-                    <!-- /.card -->
 
                 </div>
-                <!--/.col (left) -->
+                <!-- /.card-body -->
+
+
 
         </div>
-        <!-- /.row -->
+        <!-- /.card -->
+
+    </div>
+    <!--/.col (left) -->
+
+    </div>
+    <!-- /.row -->
 
 
     </div><!--/. container-fluid -->

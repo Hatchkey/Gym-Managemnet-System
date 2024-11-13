@@ -8,15 +8,31 @@ if (!isset($_SESSION['user_id'])) {
 }
 global $conn;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $paymentSql = "SELECT date FROM payment WHERE member = '" . $_SESSION['user_id'] . "' ORDER BY created_at DESC LIMIT 1";
+    $resultPayment = $conn->query($paymentSql);
+    $rowPayment = $resultPayment->fetch_assoc();
+
     $memberId = $_SESSION['user_id'];
     $currentDate = date('m/d/Y');
 
-    $insertQuery = "INSERT INTO payment (member, date) 
+    $paymentDate = new DateTime($rowPayment['date']);
+    $currentDateCompare = new DateTime();
+
+    $interval = $paymentDate->diff($currentDateCompare);
+    if ($interval->m >= 1 || $interval->y > 0) {
+        $insertQuery = "INSERT INTO payment (member, date) 
                     VALUES ('$memberId', '$currentDate')";
 
-    if ($conn->query($insertQuery) === TRUE) {
-        header("Location: dashboard.php");
-        exit();
+        if ($conn->query($insertQuery) === TRUE) {
+            echo "<script>
+            alert('Payment successful! Thank you for your payment.');
+            window.location.href = 'dashboard.php'; // Redirect after showing alert
+          </script>";
+            exit();
+
+            // header("Location: dashboard.php");
+
+        }
     }
 }
 
