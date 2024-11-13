@@ -22,6 +22,8 @@ if (isset($_GET['id'])) {
     }
 }
 
+$idToEdit = $_GET['id'];
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $equipment = $_POST['equipment'];
     $purchase = $_POST['purchase'];
@@ -29,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $price = $_POST['price'];
 
     $updateQuery = "UPDATE inventory SET equipment='$equipment', purchase_date='$purchase', quantity='$quantity', 
-                    price='$price'";
+                    price='$price' WHERE id ='$idToEdit'";
 
     if ($conn->query($updateQuery) === TRUE) {
         $response['success'] = true;
