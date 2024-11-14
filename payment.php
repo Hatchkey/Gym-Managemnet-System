@@ -36,7 +36,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 $members_query = "SELECT fullname, members.id as memberId, users.id as userId FROM members INNER JOIN users ON members.email = users.email";
 $members_result = $conn->query($members_query);
-
+$selectQuery = "SELECT * FROM payment ORDER BY created_at DESC";
+$result = $conn->query($selectQuery);
+ //
 ?>
 
 <?php include('includes/header.php'); ?>
@@ -58,48 +60,85 @@ $members_result = $conn->query($members_query);
                     <div class="row">
                         <!-- left column -->
                         <div class="col-md-12">
-                            <!-- general form elements -->
-                            <div class="card card-primary">
+
+                            <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title"><i class="fas fa-keyboard"></i> Members Payment Form</h3>
+
+
+                                    <h3 class="card-title">Payment Transaction DataTable</h3>
+
                                 </div>
+
                                 <!-- /.card-header -->
-                                <!-- form start -->
-                               
-                                <form method="post" action="" enctype="multipart/form-data">
-                                    <div class="col-sm-6">
-                                        <label for="assign_to">Paid By</label>
-                                        <!-- <input type="text" class="form-control" id="workout_name" name="workout_name"
-                                            placeholder="Enter workout name" required> -->
-                                        <select name="assign_to" id="assign_to" class="form-control" required>
-                                            <option value="">Member payment</option>
+                                <div class="card-body">
+                                    <table id="example1" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th class=''>Name</th>
+                                                <th class=''>Amount</th>
+                                                <th class=' '>Mode </th>
+                                                <th>Purchase Date</th>
+
+                                                <?php if ($_SESSION['role'] == 'admin') { ?>
+                                                    <th>Actions</th>
+                                                <?php } ?>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
                                             <?php
-                                            if ($members_result->num_rows > 0) {
-                                                // Loop through the results and create an <option> for each row
-                                                while ($row = $members_result->fetch_assoc()) {
-                                                    echo '<option value="' . htmlspecialchars($row['userId']) . '">' . htmlspecialchars($row['fullname']) . '</option>';
+                                            $counter = 1;
+                                            while ($row = $result->fetch_assoc()) {
+                                                // echo "<tr>";
+
+
+                                                echo "<tr>";
+                                                echo "<td>{$row['id']}</td>";
+                                                // echo "<td>{$row['equipment']}</td>";
+                                                // echo "<td>{$row['quantity']}</td>";
+                                                // echo "<td>{$row['price']}</td>";
+                                                // echo "<td>{$row['purchase_date']}</td>";
+                                                echo "<td>";
+                                                // if ($_SESSION['role'] == 'admin') {
+                                                //     echo "
+                                                // <td>";
+                                                // }
+                                                // Only show edit and delete buttons for admin
+                                                if ($_SESSION['role'] == 'admin') {
+                                                    echo "
+                                                    <div class='flex gap-x-2'>
+                  <a href='edit_inventory.php?id={$row['id']}' class='btn btn-primary'><i class='fas fa-edit'></i></a>
+                                <button class='btn btn-danger' onclick='deleteMember({$row['id']})'><i class='fas fa-trash'></i></button>
+                 </div>
+            ";
                                                 }
-                                            } else {
-                                                echo '<option value="">No Workouts Available</option>';
+
+                                                echo "</tr>";
+                                                $counter++;
                                             }
                                             ?>
+                                        </tbody>
+                                    </table>
+                                </div>
 
-                                        </select>
-                                    </div>
-                                    <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">Pay</button>
-                                    </div>
-                                </form>
-                                <!-- /.card -->
+                                <!-- /.card-body -->
                             </div>
-                            <!--/.col (left) -->
+                            <!-- /.card -->
+
                         </div>
-                        <!-- /.row -->
-                    </div><!--/. container-fluid -->
+                        <!--/.col (left) -->
+
+                    </div>
+                    <!-- /.row -->
+
+                </div><!--/. container-fluid -->
             </section>
+
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
+
         <!-- Control Sidebar -->
         <aside class="control-sidebar control-sidebar-dark">
             <!-- Control sidebar content goes here -->
