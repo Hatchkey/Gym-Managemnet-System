@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $uniquePhotoName = 'default.jpg';
     }
 
-    
+
     // Use prepared statements for inserting into the users table first
     $insertUserQuery = "INSERT INTO users (email, password) VALUES (?, ?)";
 
@@ -61,28 +61,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($stmtUser->execute()) {
         $lastInsertedUserId = $conn->insert_id; // Get the last inserted ID from the users table
 
-        // Now insert into the members table using the same ID for reference
-
-        /*
-
-        PAG ADD ARI UG INSERT COLUMN NA EXPIRY_DATE THEN ANG EXPIRY DATE IS * KUNG PILA ANG RENEW UPTO NIYA. 
-
-        FORMULA:
-        EXPIRY DATE = CURRENT DATE * RENEW UPTO
-        ACTUAL:
-        EXPIRY DATE = 11/14/2024 * THREE MONTHS
-        EXPIRY DATE = 02/14/2025
-        HIMO NA SIYAG FEBRAURY NXT YEAR KAY 3MONTHS FROM NOW MAN
-
-        */
-
+        $extendDays = (int)$_POST['extend']; //Convert into int
+        $expiryDate = date('Y-m-d', strtotime("+$extendDays month"));
         $insertMemberQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, address, country, postcode, occupation, 
-        membership_type, membership_number, photo, qrcode, created_at, role) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?)";
+        membership_type, membership_number, photo, qrcode, created_at, role, expiry_date) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)";
 
         $stmtMember = $conn->prepare($insertMemberQuery);
         $stmtMember->bind_param(
-            "ssssssssssssss",
+            "sssssssssssssss",
             $fullname,
             $dob,
             $gender,
@@ -96,11 +83,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $membershipNumber,
             $uniquePhotoName,
             $qrText,
-            $defaultUserRole
+            $defaultUserRole,
+            $expiryDate
         );
 
         if ($stmtMember->execute()) {
             // Insert into payment table using the last inserted user ID
+            $lastInsertedMemberId = $conn->insert_id;
             $mode = $_POST['modepayment'];
             $insertPaymentQuery = "INSERT INTO payment (member, date, mode, created_at) VALUES (?, ?, '$mode', NOW())";
             $stmtPayment = $conn->prepare($insertPaymentQuery);
@@ -128,7 +117,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $membership_type = $_POST['membershipType'];
             $upto = $_POST['extend'];
             $insertRenew = "INSERT INTO renew (member_id, total_amount, membership_type, upto, renew_date) 
-                    VALUES ('$lastInsertedUserId', '$totalAmount', '$membership_type', '$upto', '$currentDate')";
+                    VALUES ('$lastInsertedMemberId', '$totalAmount', '$membership_type', '$upto', '$currentDate')";
             if ($conn->query($insertRenew) === TRUE) {
                 $response['success'] = true;
             }
@@ -147,8 +136,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Close user and payment statements
     $stmtUser->close();
     $stmtPayment->close();
-
-     
 }
 ?>
 
@@ -197,7 +184,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <!-- form start -->
                                 <form method="post" action="" enctype="multipart/form-data">
                                     <div class="card-body">
+
                                         <div class="row">
+                                            <h1 class="text-lg font-bold ml-1">Basic Information</h1>
+                                        </div>
+                                        <div class="row mt-3">
                                             <div class="col-sm-6">
                                                 <label for="fullname">Full Name</label>
                                                 <input type="text" class="form-control" id="fullname" name="fullname"
@@ -254,16 +245,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <input type="text" class="form-control" id="occupation" name="occupation"
                                                     placeholder="Enter occupation" required>
                                             </div>
-
-                                        </div>
-
-                                        <div class="row mt-3">
-
                                             <div class="col-sm-6">
                                                 <label for="photo">Member Photo</label>
                                                 <input type="file" class="form-control-file" id="photo" name="photo">
                                             </div>
                                         </div>
+
+
                                         <div class="row mt-3">
 
                                             <div class="col-sm-6">
@@ -278,25 +266,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-6">
-                                        <label for="extendate">Renew Upto</label>
-                                            <select class="form-control" id="extend" name="extend" required>
-                                                <option value="1">One Month</option>
-                                                <option value="3">Three Months</option>
-                                                <option value="6">Six Months</option>
-                                                <option value="12">One Year</option>
-                                            </select>
+                                        <div class="row">
+                                            <h1 class="text-lg font-bold ml-1 mt-4">Payment </h1>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <label for="totalAmount">Total Amount</label>
-                                            <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <span class="input-group-text" id="currencySymbol"><?php echo getCurrencySymbol(); ?></span>
-                                                </div>
-                                                <input type="text" class="form-control" id="totalAmount" name="totalAmount" placeholder="Total Amount" readonly>
+                                        <div class="row mt-3">
+                                            <div class="col-sm-6">
+                                                <label for="extendate">Renew Upto</label>
+                                                <select class="form-control" id="extend" name="extend" required>
+                                                    <option value="1">One Month</option>
+                                                    <option value="3">Three Months</option>
+                                                    <option value="6">Six Months</option>
+                                                    <option value="12">One Year</option>
+                                                </select>
                                             </div>
-                                        </div>
-                                        <?php
+                                            <div class="col-sm-6">
+                                                <label for="totalAmount">Total Amount</label>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="currencySymbol"><?php echo getCurrencySymbol(); ?></span>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="totalAmount" name="totalAmount" placeholder="Total Amount" readonly>
+                                                </div>
+                                            </div>
+                                            <?php
                                             function getCurrencySymbol()
                                             {
                                                 global $conn;
@@ -312,22 +304,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 }
                                             }
                                             ?>
-                                        <div class="col-sm-6">
+                                        </div>
+
+                                        <div class="row mt-3">
+                                            <div class="col-sm-6">
                                                 <label for="membershipType">Membership Type</label>
                                                 <!-- Replace with a dynamic select box populated from the database -->
                                                 <select class="form-control" id="membershipType" name="membershipType" required>
-                                                <?php
-                                                if ($membershipTypesResult) {
-                                                    while ($row = $membershipTypesResult->fetch_assoc()) {
-                                                        echo "<option value='{$row['id']}'>{$row['type']} - {$row['amount']}</option>";
+                                                    <?php
+                                                    if ($membershipTypesResult) {
+                                                        while ($row = $membershipTypesResult->fetch_assoc()) {
+                                                            echo "<option value='{$row['id']}'>{$row['type']} - {$row['amount']}</option>";
+                                                        }
+                                                    } else {
+                                                        echo "Error: " . $conn->error;
                                                     }
-                                                } else {
-                                                    echo "Error: " . $conn->error;
-                                                }
-                                                ?>
-                                            </select>
-                                        </div>
-                                        <div class="row mt-3">
+                                                    ?>
+                                                </select>
+                                            </div>
+
                                             <div class="col-sm-6">
                                                 <label for="modepayment">Mode of payment</label>
                                                 <input type="text" class="form-control" id="modepayment" name="modepayment"
@@ -377,7 +372,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php include('includes/footer.php'); ?>
 </body>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         function updateTotalAmount() {
             var membershipTypeAmount = parseFloat($('#membershipType option:selected').text().split('-').pop());
 
@@ -396,4 +391,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         updateTotalAmount();
     });
 </script>
+
 </html>

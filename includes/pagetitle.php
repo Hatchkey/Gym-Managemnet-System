@@ -50,7 +50,7 @@
         } elseif (strpos($_SERVER['REQUEST_URI'], 'edit_inventory.php') !== false) {
           $pageTitle = 'Edit Equipment';
         } elseif (strpos($_SERVER['REQUEST_URI'], 'payment.php') !== false) {
-          $pageTitle = 'Payment';
+          $pageTitle = 'Payment Transaction';
         } 
         elseif (strpos($_SERVER['REQUEST_URI'], 'user_qr_code.php') !== false) {
           $pageTitle = 'My QR Code';
