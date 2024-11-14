@@ -34,9 +34,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-$members_query = "SELECT fullname, members.id as memberId, users.id as userId FROM members INNER JOIN users ON members.email = users.email";
-$members_result = $conn->query($members_query);
-$selectQuery = "SELECT * FROM payment ORDER BY created_at DESC";
+$selectQuery = "SELECT payment.id, reference, date, mode, total_amount FROM payment 
+                LEFT JOIN users ON users.id = payment.member 
+                LEFT JOIN members ON users.email = members.email
+                INNER JOIN renew ON renew.payment_id = payment.id
+                ORDER BY payment.created_at DESC";
 $result = $conn->query($selectQuery);
  //
 ?>
@@ -74,14 +76,14 @@ $result = $conn->query($selectQuery);
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>ID</th>
-                                                <th class=''>Name</th>
+
                                                 <th class=''>Amount</th>
                                                 <th class=' '>Mode </th>
-                                                <th>Purchase Date</th>
+                                                <th>Paid Date</th>
+                                                <th class=''>reference</th>
 
                                                 <?php if ($_SESSION['role'] == 'admin') { ?>
-                                                    <th>Actions</th>
+                                                    <!-- <th>Actions</th> -->
                                                 <?php } ?>
 
                                             </tr>
@@ -94,25 +96,24 @@ $result = $conn->query($selectQuery);
 
 
                                                 echo "<tr>";
-                                                echo "<td>{$row['id']}</td>";
-                                                // echo "<td>{$row['equipment']}</td>";
-                                                // echo "<td>{$row['quantity']}</td>";
-                                                // echo "<td>{$row['price']}</td>";
-                                                // echo "<td>{$row['purchase_date']}</td>";
-                                                echo "<td>";
+                                                echo "<td>{$row['total_amount']}</td>";
+                                                echo "<td>{$row['mode']}</td>";
+                                                echo "<td>{$row['date']}</td>";
+                                                echo "<td>{$row['reference']}</td>";
+                                                // echo "<td>";
                                                 // if ($_SESSION['role'] == 'admin') {
                                                 //     echo "
                                                 // <td>";
                                                 // }
                                                 // Only show edit and delete buttons for admin
-                                                if ($_SESSION['role'] == 'admin') {
-                                                    echo "
-                                                    <div class='flex gap-x-2'>
-                  <a href='edit_inventory.php?id={$row['id']}' class='btn btn-primary'><i class='fas fa-edit'></i></a>
-                                <button class='btn btn-danger' onclick='deleteMember({$row['id']})'><i class='fas fa-trash'></i></button>
-                 </div>
-            ";
-                                                }
+            //                                     if ($_SESSION['role'] == 'admin') {
+            //                                         echo "
+            //                                         <div class='flex gap-x-2'>
+            //       <a href='edit_inventory.php?id={$row['id']}' class='btn btn-primary'><i class='fas fa-edit'></i></a>
+            //                     <button class='btn btn-danger' onclick='deleteMember({$row['id']})'><i class='fas fa-trash'></i></button>
+            //      </div>
+            // ";
+            //                                     }
 
                                                 echo "</tr>";
                                                 $counter++;

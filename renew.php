@@ -35,16 +35,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $updateMemberQuery = "UPDATE members SET membership_type = $membershipTypeId, expiry_date = '$expiryDate' WHERE id = $memberId";
     $updateMemberResult = $conn->query($updateMemberQuery);
 
-    $totalAmount = $_POST['totalAmount'];
     $renewDate = date('Y-m-d');
-    $insertRenewQuery = "INSERT INTO renew (member_id, total_amount,membership_type,upto, renew_date) VALUES ($memberId, $totalAmount, $membershipTypeId,$renewDuration, '$renewDate')";
+    $reference = $_POST['reference'];
+    $insertPaymentQuery = "INSERT INTO payment (member, date, mode, reference) VALUES ($memberId, '$renewDate', '$mode', '$reference')";
+    $insertPaymentResult = $conn->query($insertPaymentQuery);
+    $lastInsertedPaymentId = $conn->insert_id;
+
+    $totalAmount = $_POST['totalAmount'];
+    $insertRenewQuery = "INSERT INTO renew (member_id, total_amount,membership_type,upto, payment_id, renew_date) VALUES ($memberId, $totalAmount, $membershipTypeId,$renewDuration, $lastInsertedPaymentId,'$renewDate')";
     $insertRenewResult = $conn->query($insertRenewQuery);
 
-    $insertPaymentQuery = "INSERT INTO payment (member, date, mode) VALUES ($memberId, '$renewDate', '$mode')";
-    $insertPaymentResult = $conn->query($insertPaymentQuery);
     if ($updateMemberResult && $insertRenewResult && $insertPaymentResult) {
         $response['success'] = true;
         $response['message'] = 'Membership renewed successfully.';
+        header("Location: list_renewal.php");
     } else {
         $response['message'] = 'Error updating membership or renewing: ' . $conn->error;
     }
@@ -152,6 +156,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <input type="text" class="form-control" id="modepayment" name="modepayment"
                                                     placeholder="Enter mode of payment" required>
                                             </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="reference">Reference Number</label>
+                                            <input type="text" class="form-control" id="reference" name="reference"
+                                                placeholder="Enter mode of payment" required>
                                         </div>
 
                                         <?php

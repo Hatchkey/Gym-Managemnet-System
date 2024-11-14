@@ -22,7 +22,7 @@ function generateUniqueFileName($originalName)
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $currentDate = date('m/d/Y');
+    $currentDate = date('Y-m-d');
     $fullname = $_POST['fullname'];
     $dob = $_POST['dob'];
     $gender = $_POST['gender'];
@@ -88,10 +88,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         );
 
         if ($stmtMember->execute()) {
-            // Insert into payment table using the last inserted user ID
             $lastInsertedMemberId = $conn->insert_id;
             $mode = $_POST['modepayment'];
-            $insertPaymentQuery = "INSERT INTO payment (member, date, mode, created_at) VALUES (?, ?, '$mode', NOW())";
+            $reference = $_POST['reference'];
+            $insertPaymentQuery = "INSERT INTO payment (member, date, mode, reference, created_at) VALUES (?, ?, '$mode', '$reference', NOW())";
             $stmtPayment = $conn->prepare($insertPaymentQuery);
             $stmtPayment->bind_param("is", $lastInsertedUserId, $currentDate);
 
@@ -103,21 +103,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $response['success'] = false;
                 $response['message'] = 'Error inserting into payment: ' . $stmtPayment->error;
             }
-
-
-            /*
-                SAYOP ANG VALUE SA LAST USER ID. KATO GPABUHAT NAKO NIMO GHPON IS PAG KUHA SA ID SA CURRENT INSERT SA USER TABLE
-                KARON ANG BUHATA SAME CONCEPT BUT INSTEAD OF USER TABLE KATONG TABLE NA members
-                KANI NA QUERY AYYY $insertMemberQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, address, country, postcode, occupation, 
-                KUHAA ANG ID TAS MAOY IPASA SA lastInsertedUserId
-                PARA DI LIBOG ANG VARIABLE PDE NA NIMO HIMOON ANG VARIABLE UG lastInsertedMemberId
-            */
-
+            $lastInsertedPaymentId = $conn->insert_id;
             $totalAmount = $_POST['totalAmount'];
             $membership_type = $_POST['membershipType'];
             $upto = $_POST['extend'];
-            $insertRenew = "INSERT INTO renew (member_id, total_amount, membership_type, upto, renew_date) 
-                    VALUES ('$lastInsertedMemberId', '$totalAmount', '$membership_type', '$upto', '$currentDate')";
+            $insertRenew = "INSERT INTO renew (member_id, total_amount, membership_type, upto, payment_id, renew_date) 
+                    VALUES ('$lastInsertedMemberId', '$totalAmount', '$membership_type', '$upto', '$lastInsertedPaymentId', '$currentDate')";
             if ($conn->query($insertRenew) === TRUE) {
                 $response['success'] = true;
             }
@@ -328,6 +319,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <input type="text" class="form-control" id="modepayment" name="modepayment"
                                                     placeholder="Enter mode of payment" required>
                                             </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label for="reference">Reference Number</label>
+                                            <input type="text" class="form-control" id="reference" name="reference"
+                                                placeholder="Enter mode of payment" required>
                                         </div>
 
                                     </div>

@@ -87,15 +87,15 @@ if (!isset($_SESSION['user_id'])) {
                 echo "<td>{$membershipTypeName}</td>";
                 if ($row['expiry_date'] === NULL) {
                   echo "<td>NONE</td>";
-              } else {
-                  $expiryDate = new DateTime($row['expiry_date']);
-                  $currentDate = new DateTime();
-              
-                  $daysRemaining = $currentDate->diff($expiryDate)->days;
+                } else {
+                    $expiryDate = new DateTime($row['expiry_date']);
+                    $currentDate = new DateTime();
+                
+                    $daysRemaining = $currentDate->diff($expiryDate)->days;
 
-              
-                  echo "<td>{$row['expiry_date']}<br><small>{$daysRemaining} days remaining</small></td>";
-              }                echo "<td><span class='badge $badgeClass'>$membershipStatus</span></td>";
+                
+                    echo "<td>{$row['expiry_date']}<br><small>{$daysRemaining} days remaining</small></td>";
+                }                echo "<td><span class='badge $badgeClass'>$membershipStatus</span></td>";
 
 
                 echo "<td>
