@@ -63,18 +63,20 @@ if ($countResult && $countResult->num_rows > 0) {
   {
     global $conn;
     // Assume you already have a database connection $conn
-    $paymentSql = "SELECT date FROM payment WHERE member = '" . $_SESSION['user_id'] . "' ORDER BY created_at DESC LIMIT 1";
+    $paymentSql = "SELECT expiry_date FROM members WHERE id = '" . $_SESSION['member_id'] . "' ORDER BY created_at DESC LIMIT 1";
     $resultPayment = $conn->query($paymentSql);
     $rowPayment = $resultPayment->fetch_assoc();
+    if (empty($rowPayment) || !isset($rowPayment['expiry_date']) || $rowPayment['expiry_date'] == null) {
+      return false; // Not paid for this month
+    }
 
-    $paymentDate = new DateTime($rowPayment['date']);
+    $paymentDate = new DateTime($rowPayment['expiry_date']);
     $currentDate = new DateTime();
 
-    $interval = $paymentDate->diff($currentDate);
-    if ($interval->m >= 1 || $interval->y > 0) {
-      return false; // Not paid for this month
+    if ($currentDate >= $paymentDate) {
+        return false; // Not paid for this month (expired)
     } else {
-      return true; // Paid for this month
+        return true; // Paid for this month
     }
   }
 
@@ -207,7 +209,7 @@ if ($countResult && $countResult->num_rows > 0) {
           <li class="nav-item">
             <a href="payment.php" class="nav-link <?php echo ($current_page == 'payment.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-credit-card"></i>
-              <p>Payment Transaction <i class="fas fa-angle-left right"></i></p>
+              <p>Payment Transaction</p>
             </a>
           </li>
           <ul class="nav nav-treeview">
