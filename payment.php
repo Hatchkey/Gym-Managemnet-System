@@ -8,13 +8,11 @@ if (!isset($_SESSION['user_id'])) {
 }
 global $conn;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $paymentSql = "SELECT date FROM payment WHERE member = '" . $_SESSION['user_id'] . "' ORDER BY created_at DESC LIMIT 1";
+    $memberId = $_POST['assign_to'];
+    $paymentSql = "SELECT date FROM payment WHERE member = '" . $memberId . "' ORDER BY created_at DESC LIMIT 1";
     $resultPayment = $conn->query($paymentSql);
     $rowPayment = $resultPayment->fetch_assoc();
-
-    $memberId = $_POST['assign_to'];
     $currentDate = date('m/d/Y');
-
     $paymentDate = new DateTime($rowPayment['date']);
     $currentDateCompare = new DateTime();
 
@@ -36,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-$members_query = "SELECT * FROM members";
+$members_query = "SELECT fullname, members.id as memberId, users.id as userId FROM members INNER JOIN users ON members.email = users.email";
 $members_result = $conn->query($members_query);
 
 ?>
@@ -79,7 +77,7 @@ $members_result = $conn->query($members_query);
                                             if ($members_result->num_rows > 0) {
                                                 // Loop through the results and create an <option> for each row
                                                 while ($row = $members_result->fetch_assoc()) {
-                                                    echo '<option value="' . htmlspecialchars($row['id']) . '">' . htmlspecialchars($row['fullname']) . '</option>';
+                                                    echo '<option value="' . htmlspecialchars($row['userId']) . '">' . htmlspecialchars($row['fullname']) . '</option>';
                                                 }
                                             } else {
                                                 echo '<option value="">No Workouts Available</option>';
