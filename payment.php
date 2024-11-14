@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 global $conn;
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $memberId = $_SESSION['user_id'];
+    $memberId = $_POST['assign_to'];
     $currentDate = date('m/d/Y');
 
     $insertQuery = "INSERT INTO payment (member, date) 
@@ -19,6 +19,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 }
+
+$members_query = "SELECT * FROM members";
+$members_result = $conn->query($members_query);
 
 ?>
 
@@ -48,35 +51,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
+                               
                                 <form method="post" action="" enctype="multipart/form-data">
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <label for="number">Card Number</label>
-                                                <input type="text" class="form-control" id="number" name="number"
-                                                    placeholder="Enter Card Number" required>
-                                            </div>
+                                    <div class="col-sm-6">
+                                        <label for="assign_to">Paid By</label>
+                                        <!-- <input type="text" class="form-control" id="workout_name" name="workout_name"
+                                            placeholder="Enter workout name" required> -->
+                                        <select name="assign_to" id="assign_to" class="form-control" required>
+                                            <option value="">Member payment</option>
+                                            <?php
+                                            if ($members_result->num_rows > 0) {
+                                                // Loop through the results and create an <option> for each row
+                                                while ($row = $members_result->fetch_assoc()) {
+                                                    echo '<option value="' . htmlspecialchars($row['id']) . '">' . htmlspecialchars($row['fullname']) . '</option>';
+                                                }
+                                            } else {
+                                                echo '<option value="">No Workouts Available</option>';
+                                            }
+                                            ?>
 
-
-
-                                            <div class="col-sm-6">
-                                                <label for="cvv">Cvv</label>
-                                                <input type="text" class="form-control" id="cvv" name="cvv"
-                                                    placeholder="Enter cvv" required>
-                                            </div>
-                                        </div>
-                                        <div class="row mt-3">
-                                            <div class="col-sm-6">
-                                                <label for="month">Expiry month</label>
-                                                <input type="text" class="form-control" id="month"
-                                                    name="month" placeholder="Enter Expiry month" required>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label for="year">Expiry year</label>
-                                                <input type="text" class="form-control" id="year" name="year"
-                                                    placeholder="Enter Expiry year" required>
-                                            </div>
-                                        </div>
+                                        </select>
                                     </div>
                                     <div class="card-footer">
                                         <button type="submit" class="btn btn-primary">Pay</button>

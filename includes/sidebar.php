@@ -204,7 +204,12 @@ if ($countResult && $countResult->num_rows > 0) {
               <p class="">Scanner</p>
             </a>
           </li>
-
+          <li class="nav-item">
+            <a href="payment.php" class="nav-link <?php echo ($current_page == 'payment.php') ? 'active' : ''; ?>">
+              <i class="nav-icon fas fa-credit-card"></i>
+              <p>Payment</p>
+            </a>
+          </li>
           <ul class="nav nav-treeview">
             <li class="nav-item">
               <a href="inventory.php" class="nav-link <?php echo ($current_page == 'inventory.php') ? 'active' : ''; ?>">
@@ -289,12 +294,6 @@ if ($countResult && $countResult->num_rows > 0) {
               <i class="nav-icon fas fa-qrcode"></i>
               <p>QR Code</p>
             </a> -->
-          </li>
-          <li class="nav-item">
-            <a href="payment.php" class="nav-link <?php echo ($current_page == 'payment.php') ? 'active' : ''; ?>">
-              <i class="nav-icon fas fa-credit-card"></i>
-              <p>Paymnent</p>
-            </a>
           </li>
           <!-- <li class="nav-item">
             <a href="user_profile.php" class="nav-link <?php echo ($current_page == 'user_profile.php') ? 'active' : ''; ?>">
