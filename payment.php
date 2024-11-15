@@ -7,36 +7,9 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 global $conn;
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $memberId = $_POST['assign_to'];
-    $paymentSql = "SELECT date FROM payment WHERE member = '" . $memberId . "' ORDER BY created_at DESC LIMIT 1";
-    $resultPayment = $conn->query($paymentSql);
-    $rowPayment = $resultPayment->fetch_assoc();
-    $currentDate = date('m/d/Y');
-    $paymentDate = new DateTime($rowPayment['date']);
-    $currentDateCompare = new DateTime();
 
-    $interval = $paymentDate->diff($currentDateCompare);
-    if ($interval->m >= 1 || $interval->y > 0) {
-        $insertQuery = "INSERT INTO payment (member, date) 
-                    VALUES ('$memberId', '$currentDate')";
-
-        if ($conn->query($insertQuery) === TRUE) {
-            echo "<script>
-            alert('Payment successful! Thank you for your payment.');
-            window.location.href = 'dashboard.php'; // Redirect after showing alert
-          </script>";
-            exit();
-
-            // header("Location: dashboard.php");
-
-        }
-    }
-}
-
-$selectQuery = "SELECT payment.id, reference, date, mode, total_amount FROM payment 
-                LEFT JOIN users ON users.id = payment.member 
-                LEFT JOIN members ON users.email = members.email
+$selectQuery = "SELECT payment.id, fullname, reference, date, mode, total_amount FROM payment
+                INNER JOIN members ON payment.member = members.id
                 INNER JOIN renew ON renew.payment_id = payment.id
                 ORDER BY payment.created_at DESC";
 $result = $conn->query($selectQuery);
@@ -76,7 +49,7 @@ $result = $conn->query($selectQuery);
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-
+                                                <th class=''>Fullname</th>
                                                 <th class=''>Amount</th>
                                                 <th class=' '>Mode </th>
                                                 <th>Paid Date</th>
@@ -96,6 +69,7 @@ $result = $conn->query($selectQuery);
 
 
                                                 echo "<tr>";
+                                                echo "<td>{$row['fullname']}</td>";
                                                 echo "<td>{$row['total_amount']}</td>";
                                                 echo "<td>{$row['mode']}</td>";
                                                 echo "<td>{$row['date']}</td>";

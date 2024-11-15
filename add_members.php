@@ -93,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $reference = $_POST['reference'];
             $insertPaymentQuery = "INSERT INTO payment (member, date, mode, reference, created_at) VALUES (?, ?, '$mode', '$reference', NOW())";
             $stmtPayment = $conn->prepare($insertPaymentQuery);
-            $stmtPayment->bind_param("is", $lastInsertedUserId, $currentDate);
+            $stmtPayment->bind_param("is", $lastInsertedMemberId, $currentDate);
 
             if ($stmtPayment->execute()) {
                 echo "Record inserted into payment successfully.";
