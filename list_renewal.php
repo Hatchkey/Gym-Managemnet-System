@@ -1,7 +1,7 @@
 <?php
 include('includes/config.php');
 
-$selectQuery = "SELECT * FROM members";
+$selectQuery = "SELECT * FROM members WHERE role = 'user'";
 $result = $conn->query($selectQuery);
 
 if (!isset($_SESSION['user_id'])) {
