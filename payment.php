@@ -14,9 +14,10 @@ global $conn;
     //                 ORDER BY payment.created_at DESC";
 
 
-    $selectQuery = "SELECT payment.id, fullname, members.membership_type, reference, date, mode, total_amount FROM payment
+    $selectQuery = "SELECT payment.id, fullname, type, reference, date, mode, total_amount FROM payment
                 INNER JOIN members ON payment.member = members.id
                 INNER JOIN renew ON renew.payment_id = payment.id
+                INNER JOIN membership_types ON membership_types.id = renew.membership_type
                 ORDER BY payment.created_at DESC";
 $result = $conn->query($selectQuery);
  
@@ -81,7 +82,7 @@ $result = $conn->query($selectQuery);
                                                 echo "<td>{$row['fullname']}</td>";
                                                 echo "<td>{$row['total_amount']}</td>";
                                                 echo "<td>{$row['mode']}</td>";
-                                                echo "<td>{$row['membership_type']}</td>";
+                                                echo "<td>{$row['type']}</td>";
                                                 echo "<td>{$row['date']}</td>";
                                                 echo "<td>{$row['reference']}</td>";
                                                 // echo "<td>";
