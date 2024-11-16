@@ -38,78 +38,89 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashedPassword = md5($password);
     $membershipNumber = 'CA-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
 
-    // Use prepared statements for inserting into the users table first
-    $insertUserQuery = "INSERT INTO users (email, password) VALUES (?, ?)";
+    $checkQuery = "SELECT * FROM users WHERE email = ?";
+    $stmt = $conn->prepare($checkQuery);
+    $stmt->bind_param('s', $email); // 's' indicates the type is string
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    $stmtUser = $conn->prepare($insertUserQuery);
-    $stmtUser->bind_param("ss", $email, $hashedPassword);
+    if ($result->num_rows > 0) {
+        $response['success'] = false;
+        $response['message'] = 'Email is already exist: ' . $email;
+    } else {
+        // Use prepared statements for inserting into the users table first
+        $insertUserQuery = "INSERT INTO users (email, password) VALUES (?, ?)";
 
-    // Execute the insertion into users table
-    if ($stmtUser->execute()) {
-        $lastInsertedUserId = $conn->insert_id; // Get the last inserted ID from the users table
+        $stmtUser = $conn->prepare($insertUserQuery);
+        $stmtUser->bind_param("ss", $email, $hashedPassword);
 
-        $extendDays = (int)$_POST['extend']; //Convert into int
-        $expiryDate = date('Y-m-d', strtotime("+$extendDays month"));
-        $insertMemberQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, address,  
-        membership_type, membership_number, qrcode, created_at, role, expiry_date) 
-        VALUES (?, ?,  ?, ?, ?, ?, ?, ?, ?,  NOW(), ?, ?)";
+        // Execute the insertion into users table
+        if ($stmtUser->execute()) {
+            $lastInsertedUserId = $conn->insert_id; // Get the last inserted ID from the users table
 
-        $stmtMember = $conn->prepare($insertMemberQuery);
-        $stmtMember->bind_param(
-            "sssssssssss",
-            $fullname,
-            $dob,
-            $gender,
-            $contactNumber,
-            $email,
-            $address,
-            $membershipType,
-            $membershipNumber,
-            $qrText,
-            $defaultUserRole,
-            $expiryDate
-        );
+            $extendDays = (int)$_POST['extend']; //Convert into int
+            $expiryDate = date('Y-m-d', strtotime("+$extendDays month"));
+            $insertMemberQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, address,  
+            membership_type, membership_number, qrcode, created_at, role, expiry_date) 
+            VALUES (?, ?,  ?, ?, ?, ?, ?, ?, ?,  NOW(), ?, ?)";
 
-        if ($stmtMember->execute()) {
-            $lastInsertedMemberId = $conn->insert_id;
-            $mode = $_POST['modepayment'];
-            $reference = $_POST['reference'];
-            $insertPaymentQuery = "INSERT INTO payment (member, date, mode, reference, created_at) VALUES (?, ?, '$mode', '$reference', NOW())";
-            $stmtPayment = $conn->prepare($insertPaymentQuery);
-            $stmtPayment->bind_param("is", $lastInsertedMemberId, $currentDate);
+            $stmtMember = $conn->prepare($insertMemberQuery);
+            $stmtMember->bind_param(
+                "sssssssssss",
+                $fullname,
+                $dob,
+                $gender,
+                $contactNumber,
+                $email,
+                $address,
+                $membershipType,
+                $membershipNumber,
+                $qrText,
+                $defaultUserRole,
+                $expiryDate
+            );
 
-            if ($stmtPayment->execute()) {
-                echo "Record inserted into payment successfully.";
-                $response['success'] = true;
-                $response['message'] = 'Member added successfully! Membership Number: ' . $membershipNumber;
+            if ($stmtMember->execute()) {
+                $lastInsertedMemberId = $conn->insert_id;
+                $mode = $_POST['modepayment'];
+                $reference = $_POST['reference'];
+                $insertPaymentQuery = "INSERT INTO payment (member, date, mode, reference, created_at) VALUES (?, ?, '$mode', '$reference', NOW())";
+                $stmtPayment = $conn->prepare($insertPaymentQuery);
+                $stmtPayment->bind_param("is", $lastInsertedMemberId, $currentDate);
+
+                if ($stmtPayment->execute()) {
+                    echo "Record inserted into payment successfully.";
+                    $response['success'] = true;
+                    $response['message'] = 'Member added successfully! Membership Number: ' . $membershipNumber;
+                } else {
+                    $response['success'] = false;
+                    $response['message'] = 'Error inserting into payment: ' . $stmtPayment->error;
+                }
+                $lastInsertedPaymentId = $conn->insert_id;
+                $totalAmount = $_POST['totalAmount'];
+                $membership_type = $_POST['membershipType'];
+                $upto = $_POST['extend'];
+                $insertRenew = "INSERT INTO renew (member_id, total_amount, membership_type, upto, payment_id, renew_date) 
+                        VALUES ('$lastInsertedMemberId', '$totalAmount', '$membership_type', '$upto', '$lastInsertedPaymentId', '$currentDate')";
+                if ($conn->query($insertRenew) === TRUE) {
+                    $response['success'] = true;
+                }
             } else {
                 $response['success'] = false;
-                $response['message'] = 'Error inserting into payment: ' . $stmtPayment->error;
+                $response['message'] = 'Error inserting into members: ' . $stmtMember->error;
             }
-            $lastInsertedPaymentId = $conn->insert_id;
-            $totalAmount = $_POST['totalAmount'];
-            $membership_type = $_POST['membershipType'];
-            $upto = $_POST['extend'];
-            $insertRenew = "INSERT INTO renew (member_id, total_amount, membership_type, upto, payment_id, renew_date) 
-                    VALUES ('$lastInsertedMemberId', '$totalAmount', '$membership_type', '$upto', '$lastInsertedPaymentId', '$currentDate')";
-            if ($conn->query($insertRenew) === TRUE) {
-                $response['success'] = true;
-            }
+
+            // Close member statement
+            $stmtMember->close();
         } else {
             $response['success'] = false;
-            $response['message'] = 'Error inserting into members: ' . $stmtMember->error;
+            $response['message'] = 'Error inserting into users: ' . $stmtUser->error;
         }
 
-        // Close member statement
-        $stmtMember->close();
-    } else {
-        $response['success'] = false;
-        $response['message'] = 'Error inserting into users: ' . $stmtUser->error;
+        // Close user and payment statements
+        $stmtUser->close();
+        $stmtPayment->close();
     }
-
-    // Close user and payment statements
-    $stmtUser->close();
-    $stmtPayment->close();
 }
 ?>
 
