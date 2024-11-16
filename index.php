@@ -10,9 +10,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error_message = "Email and password are required!";
         } else {
             $hashed_password = md5($password);
-           //echo $hashed_password;
+            //echo $hashed_password;
             $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$hashed_password'";
-            $result = $conn->query($sql); 
+            $result = $conn->query($sql);
             if ($result->num_rows == 1) {
                 $row = $result->fetch_assoc();
                 // Check if the email also exists in the 'members' table
@@ -25,10 +25,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     // Set session variables
                     $_SESSION['user_id'] = $row['id'];
                     $_SESSION['email'] = $row['email'];
-                    $_SESSION['role'] = $memberRow['role']; 
+                    $_SESSION['role'] = $memberRow['role'];
                     $_SESSION['member_id'] = $memberRow['id'];
                     $paymentSql = "SELECT date FROM payment WHERE member = '" . $row['id'] . "' ORDER BY created_at DESC LIMIT 1";
-                    $resultPayment = $conn->query($paymentSql); 
+                    $resultPayment = $conn->query($paymentSql);
                     $rowPayment = $resultPayment->fetch_assoc();
 
                     $paymentDate = new DateTime($rowPayment['date']);
@@ -41,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         // User has paid for this month
                         header("Location: dashboard.php");
                     }
-
                 } else {
                     // Email is not found in the 'members' table
                     $error_message = "Email not found in the members list!";
@@ -67,26 +66,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <div class="wrapper">
-        <form action="" method="POST">
+    <div class="wrapper  ">
+        <form action="" method="POST" class="">
             <h1>Login</h1>
             <?php
             if (isset($error_message)) {
                 echo '<div class="alert alert-danger">' . $error_message . '</div>';
             }
-            // if (isset($test)) {
-            //     echo '<div class="alert alert-danger">' . $test . '</div>';
-            // }
+           
             ?>
 
-            <div class="input-box">
+            <div class="input-box ">
                 <input type="email" name="email" placeholder="Email" required>
-                <i class='bx bxs-user'></i>
+                <i class='bx bxs-user' style="color: #93bb3f;"></i>
             </div>
 
             <div class="input-box">
                 <input type="password" name="password" placeholder="Password" required>
-                <i class='bx bxs-lock-alt'></i>
+                <i class='bx bxs-lock-alt ' style="color: #93bb3f;"></i>
             </div>
 
             <button type="submit" name="login" class="btn">Login</button>

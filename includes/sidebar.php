@@ -22,12 +22,6 @@ if ($countResult && $countResult->num_rows > 0) {
 
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-light-blue elevation-4">
-  <!-- Brand Logo -->
-  <a href="" class="brand-link">
-    <img src="uploads/cfg-logo.png" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-    <span class="brand-text font-weight-light"><?php echo getSystemName(); ?></span>
-  </a>
-
   <?php
   function getSystemName()
   {
@@ -74,26 +68,34 @@ if ($countResult && $countResult->num_rows > 0) {
     $currentDate = new DateTime();
 
     if ($currentDate >= $paymentDate) {
-        return false; // Not paid for this month (expired)
+      return false; // Not paid for this month (expired)
     } else {
-        return true; // Paid for this month
+      return true; // Paid for this month
     }
   }
 
   ?>
+  <!-- Brand Logo -->
+  <!-- <a href="" class="brand-link">
+    <img src="uploads/cfg-logo.png" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <span class="brand-text font-weight-light"><?php echo getSystemName(); ?></span>
+  </a> -->
+  <a href="" class=" border-b-2">
+    <!-- <img src="uploads/cfg-logo.png" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
+    <div class="flex justify-center items-center ">
+      <img src="uploads/cfg-logo.png" alt="" class="h-32  w-24">
+
+    </div>
+    <!-- <span class="brand-text font-weight-light"><?php echo getSystemName(); ?></span> -->
+  </a>
 
   <!-- Sidebar -->
-  <div class="sidebar">
+  <div class="  p-2 overflow-y-auto h-[530px]  " >
     <!-- Sidebar user panel (optional) -->
-    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
 
-      <div class="info">
-
-      </div>
-    </div>
 
     <!-- Sidebar Menu -->
-    <nav class="mt-2">
+    <nav class=" ">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <?php
         // Render if the login user is ADMIN
