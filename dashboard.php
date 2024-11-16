@@ -159,13 +159,13 @@ if ($fetchLogoResult->num_rows > 0) {
 <?php include('includes/header.php'); ?>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-  <div class="wrapper">
+  <div class="wrapper ">
     <?php include('includes/nav.php'); ?>
 
     <?php include('includes/sidebar.php'); ?>
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <!-- Content Wrapper. Contains page content bg-[#364a53] -->
+    <div class="content-wrapper  ">
 
       <?php include('includes/pagetitle.php'); ?>
 

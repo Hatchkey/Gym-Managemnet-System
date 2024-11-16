@@ -29,9 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $contactNumber = $_POST['contactNumber'];
     $email = $_POST['email'];
     $address = $_POST['address'];
-    $country = $_POST['country'];
-    $postcode = $_POST['postcode'];
-    $occupation = $_POST['occupation'];
     $membershipType = $_POST['membershipType'];
     $password = $_POST['password'];
     $qrText = $_POST['fullname'] . (string)time() . (string)microtime(true);
@@ -40,16 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     QRcode::png($qrText, $qrCodeImage);
     $hashedPassword = md5($password);
     $membershipNumber = 'CA-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
-
-    if (!empty($_FILES['photo']['name'])) {
-        $uploadedPhoto = $_FILES['photo'];
-        $uniquePhotoName = generateUniqueFileName($uploadedPhoto['name']);
-
-        move_uploaded_file($uploadedPhoto['tmp_name'], 'uploads/member_photos/' . $uniquePhotoName);
-    } else {
-        $uniquePhotoName = 'default.jpg';
-    }
-
 
     // Use prepared statements for inserting into the users table first
     $insertUserQuery = "INSERT INTO users (email, password) VALUES (?, ?)";
@@ -63,25 +50,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $extendDays = (int)$_POST['extend']; //Convert into int
         $expiryDate = date('Y-m-d', strtotime("+$extendDays month"));
-        $insertMemberQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, address, country, postcode, occupation, 
-        membership_type, membership_number, photo, qrcode, created_at, role, expiry_date) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)";
+        $insertMemberQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, address,  
+        membership_type, membership_number, qrcode, created_at, role, expiry_date) 
+        VALUES (?, ?,  ?, ?, ?, ?, ?, ?, ?,  NOW(), ?, ?)";
 
         $stmtMember = $conn->prepare($insertMemberQuery);
         $stmtMember->bind_param(
-            "sssssssssssssss",
+            "sssssssssss",
             $fullname,
             $dob,
             $gender,
             $contactNumber,
             $email,
             $address,
-            $country,
-            $postcode,
-            $occupation,
             $membershipType,
             $membershipNumber,
-            $uniquePhotoName,
             $qrText,
             $defaultUserRole,
             $expiryDate
@@ -213,36 +196,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     placeholder="Enter address" required>
                                             </div>
                                         </div>
-
-                                        <div class="row mt-3">
-
-                                            <div class="col-sm-6">
-                                                <label for="country">Country</label>
-                                                <input type="text" class="form-control" id="country" name="country"
-                                                    placeholder="Enter country" required>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label for="postcode">Postcode</label>
-                                                <input type="text" class="form-control" id="postcode" name="postcode"
-                                                    placeholder="Enter postcode" required>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="row mt-3">
-
-                                            <div class="col-sm-6">
-                                                <label for="occupation">Occupation</label>
-                                                <input type="text" class="form-control" id="occupation" name="occupation"
-                                                    placeholder="Enter occupation" required>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label for="photo">Member Photo</label>
-                                                <input type="file" class="form-control-file" id="photo" name="photo">
-                                            </div>
-                                        </div>
-
-
                                         <div class="row mt-3">
 
                                             <div class="col-sm-6">
@@ -320,11 +273,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     placeholder="Enter mode of payment" required>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <label for="reference">Reference Number</label>
-                                            <input type="text" class="form-control" id="reference" name="reference"
-                                                placeholder="Enter mode of payment" required>
+                                        <div class="row mt-3  mt-3">
+                                            <div class="col-sm-6">
+                                                <label for="reference">Reference Number</label>
+                                                <input type="text" class="form-control" id="reference" name="reference"
+                                                    placeholder="Enter mode of payment" required>
+                                            </div>
                                         </div>
+
 
                                     </div>
                                     <!-- /.card-body -->

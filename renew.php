@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mode = $_POST['modepayment'];
 
     $expiryDate = date('Y-m-d', strtotime("+$renewDuration months"));
- 
+
     $updateMemberQuery = "UPDATE members SET membership_type = $membershipTypeId, expiry_date = '$expiryDate' WHERE id = $memberId";
     $updateMemberResult = $conn->query($updateMemberQuery);
 
@@ -157,10 +157,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                     placeholder="Enter mode of payment" required>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <label for="reference">Reference Number</label>
-                                            <input type="text" class="form-control" id="reference" name="reference"
-                                                placeholder="Enter mode of payment" required>
+                                        <div class="row mt-3">
+
+                                            <div class="col-sm-6">
+                                                <label for="reference">Reference Number</label>
+                                                <input type="text" class="form-control" id="reference" name="reference"
+                                                    placeholder="Enter mode of payment" required>
+                                            </div>
                                         </div>
 
                                         <?php

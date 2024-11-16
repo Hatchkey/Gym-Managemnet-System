@@ -40,22 +40,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $contactNumber = $_POST['contactNumber'];
     $email = $_POST['email'];
     $address = $_POST['address'];
-    $country = $_POST['country'];
-    $postcode = $_POST['postcode'];
-    $occupation = $_POST['occupation'];
 
-    $photoUpdate = "";
-    $uploadedPhoto = $_FILES['photo'];
+    // $country = $_POST['country'];
+    // $postcode = $_POST['postcode'];
+    // $occupation = $_POST['occupation'];
 
-    if (!empty($uploadedPhoto['name'])) {
-        $uniquePhotoName = generateUniqueFileName($uploadedPhoto['name']);
-        move_uploaded_file($uploadedPhoto['tmp_name'], 'uploads/member_photos/' . $uniquePhotoName);
-        $photoUpdate = ", photo='$uniquePhotoName'";
-    }
+    // $photoUpdate = "";
+    // $uploadedPhoto = $_FILES['photo'];
+
+ 
 
     $updateQuery = "UPDATE members SET fullname='$fullname', dob='$dob', gender='$gender', 
-                    contact_number='$contactNumber', email='$email', address='$address', country='$country', 
-                    postcode='$postcode', occupation='$occupation' $photoUpdate
+                    contact_number='$contactNumber', email='$email', address='$address'
                     WHERE id = $memberId";
 
     if ($conn->query($updateQuery) === TRUE) {
@@ -157,14 +153,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <input type="text" class="form-control" id="address" name="address"
                                                    placeholder="Enter address" value="<?php echo $memberDetails['address']; ?>" required>
                                         </div>
-                                        <div class="col-sm-6">
+                                        <!-- <div class="col-sm-6">
                                             <label for="country">Country</label>
                                             <input type="text" class="form-control" id="country" name="country"
                                                    placeholder="Enter country" value="<?php echo $memberDetails['country']; ?>" required>
-                                        </div>
+                                        </div> -->
                                     </div>
 
-                                    <div class="row mt-3">
+                                    <!-- <div class="row mt-3">
                                         <div class="col-sm-6">
                                             <label for="postcode">Postcode</label>
                                             <input type="text" class="form-control" id="postcode" name="postcode"
@@ -175,14 +171,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <input type="text" class="form-control" id="occupation" name="occupation"
                                                    placeholder="Enter occupation" value="<?php echo $memberDetails['occupation']; ?>" required>
                                         </div>
-                                    </div>
+                                    </div> -->
                                     
                                     <div class="row mt-3">
-                                    <div class="col-sm-6">
+                                    <!-- <div class="col-sm-6">
                                         <label for="photo">Member Photo</label>
                                         <input type="file" class="form-control" id="photo" name="photo">
                                         <small class="text-muted">Leave it blank if you don't want to change the photo.</small>
-                                    </div>
+                                    </div> -->
                                 </div>
 
                                 </div>

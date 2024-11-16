@@ -8,12 +8,18 @@ if (!isset($_SESSION['user_id'])) {
 }
 global $conn;
 
-$selectQuery = "SELECT payment.id, fullname, reference, date, mode, total_amount FROM payment
+    // $selectQuery = "SELECT payment.id, fullname, reference, date, mode, total_amount FROM payment
+    //                 INNER JOIN members ON payment.member = members.id
+    //                 INNER JOIN renew ON renew.payment_id = payment.id
+    //                 ORDER BY payment.created_at DESC";
+
+
+    $selectQuery = "SELECT payment.id, fullname, members.membership_type, reference, date, mode, total_amount FROM payment
                 INNER JOIN members ON payment.member = members.id
                 INNER JOIN renew ON renew.payment_id = payment.id
                 ORDER BY payment.created_at DESC";
 $result = $conn->query($selectQuery);
- //
+ 
 ?>
 
 <?php include('includes/header.php'); ?>
@@ -52,8 +58,11 @@ $result = $conn->query($selectQuery);
                                                 <th class=''>Fullname</th>
                                                 <th class=''>Amount</th>
                                                 <th class=' '>Mode </th>
+                                                <th>Membership Type</th>
                                                 <th>Paid Date</th>
-                                                <th class=''>reference</th>
+
+
+                                                <th class=''>Reference</th>
 
                                                 <?php if ($_SESSION['role'] == 'admin') { ?>
                                                     <!-- <th>Actions</th> -->
@@ -72,6 +81,7 @@ $result = $conn->query($selectQuery);
                                                 echo "<td>{$row['fullname']}</td>";
                                                 echo "<td>{$row['total_amount']}</td>";
                                                 echo "<td>{$row['mode']}</td>";
+                                                echo "<td>{$row['membership_type']}</td>";
                                                 echo "<td>{$row['date']}</td>";
                                                 echo "<td>{$row['reference']}</td>";
                                                 // echo "<td>";
@@ -80,14 +90,14 @@ $result = $conn->query($selectQuery);
                                                 // <td>";
                                                 // }
                                                 // Only show edit and delete buttons for admin
-            //                                     if ($_SESSION['role'] == 'admin') {
-            //                                         echo "
-            //                                         <div class='flex gap-x-2'>
-            //       <a href='edit_inventory.php?id={$row['id']}' class='btn btn-primary'><i class='fas fa-edit'></i></a>
-            //                     <button class='btn btn-danger' onclick='deleteMember({$row['id']})'><i class='fas fa-trash'></i></button>
-            //      </div>
-            // ";
-            //                                     }
+                                                //                                     if ($_SESSION['role'] == 'admin') {
+                                                //                                         echo "
+                                                //                                         <div class='flex gap-x-2'>
+                                                //       <a href='edit_inventory.php?id={$row['id']}' class='btn btn-primary'><i class='fas fa-edit'></i></a>
+                                                //                     <button class='btn btn-danger' onclick='deleteMember({$row['id']})'><i class='fas fa-trash'></i></button>
+                                                //      </div>
+                                                // ";
+                                                //                                     }
 
                                                 echo "</tr>";
                                                 $counter++;
