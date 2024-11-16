@@ -52,12 +52,14 @@ body {
 
 .input-box input {
     width: 100%;
-    padding: 15px 20px;
-    background: transparent;
+    padding: 15px 20px; 
+    /* #93bb3f */
+    background:  #364a53;
     border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 40px;
     color: #fff;
     font-size: 16px;
+    outline: none;
 }
 
 .input-box input::placeholder {
@@ -101,10 +103,10 @@ body {
 .btn {
     width: 100%;
     padding: 15px 0;
-    background: #fff;
+    background:  #364a53;
     border: none;
     border-radius: 40px;
-    color: #333;
+    color: #93bb3f;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;

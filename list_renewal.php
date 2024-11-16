@@ -1,7 +1,7 @@
 <?php
 include('includes/config.php');
 
-$selectQuery = "SELECT * FROM members";
+$selectQuery = "SELECT * FROM members WHERE role = 'user'";
 $result = $conn->query($selectQuery);
 
 if (!isset($_SESSION['user_id'])) {
@@ -87,21 +87,27 @@ if (!isset($_SESSION['user_id'])) {
                 echo "<td>{$membershipTypeName}</td>";
                 if ($row['expiry_date'] === NULL) {
                   echo "<td>NONE</td>";
-              } else {
-                  $expiryDate = new DateTime($row['expiry_date']);
-                  $currentDate = new DateTime();
-              
-                  $daysRemaining = $currentDate->diff($expiryDate)->days;
+                } else {
+                    $expiryDate = new DateTime($row['expiry_date']);
+                    $currentDate = new DateTime();
+                
+                    $daysRemaining = $currentDate->diff($expiryDate)->days;
 
-              
-                  echo "<td>{$row['expiry_date']}<br><small>{$daysRemaining} days remaining</small></td>";
-              }                echo "<td><span class='badge $badgeClass'>$membershipStatus</span></td>";
+                
+                    echo "<td>{$row['expiry_date']}<br><small>{$daysRemaining} days remaining</small></td>";
+                }                echo "<td><span class='badge $badgeClass'>$membershipStatus</span></td>";
 
-
-                echo "<td>
-                <a href='renew.php?id={$row['id']}' class='btn btn-success'>Renew</a>
-                    </td>";
-                echo "</tr>";
+                if ($membershipStatus == 'Active') {
+                  // If the status is 'Active', show the button as disabled (using pointer-events: none)
+                    echo "<td>
+                            <a href='#' class='btn btn-success' style='pointer-events: none; background-color: gray;'>Renew</a>
+                          </td>";
+                } else {
+                    // If the status is 'Expired', allow the button to be clickable
+                    echo "<td>
+                            <a href='renew.php?id={$row['id']}' class='btn btn-success'>Renew</a>
+                          </td>";
+                }
 
                 $counter++;
             }
