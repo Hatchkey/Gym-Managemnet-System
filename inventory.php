@@ -148,6 +148,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             window.location.href = 'delete_inventory.php?id=' + id;
         }
     }
+    $(function() {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+
+        });
+    });
 </script>
 
 </html>

@@ -96,9 +96,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         echo "<td>{$membershipTypeName}</td>";
                         echo "<td>{$membershipStatus}</td>";
                         echo "<td class='flex gap-x-2'>";
-                        if (!empty($row['expiry_date'])) {
-                          echo "<a href='memberProfile.php?id={$row['id']}' class='btn btn-info'><i class='fas fa-id-card'></i></a>";
-                        }
+                        // if (!empty($row['expiry_date'])) {
+                        //   echo "<a href='memberProfile.php?id={$row['id']}' class='btn btn-info'><i class='fas fa-id-card'></i></a>";
+                        // }
 
                         echo "
                     <a href='edit_member.php?id={$row['id']}' class='btn btn-primary'><i class='fas fa-edit'></i></a>
