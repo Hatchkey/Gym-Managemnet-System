@@ -76,7 +76,7 @@ if (!isset($_SESSION['user_id'])) {
         <?php include('includes/sidebar.php'); ?>
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper bg-[#364a53]">
 
             <?php include('includes/pagetitle.php'); ?>
 
@@ -88,9 +88,8 @@ if (!isset($_SESSION['user_id'])) {
 
                         <div class="col-12">
 
-                            <div class="card">
-                                <div class="card-header">
-
+                            <div class="card bg-[#ececec]">
+                                <div class="card-header  bg-[#aeb3b3]">
                                     <?php if ($_SESSION['role'] == 'admin') { ?>
                                         <h3 class="card-title">Workout Program List DataTable</h3>
                                     <?php } ?>
@@ -186,7 +185,7 @@ if (!isset($_SESSION['user_id'])) {
         <!-- /.control-sidebar -->
 
         <!-- Main Footer -->
-        <footer class="main-footer">
+        <footer class="main-footer bg-[#364a53]">
             <strong> &copy; <?php echo date('Y'); ?> Camalig Fitness Gym</a> </strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">

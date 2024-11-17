@@ -2,71 +2,71 @@
 include('includes/config.php');
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
-    exit();
+  header("Location: index.php");
+  exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $fromDate = $_POST['fromDate'];
-    $toDate = $_POST['toDate'];
+  $fromDate = $_POST['fromDate'];
+  $toDate = $_POST['toDate'];
 
-    $reportQuery = "SELECT m.*, mt.type AS membership_type_name
+  $reportQuery = "SELECT m.*, mt.type AS membership_type_name
                     FROM members m
                     LEFT JOIN membership_types mt ON m.membership_type = mt.id
                     WHERE m.created_at BETWEEN '$fromDate' AND '$toDate'";
-    $reportResult = $conn->query($reportQuery);
+  $reportResult = $conn->query($reportQuery);
 }
 
 ?>
 
-<?php include('includes/header.php');?>
+<?php include('includes/header.php'); ?>
 <style>
-    @media print {
-        form {
-            display: none;
-        }
-
-        .print-button {
-            display: none;
-        }
+  @media print {
+    form {
+      display: none;
     }
+
+    .print-button {
+      display: none;
+    }
+  }
 </style>
 
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-<div class="wrapper">
-  <?php include('includes/nav.php');?>
-  <?php include('includes/sidebar.php');?>
-  
-  <div class="content-wrapper">
-    <?php include('includes/pagetitle.php');?>
+  <div class="wrapper">
+    <?php include('includes/nav.php'); ?>
+    <?php include('includes/sidebar.php'); ?>
 
-    <section class="content">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="card card-primary">
-              <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-keyboard"></i> Membership Report</h3>
-              </div>
-              
-              <form method="post" action="">
-                <div class="card-body">
-                  <div class="form-group">
-                    <label for="fromDate">From Date:</label>
-                    <input type="date" id="fromDate" name="fromDate" class="form-control" required>
-                  </div>
+    <div class="content-wrapper bg-[#364a53]">
+      <?php include('includes/pagetitle.php'); ?>
 
-                  <div class="form-group">
-                    <label for="toDate">To Date:</label>
-                    <input type="date" id="toDate" name="toDate" class="form-control" required>
-                  </div>
-
-                  <button type="submit" class="btn btn-success">Generate Report</button>
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="card bg-[#ececec]">
+                <div class="card-header  bg-[#aeb3b3]">
+                  <h3 class="card-title"><i class="fas fa-keyboard"></i> Membership Report</h3>
                 </div>
-              </form>
-              
-              <?php
+
+                <form method="post" action="">
+                  <div class="card-body">
+                    <div class="form-group">
+                      <label for="fromDate">From Date:</label>
+                      <input type="date" id="fromDate" name="fromDate" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="toDate">To Date:</label>
+                      <input type="date" id="toDate" name="toDate" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn bg-[#20333c] text-white">Generate Report</button>
+                  </div>
+                </form>
+
+                <?php
                 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   if ($reportResult->num_rows > 0) {
                     echo '<div class="card-body">';
@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo '</tr>';
                     echo '</thead>';
                     echo '<tbody>';
-                    
+
                     while ($row = $reportResult->fetch_assoc()) {
                       echo '<tr>';
                       echo '<td>' . $row['membership_number'] . '</td>';
@@ -105,33 +105,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     echo '</div>';
                   }
                 }
-              ?>
+                ?>
+              </div>
             </div>
           </div>
         </div>
+      </section>
+    </div>
+
+    <aside class="control-sidebar control-sidebar-dark">
+    </aside>
+
+    <footer class="main-footer bg-[#364a53]">
+      <strong> &copy; <?php echo date('Y'); ?> Camalig Fitness Gym</a> </strong>
+      All rights reserved.
+      <div class="float-right d-none d-sm-inline-block">
+        <b>Developed By</b> <a href="https://www.facebook.com/camaligfitnessgym">CFG</a>
       </div>
-    </section>
+    </footer>
   </div>
 
-  <aside class="control-sidebar control-sidebar-dark">
-  </aside>
+  <?php include('includes/footer.php'); ?>
 
-  <footer class="main-footer"> 
-  <strong> &copy; <?php echo date('Y');?> Camalig Fitness Gym</a> </strong>
-  All rights reserved.
-  <div class="float-right d-none d-sm-inline-block">
-    <b>Developed By</b> <a href="https://www.facebook.com/camaligfitnessgym">CFG</a>
-  </div>
-</footer>
-</div>
-
-<?php include('includes/footer.php');?>
-
-<script>
-function printReport() {
-    window.print();
-}
-</script>
+  <script>
+    function printReport() {
+      window.print();
+    }
+  </script>
 
 </body>
+
 </html>

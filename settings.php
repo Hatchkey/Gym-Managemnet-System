@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateSettings'])) {
         $logoName = $_FILES['logo']['name'];
         $logoTmpName = $_FILES['logo']['tmp_name'];
         $logoType = $_FILES['logo']['type'];
-        $uploadPath = 'uploads/'; 
+        $uploadPath = 'uploads/';
 
         $targetPath = $uploadPath . $logoName;
         if (move_uploaded_file($logoTmpName, $targetPath)) {
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['updateSettings'])) {
     } else {
         $updateSettingsQuery = "UPDATE settings SET system_name = '$systemName', currency = '$currency' WHERE id = 1";
         $updateSettingsResult = $conn->query($updateSettingsQuery);
-        
+
         if ($updateSettingsResult) {
             $successMessage = 'System settings updated successfully.';
         } else {
@@ -80,108 +80,108 @@ if ($fetchSettingsResult->num_rows > 0) {
 
 ?>
 
-<?php include('includes/header.php');?>
+<?php include('includes/header.php'); ?>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-<div class="wrapper">
-    <?php include('includes/nav.php');?>
-    <?php include('includes/sidebar.php');?>
+    <div class="wrapper">
+        <?php include('includes/nav.php'); ?>
+        <?php include('includes/sidebar.php'); ?>
 
-    <div class="content-wrapper">
-        <?php include('includes/pagetitle.php');?>
+        <div class="content-wrapper bg-[#364a53]">
+            <?php include('includes/pagetitle.php'); ?>
 
-        <section class="content">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title"><i class="fas fa-cogs"></i> System Settings</h3>
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card bg-[#ececec]">
+                                <div class="card-header  bg-[#aeb3b3]">
+                                    <h3 class="card-title"><i class="fas fa-cogs"></i> System Settings</h3>
+                                </div>
+
+                                <?php
+                                if (!empty($successMessage)) {
+                                    echo '<div class="alert alert-success">' . $successMessage . '</div>';
+                                } elseif (!empty($errorMessage)) {
+                                    echo '<div class="alert alert-danger">' . $errorMessage . '</div>';
+                                }
+
+                                if (!empty($successMessagePassword)) {
+                                    echo '<div class="alert alert-success">' . $successMessagePassword . '</div>';
+                                } elseif (!empty($errorMessagePassword)) {
+                                    echo '<div class="alert alert-danger">' . $errorMessagePassword . '</div>';
+                                }
+                                ?>
+
+                                <form method="post" action="" enctype="multipart/form-data">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="systemName">System Name:</label>
+                                            <input type="text" id="systemName" name="systemName" class="form-control"
+                                                value="<?php echo isset($settings['system_name']) ? $settings['system_name'] : ''; ?>"
+                                                required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="logo">Logo:</label>
+                                            <input type="file" id="logo" name="logo" class="form-control">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="currency">Currency:</label>
+                                            <input type="text" id="currency" name="currency" class="form-control"
+                                                value="<?php echo isset($settings['currency']) ? $settings['currency'] : ''; ?>"
+                                                required>
+                                        </div>
+
+                                        <button type="submit" name="updateSettings" class="btn bg-[#20333c] text-white">Update Settings</button>
+                                    </div>
+                                </form>
+
+                                <form method="post" action="">
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="currentPassword">Current Password:</label>
+                                            <input type="password" id="currentPassword" name="currentPassword" class="form-control"
+                                                required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="newPassword">New Password:</label>
+                                            <input type="password" id="newPassword" name="newPassword" class="form-control"
+                                                required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="confirmPassword">Confirm Password:</label>
+                                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
+                                                required>
+                                        </div>
+
+                                        <button type="submit" name="changePassword" class="btn bg-[#20333c] text-white">Change Password</button>
+                                    </div>
+                                </form>
+
                             </div>
-
-                            <?php
-                            if (!empty($successMessage)) {
-                                echo '<div class="alert alert-success">' . $successMessage . '</div>';
-                            } elseif (!empty($errorMessage)) {
-                                echo '<div class="alert alert-danger">' . $errorMessage . '</div>';
-                            }
-
-                            if (!empty($successMessagePassword)) {
-                                echo '<div class="alert alert-success">' . $successMessagePassword . '</div>';
-                            } elseif (!empty($errorMessagePassword)) {
-                                echo '<div class="alert alert-danger">' . $errorMessagePassword . '</div>';
-                            }
-                            ?>
-
-                            <form method="post" action="" enctype="multipart/form-data">
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="systemName">System Name:</label>
-                                        <input type="text" id="systemName" name="systemName" class="form-control"
-                                            value="<?php echo isset($settings['system_name']) ? $settings['system_name'] : ''; ?>"
-                                            required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="logo">Logo:</label>
-                                        <input type="file" id="logo" name="logo" class="form-control">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="currency">Currency:</label>
-                                        <input type="text" id="currency" name="currency" class="form-control"
-                                            value="<?php echo isset($settings['currency']) ? $settings['currency'] : ''; ?>"
-                                            required>
-                                    </div>
-
-                                    <button type="submit" name="updateSettings" class="btn btn-primary">Update Settings</button>
-                                </div>
-                            </form>
-
-                            <form method="post" action="">
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="currentPassword">Current Password:</label>
-                                        <input type="password" id="currentPassword" name="currentPassword" class="form-control"
-                                            required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="newPassword">New Password:</label>
-                                        <input type="password" id="newPassword" name="newPassword" class="form-control"
-                                            required>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="confirmPassword">Confirm Password:</label>
-                                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control"
-                                            required>
-                                    </div>
-
-                                    <button type="submit" name="changePassword" class="btn btn-primary">Change Password</button>
-                                </div>
-                            </form>
-
                         </div>
                     </div>
                 </div>
+            </section>
+        </div>
+
+        <aside class="control-sidebar control-sidebar-dark">
+        </aside>
+
+        <footer class="main-footer bg-[#364a53]">
+            <strong> &copy; <?php echo date('Y'); ?> Camalig Fitness Gym</a> </strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Developed By</b> <a href="https://www.facebook.com/camaligfitnessgym">CFG</a>
             </div>
-        </section>
+        </footer>
     </div>
 
-    <aside class="control-sidebar control-sidebar-dark">
-    </aside>
-
-    <footer class="main-footer"> 
-  <strong> &copy; <?php echo date('Y');?> Camalig Fitness Gym</a> </strong>
-  All rights reserved.
-  <div class="float-right d-none d-sm-inline-block">
-    <b>Developed By</b> <a href="https://www.facebook.com/camaligfitnessgym">CFG</a>
-  </div>
-</footer>
-</div>
-
-<?php include('includes/footer.php');?>
+    <?php include('includes/footer.php'); ?>
 
 
 </body>

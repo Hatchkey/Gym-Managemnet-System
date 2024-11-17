@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php include('includes/sidebar.php'); ?>
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper bg-[#364a53]">
             <?php include('includes/pagetitle.php'); ?>
 
             <!-- Main content -->
@@ -48,13 +48,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="row">
                         <!-- left column -->
                         <div class="col-md-12">
-
-                            <div class="card">
-                                <div class="card-header">
-
-
+                            <div class="card bg-[#ececec]">
+                                <div class="card-header  bg-[#aeb3b3]">
                                     <h3 class="card-title">Equipment List DataTable</h3>
-
                                 </div>
 
                                 <!-- /.card-header -->
@@ -101,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                  </div>
             ";
                                                 }
-                                               
+
                                                 echo "</tr>";
                                                 $counter++;
                                             }
@@ -134,7 +130,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- /.control-sidebar -->
 
         <!-- Main Footer -->
-        <footer class="main-footer">
+        <footer class="main-footer bg-[#364a53]">
             <strong> &copy; <?php echo date('Y'); ?>Camalig Fitness Gym</a> </strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
@@ -152,6 +148,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             window.location.href = 'delete_inventory.php?id=' + id;
         }
     }
+    $(function() {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+
+        });
+    });
 </script>
 
 </html>

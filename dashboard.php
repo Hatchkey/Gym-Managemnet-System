@@ -158,6 +158,17 @@ if ($fetchLogoResult->num_rows > 0) {
 
 <?php include('includes/header.php'); ?>
 
+<head>
+
+  <style>
+ 
+    .info-box,
+    .item {
+      background-color: #aeb3b3 !important;
+    }
+  </style>
+</head>
+
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
   <div class="wrapper ">
     <?php include('includes/nav.php'); ?>
@@ -165,7 +176,7 @@ if ($fetchLogoResult->num_rows > 0) {
     <?php include('includes/sidebar.php'); ?>
 
     <!-- Content Wrapper. Contains page content bg-[#364a53] -->
-    <div class="content-wrapper  ">
+    <div class="content-wrapper bg-[#364a53] ">
 
       <?php include('includes/pagetitle.php'); ?>
 
@@ -199,7 +210,7 @@ if ($fetchLogoResult->num_rows > 0) {
                 <div class="info-box">
                   <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-users"></i></span>
 
-                  <div class="info-box-content">
+                  <div class="info-box-content ">
                     <span class="info-box-text">Total Members</span>
                     <span class="info-box-number">
                       <?php echo getTotalMembersCount(); ?>
@@ -298,14 +309,14 @@ if ($fetchLogoResult->num_rows > 0) {
               ?>
 
               <?php if ($_SESSION['role'] == 'admin') { ?>
-                <div class="card">
+                <div class="card info-box">
                   <div class="card-header">
                     <h3 class="card-title">Recently Joined Members</h3>
                     <div class="card-tools">
-                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <button type="button" class="btn btn-tool text-black" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
                       </button>
-                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                      <button type="button" class="btn btn-tool text-black" data-card-widget="remove">
                         <i class="fas fa-times"></i>
                       </button>
                     </div>
@@ -313,10 +324,10 @@ if ($fetchLogoResult->num_rows > 0) {
 
                   <!-- /.card-header -->
                   <div class="card-body p-0">
-                    <ul class="products-list product-list-in-card pl-2 pr-2">
+                    <ul class="products-list product-list-in-card pl-2 pr-2 ">
                       <?php
                       while ($row = $recentMembersResult->fetch_assoc()) {
-                        echo '<li class="item">';
+                        echo '<li class="item border-b py-1">';
                         echo '<div class="product-img">';
                         // Check if the member has a photo
                         if (!empty($row['photo'])) {
@@ -326,7 +337,7 @@ if ($fetchLogoResult->num_rows > 0) {
                           echo '<img src="uploads/member_photos/default.jpg" alt="Default Photo" class="img-size-50">';
                         }
                         echo '</div>';
-                        echo '<div class="product-info">';
+                        echo '<div class="product-info  ">';
                         echo '<a href="javascript:void(0)" class="product-title">' . $row['fullname'] . '</a>';
                         echo '<span class="product-description">';
                         echo '<span class="badge badge-dark float-right">' . getMembershipTypeName($row['membership_type']) . '</span>';
@@ -380,7 +391,7 @@ if ($fetchLogoResult->num_rows > 0) {
     <!-- /.control-sidebar -->
 
     <!-- Main Footer -->
-    <footer class="main-footer">
+    <footer class="main-footer bg-[#364a53]">
       <strong> &copy; <?php echo date('Y'); ?> Camalig Fitness Gym</a> -</strong>
       All rights reserved.
       <div class="float-right d-none d-sm-inline-block">

@@ -54,7 +54,7 @@ $result = $conn->query($selectQuery);
         <?php include('includes/sidebar.php'); ?>
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper bg-[#364a53]">
 
             <?php include('includes/pagetitle.php'); ?>
 
@@ -62,11 +62,8 @@ $result = $conn->query($selectQuery);
             <section class="content">
                 <div class="container-fluid">
                     <!-- Info boxes -->
-
-
                     <!-- Main row -->
                     <div class="row ">
-
                         <div class="col-md-12">
                             <!-- Member LIST -->
                             <?php
@@ -75,10 +72,8 @@ $result = $conn->query($selectQuery);
                             $recentMembersResult = $conn->query($recentMembersQuery);
                             ?>
 
-                            <div class="card p-2">
-
-
-                                <div class="card-header">
+                            <div class="card  bg-[#ececec]">
+                                <div class="card-header  bg-[#aeb3b3]">
                                     <h3 class="card-title">Scan QR Code</h3>
                                 </div>
                                 <div class="flex justify-center py-2">
@@ -87,7 +82,7 @@ $result = $conn->query($selectQuery);
 
                                 <input type="text" id="qr_code_text" class="hidden" />
                                 <div class="flex justify-center py-2">
-                                    <button onclick="startScanning()" class="btn btn-primary">Scan</button>
+                                    <button onclick="startScanning()" class="btn bg-[#20333c] text-white w-32">Scan</button>
                                 </div>
                             </div>
                         </div>
@@ -95,48 +90,58 @@ $result = $conn->query($selectQuery);
                     </div>
                     <!-- /.row -->
                 </div><!--/. container-fluid -->
+                <div class="row px-2">
+                    <div class="col-md-12">
+                        <div class="card  bg-[#ececec]">
+                            <!-- <div class="card-header  bg-[#aeb3b3]">
+                                <h3 class="card-title">Record</h3>
+                            </div> -->
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead class="border-b-2 border-red-900">
+                                    <tr>
+                                        <th>Membership #</th>
+                                        <th>Fullname</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <?php
+                                    $counter = 1;
+                                    while ($row = $result->fetch_assoc()) {
+
+                                        $expiryDate = strtotime($row['expiry_date']);
+                                        $currentDate = time();
+                                        $daysDifference = floor(($expiryDate - $currentDate) / (60 * 60 * 24));
+
+                                        $membershipStatus = ($daysDifference < 0) ? 'Expired' : 'Active';
+
+                                        $membershipTypeId = $row['membership_type'];
+                                        $membershipTypeQuery = "SELECT type FROM membership_types WHERE id = $membershipTypeId";
+                                        $membershipTypeResult = $conn->query($membershipTypeQuery);
+                                        $membershipTypeRow = $membershipTypeResult->fetch_assoc();
+                                        $membershipTypeName = ($membershipTypeRow) ? $membershipTypeRow['type'] : 'Unknown';
+
+                                        echo "<tr>";
+                                        echo "<td>{$row['membership_number']}</td>";
+                                        echo "<td>{$row['fullname']}</td>";
+                                        echo "<td>{$row['date']}</td>";
+
+
+
+                                        echo "</tr>";
+
+                                        $counter++;
+                                    }
+                                    ?>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </section>
-            <table id="example1" class="table table-bordered table-striped">
-                <thead>
-                    <tr>
-                        <th>Membership #</th>
-                        <th>Fullname</th>
-                        <th>Date</th>
-                    </tr>
-                </thead>
 
-                <tbody>
-                    <?php
-                    $counter = 1;
-                    while ($row = $result->fetch_assoc()) {
-
-                        $expiryDate = strtotime($row['expiry_date']);
-                        $currentDate = time();
-                        $daysDifference = floor(($expiryDate - $currentDate) / (60 * 60 * 24));
-
-                        $membershipStatus = ($daysDifference < 0) ? 'Expired' : 'Active';
-
-                        $membershipTypeId = $row['membership_type'];
-                        $membershipTypeQuery = "SELECT type FROM membership_types WHERE id = $membershipTypeId";
-                        $membershipTypeResult = $conn->query($membershipTypeQuery);
-                        $membershipTypeRow = $membershipTypeResult->fetch_assoc();
-                        $membershipTypeName = ($membershipTypeRow) ? $membershipTypeRow['type'] : 'Unknown';
-
-                        echo "<tr>";
-                        echo "<td>{$row['membership_number']}</td>";
-                        echo "<td>{$row['fullname']}</td>";
-                        echo "<td>{$row['date']}</td>";
-
-
-
-                        echo "</tr>";
-
-                        $counter++;
-                    }
-                    ?>
-                </tbody>
-
-            </table>
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
@@ -148,7 +153,7 @@ $result = $conn->query($selectQuery);
         <!-- /.control-sidebar -->
 
         <!-- Main Footer -->
-        <footer class="main-footer">
+        <footer class="main-footer bg-[#364a53]">
             <strong> &copy; <?php echo date('Y'); ?> Camalig Fitness Gym</a> -</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">

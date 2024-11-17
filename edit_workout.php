@@ -39,7 +39,7 @@ function generateUniqueFileName($filename)
     $uniqueName = $basename . '_' . time() . '.' . $ext;
     return $uniqueName;
 }
-var_dump($_POST);
+
 $idToEdit = $_GET['id'];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -59,8 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         member_id = '$assign_to'  
         WHERE id ='$idToEdit' ";
 
-    // var_dump($updateWorkoutProgramQuery);
-    // exit();
+
 
     // Execute the update query for workout_program
     if ($conn->query($updateWorkoutProgramQuery) === TRUE) {
@@ -77,17 +76,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
-
 <?php include('includes/header.php'); ?>
+
+<head>
+
+    <style>
+        .parent-card {
+            background-color: #ececec !important;
+        }
+
+        .card-header {
+            background-color: #aeb3b3 !important;
+        }
+
+        .btn-submit {
+            background-color: #20333c !important;
+            color: #fff !important;
+        }
+
+        .body-container,
+        .footer-container {
+            background-color: #364a53 !important;
+        }
+    </style>
+</head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
     <div class="wrapper">
         <?php include('includes/nav.php'); ?>
-
         <?php include('includes/sidebar.php'); ?>
-
+ 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper body-container">
             <?php include('includes/pagetitle.php'); ?>
 
             <!-- Main content -->
@@ -113,16 +133,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <?php endif; ?>
 
                             <!-- general form elements -->
-                            <div class="card card-primary">
-                                <div class="card-header">
+                            <div class="card  parent-card ">
+                                <div class="card-header  bg-[#aeb3b3]">
                                     <h3 class="card-title"><i class="fas fa-keyboard"></i> Edit Workout Program Details</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
                                 <form method="post" action="" enctype="multipart/form-data">
                                     <div class="card-body">
-
-
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <label for="workout_name">Workout Name</label>
@@ -136,7 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     if ($workout_list_result->num_rows > 0) {
 
                                                         while ($row = $workout_list_result->fetch_assoc()) {
-                                                             
+
                                                             $selected = ($row['workout_id'] == $row['workout_id']) ? 'selected' : '';
 
                                                             echo '<option value="' . htmlspecialchars($row['workout_id']) . '" ' . $selected . '>' . htmlspecialchars($row['workout_name']) . '</option>';
@@ -204,13 +222,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="submit" class="btn btn-submit">Submit</button>
                                     </div>
-                                    <!-- /.card-body -->
-
-
                                 </form>
                             </div>
                             <!-- /.card -->
@@ -229,13 +243,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- /.content-wrapper -->
 
         <!-- Control Sidebar -->
-        <aside class="control-sidebar control-sidebar-dark">
-            <!-- Control sidebar content goes here -->
-        </aside>
+   
         <!-- /.control-sidebar -->
 
         <!-- Main Footer -->
-        <footer class="main-footer">
+        <footer class="main-footer footer-container">
             <strong> &copy; <?php echo date('Y'); ?> Camalig Fitness Gym</a> </strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">

@@ -63,32 +63,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Login</title>
     <link rel="stylesheet" href="dist/css/admin-login.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        .form-style {
+            opacity: 0.9;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="wrapper  ">
-        <form action="" method="POST" class="">
-            <h1>Login</h1>
-            <?php
-            if (isset($error_message)) {
-                echo '<div class="alert alert-danger">' . $error_message . '</div>';
-            }
-           
-            ?>
+    <div class="relative">
+        
+        <div class="wrapper form-style">
+            <form action="" method="POST" class="">
+                <h1>Welcome Back</h1>
+                <h1>Login</h1>
+                <?php
+                if (isset($error_message)) {
+                    echo '<div class="alert alert-danger">' . $error_message . '</div>';
+                }
 
-            <div class="input-box ">
-                <input type="email" name="email" placeholder="Email" required>
-                <i class='bx bxs-user' style="color: #93bb3f;"></i>
-            </div>
+                ?>
 
-            <div class="input-box">
-                <input type="password" name="password" placeholder="Password" required>
-                <i class='bx bxs-lock-alt ' style="color: #93bb3f;"></i>
-            </div>
+                <div class="input-box ">
+                    <input type="email" name="email" placeholder="Email" required>
+                    <i class='bx bxs-user' style="color: #93bb3f;"></i>
+                </div>
 
-            <button type="submit" name="login" class="btn">Login</button>
-        </form>
+                <div class="input-box">
+                    <input type="password" name="password" placeholder="Password" required>
+                    <i class='bx bxs-lock-alt ' style="color: #93bb3f;"></i>
+                </div>
+
+                <button type="submit" name="login" class="btn">Login</button>
+            </form>
+        </div>
     </div>
+
 </body>
 
 </html>

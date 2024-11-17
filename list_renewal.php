@@ -5,169 +5,171 @@ $selectQuery = "SELECT * FROM members WHERE role = 'user'";
 $result = $conn->query($selectQuery);
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: index.php");
-    exit();
+  header("Location: index.php");
+  exit();
 }
 
 
 ?>
 
-<?php include('includes/header.php');?>
+<?php include('includes/header.php'); ?>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-<div class="wrapper">
-  <?php include('includes/nav.php');?>
+  <div class="wrapper">
+    <?php include('includes/nav.php'); ?>
 
- <?php include('includes/sidebar.php');?>
+    <?php include('includes/sidebar.php'); ?>
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    
-  <?php include('includes/pagetitle.php');?>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper  bg-[#364a53]">
 
-    <!-- Main content -->
-    <section class="content">
-      <div class="container-fluid">
-        <!-- Info boxes -->
-       
-        <div class="row">
-        
-        <div class="col-12">
+      <?php include('includes/pagetitle.php'); ?>
 
-        <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Members DataTable</h3>
-    </div>
-    <!-- /.card-header -->
-    <div class="card-body">
-    <table id="example1" class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Fullname</th>
-                <th>Contact</th>
-                <th>Email</th>
-                <th>Type</th>
-                <th>Expiry</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $counter = 1;
-            while ($row = $result->fetch_assoc()) {
-                $expiryDate = strtotime($row['expiry_date']);
-                $currentDate = time();
-                $daysDifference = floor(($expiryDate - $currentDate) / (60 * 60 * 24));
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <!-- Info boxes -->
 
-                $membershipStatus = ($daysDifference < 0) ? 'Expired' : 'Active';
-                if ($membershipStatus === 'Expired') {
-                  $badgeClass = 'badge-danger';
-                } elseif ($membershipStatus === 'Active') {
-                    $badgeClass = 'badge-success';
-                } else {
-                    $badgeClass = 'badge-secondary';
-                }
+          <div class="row">
 
-                $membershipTypeId = $row['membership_type'];
-                $membershipTypeQuery = "SELECT type FROM membership_types WHERE id = $membershipTypeId";
-                $membershipTypeResult = $conn->query($membershipTypeQuery);
-                $membershipTypeRow = $membershipTypeResult->fetch_assoc();
-                $membershipTypeName = ($membershipTypeRow) ? $membershipTypeRow['type'] : 'Unknown';
+            <div class="col-12">
 
-                $expiryDate = strtotime($row['expiry_date']);
-                $daysRemaining = floor(($expiryDate - $currentDate) / (60 * 60 * 24));
+              <div class="card bg-[#ececec]">
+                <div class="card-header  bg-[#aeb3b3]">
+                  <h3 class="card-title">Members DataTable</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>#</th>
+                        <th>Fullname</th>
+                        <th>Contact</th>
+                        <th>Email</th>
+                        <th>Type</th>
+                        <th>Expiry</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
+                      $counter = 1;
+                      while ($row = $result->fetch_assoc()) {
+                        $expiryDate = strtotime($row['expiry_date']);
+                        $currentDate = time();
+                        $daysDifference = floor(($expiryDate - $currentDate) / (60 * 60 * 24));
 
-                echo "<tr>";
-                echo "<td>{$row['membership_number']}</td>";
-                echo "<td>{$row['fullname']}</td>";
-                echo "<td>{$row['contact_number']}</td>";
-                echo "<td>{$row['email']}</td>";
-                echo "<td>{$membershipTypeName}</td>";
-                if ($row['expiry_date'] === NULL) {
-                  echo "<td>NONE</td>";
-                } else {
-                    $expiryDate = new DateTime($row['expiry_date']);
-                    $currentDate = new DateTime();
-                
-                    $daysRemaining = $currentDate->diff($expiryDate)->days;
+                        $membershipStatus = ($daysDifference < 0) ? 'Expired' : 'Active';
+                        if ($membershipStatus === 'Expired') {
+                          $badgeClass = 'badge-danger';
+                        } elseif ($membershipStatus === 'Active') {
+                          $badgeClass = 'badge-success';
+                        } else {
+                          $badgeClass = 'badge-secondary';
+                        }
 
-                
-                    echo "<td>{$row['expiry_date']}<br><small>{$daysRemaining} days remaining</small></td>";
-                }                echo "<td><span class='badge $badgeClass'>$membershipStatus</span></td>";
+                        $membershipTypeId = $row['membership_type'];
+                        $membershipTypeQuery = "SELECT type FROM membership_types WHERE id = $membershipTypeId";
+                        $membershipTypeResult = $conn->query($membershipTypeQuery);
+                        $membershipTypeRow = $membershipTypeResult->fetch_assoc();
+                        $membershipTypeName = ($membershipTypeRow) ? $membershipTypeRow['type'] : 'Unknown';
 
-                if ($membershipStatus == 'Active') {
-                  // If the status is 'Active', show the button as disabled (using pointer-events: none)
-                    echo "<td>
+                        $expiryDate = strtotime($row['expiry_date']);
+                        $daysRemaining = floor(($expiryDate - $currentDate) / (60 * 60 * 24));
+
+                        echo "<tr>";
+                        echo "<td>{$row['membership_number']}</td>";
+                        echo "<td>{$row['fullname']}</td>";
+                        echo "<td>{$row['contact_number']}</td>";
+                        echo "<td>{$row['email']}</td>";
+                        echo "<td>{$membershipTypeName}</td>";
+                        if ($row['expiry_date'] === NULL) {
+                          echo "<td>NONE</td>";
+                        } else {
+                          $expiryDate = new DateTime($row['expiry_date']);
+                          $currentDate = new DateTime();
+
+                          $daysRemaining = $currentDate->diff($expiryDate)->days;
+
+
+                          echo "<td>{$row['expiry_date']}<br><small>{$daysRemaining} days remaining</small></td>";
+                        }
+                        echo "<td><span class='badge $badgeClass'>$membershipStatus</span></td>";
+
+                        if ($membershipStatus == 'Active') {
+                          // If the status is 'Active', show the button as disabled (using pointer-events: none)
+                          echo "<td>
                             <a href='#' class='btn btn-success' style='pointer-events: none; background-color: gray;'>Renew</a>
                           </td>";
-                } else {
-                    // If the status is 'Expired', allow the button to be clickable
-                    echo "<td>
+                        } else {
+                          // If the status is 'Expired', allow the button to be clickable
+                          echo "<td>
                             <a href='renew.php?id={$row['id']}' class='btn btn-success'>Renew</a>
                           </td>";
-                }
+                        }
 
-                $counter++;
-            }
-            ?>
-        </tbody>
-    </table>
-</div>
+                        $counter++;
+                      }
+                      ?>
+                    </tbody>
+                  </table>
+                </div>
 
-    <!-- /.card-body -->
-</div>
+                <!-- /.card-body -->
+              </div>
 
-            <!-- /.card -->
+              <!-- /.card -->
+            </div>
+            <!-- /.col -->
+
           </div>
-          <!-- /.col -->
+          <!-- /.row -->
 
-        </div>
-        <!-- /.row -->
 
-        
-      </div><!--/. container-fluid -->
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <strong> &copy; <?php echo date('Y');?> Camalig Fitness Gym</a> -</strong>
-    All rights reserved.
-    <div class="float-right d-none d-sm-inline-block">
-      <b>Developed By</b> <a href="https://www.facebook.com/camaligfitnessgym">CFG</a>
+        </div><!--/. container-fluid -->
+      </section>
+      <!-- /.content -->
     </div>
-  </footer>
-</div>
-<!-- ./wrapper -->
+    <!-- /.content-wrapper -->
 
-<?php include('includes/footer.php');?>
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true,
-      "autoWidth": false,
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <footer class="main-footer  bg-[#364a53]">
+      <strong> &copy; <?php echo date('Y'); ?> Camalig Fitness Gym</a> -</strong>
+      All rights reserved.
+      <div class="float-right d-none d-sm-inline-block">
+        <b>Developed By</b> <a href="https://www.facebook.com/camaligfitnessgym">CFG</a>
+      </div>
+    </footer>
+  </div>
+  <!-- ./wrapper -->
+
+  <?php include('includes/footer.php'); ?>
+  <script>
+    $(function() {
+      $("#example1").DataTable({
+        "responsive": true,
+        "autoWidth": false,
+      });
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
     });
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script>
+  </script>
 
 </body>
+
 </html>
