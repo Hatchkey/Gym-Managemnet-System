@@ -161,12 +161,12 @@ if ($countResult && $countResult->num_rows > 0) {
             </a>
           </li>
 
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="revenue_report.php" class="nav-link <?php echo ($current_page == 'revenue_report.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-money-check"></i>
               <p>Revenue Report</p>
             </a>
-          </li>
+          </li> -->
 
 
           <li class="nav-item has-treeview">
@@ -211,7 +211,7 @@ if ($countResult && $countResult->num_rows > 0) {
           <li class="nav-item">
             <a href="payment.php" class="nav-link <?php echo ($current_page == 'payment.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-credit-card"></i>
-              <p>Payment Transaction</p>
+              <p>Revenue Report</p>
             </a>
           </li>
           <ul class="nav nav-treeview">

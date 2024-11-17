@@ -143,6 +143,17 @@ $result = $conn->query($selectQuery);
     <!-- ./wrapper -->
 
     <?php include('includes/footer.php'); ?>
+
+    <script>
+    $(function() {
+      $("#example1").DataTable({
+        "responsive": true,
+        "autoWidth": false,
+
+      });
+    });
+  </script>
+
 </body>
 
 </html>
