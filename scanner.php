@@ -93,50 +93,52 @@ $result = $conn->query($selectQuery);
                 <div class="row px-2">
                     <div class="col-md-12">
                         <div class="card  bg-[#ececec]">
-                            <!-- <div class="card-header  bg-[#aeb3b3]">
-                                <h3 class="card-title">Record</h3>
-                            </div> -->
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead class="border-b-2 border-red-900">
-                                    <tr>
-                                        <th>Membership #</th>
-                                        <th>Fullname</th>
-                                        <th>Date</th>
-                                    </tr>
-                                </thead>
+                            <div class="card-header  bg-[#aeb3b3]">
+                                <h3 class="card-title">Attendance DataTable</h3>
+                            </div>
+                            <div class="card-body">
+                                <table id="example1" class="table table-bordered table-striped">
+                                    <thead class="border-b-2 border-red-900">
+                                        <tr>
+                                            <th>Membership #</th>
+                                            <th>Fullname</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
 
-                                <tbody>
-                                    <?php
-                                    $counter = 1;
-                                    while ($row = $result->fetch_assoc()) {
+                                    <tbody>
+                                        <?php
+                                        $counter = 1;
+                                        while ($row = $result->fetch_assoc()) {
 
-                                        $expiryDate = strtotime($row['expiry_date']);
-                                        $currentDate = time();
-                                        $daysDifference = floor(($expiryDate - $currentDate) / (60 * 60 * 24));
+                                            $expiryDate = strtotime($row['expiry_date']);
+                                            $currentDate = time();
+                                            $daysDifference = floor(($expiryDate - $currentDate) / (60 * 60 * 24));
 
-                                        $membershipStatus = ($daysDifference < 0) ? 'Expired' : 'Active';
+                                            $membershipStatus = ($daysDifference < 0) ? 'Expired' : 'Active';
 
-                                        $membershipTypeId = $row['membership_type'];
-                                        $membershipTypeQuery = "SELECT type FROM membership_types WHERE id = $membershipTypeId";
-                                        $membershipTypeResult = $conn->query($membershipTypeQuery);
-                                        $membershipTypeRow = $membershipTypeResult->fetch_assoc();
-                                        $membershipTypeName = ($membershipTypeRow) ? $membershipTypeRow['type'] : 'Unknown';
+                                            $membershipTypeId = $row['membership_type'];
+                                            $membershipTypeQuery = "SELECT type FROM membership_types WHERE id = $membershipTypeId";
+                                            $membershipTypeResult = $conn->query($membershipTypeQuery);
+                                            $membershipTypeRow = $membershipTypeResult->fetch_assoc();
+                                            $membershipTypeName = ($membershipTypeRow) ? $membershipTypeRow['type'] : 'Unknown';
 
-                                        echo "<tr>";
-                                        echo "<td>{$row['membership_number']}</td>";
-                                        echo "<td>{$row['fullname']}</td>";
-                                        echo "<td>{$row['date']}</td>";
+                                            echo "<tr>";
+                                            echo "<td>{$row['membership_number']}</td>";
+                                            echo "<td>{$row['fullname']}</td>";
+                                            echo "<td>{$row['date']}</td>";
 
 
 
-                                        echo "</tr>";
+                                            echo "</tr>";
 
-                                        $counter++;
-                                    }
-                                    ?>
-                                </tbody>
+                                            $counter++;
+                                        }
+                                        ?>
+                                    </tbody>
 
-                            </table>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -171,6 +173,14 @@ $result = $conn->query($selectQuery);
     let canvasElement = document.createElement('canvas');
     let canvas = canvasElement.getContext('2d');
     let isScanning = false;
+
+    $(function() {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+
+        });
+    });
 
     // Start scanning when the button is clicked
     function startScanning() {
