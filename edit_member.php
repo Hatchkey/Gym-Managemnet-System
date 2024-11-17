@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // $photoUpdate = "";
     // $uploadedPhoto = $_FILES['photo'];
 
- 
+
 
     $updateQuery = "UPDATE members SET fullname='$fullname', dob='$dob', gender='$gender', 
                     contact_number='$contactNumber', email='$email', address='$address'
@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($conn->query($updateQuery) === TRUE) {
         $response['success'] = true;
         $response['message'] = 'Member updated successfully!';
-        
+
         header("Location: manage_members.php");
         exit();
     } else {
@@ -67,160 +67,140 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 
-<?php include('includes/header.php');?>
+<?php include('includes/header.php'); ?>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
-<div class="wrapper">
-    <?php include('includes/nav.php'); ?>
+    <div class="wrapper">
+        <?php include('includes/nav.php'); ?>
 
-    <?php include('includes/sidebar.php'); ?>
+        <?php include('includes/sidebar.php'); ?>
 
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <?php include('includes/pagetitle.php'); ?>
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper  bg-[#364a53]">
+            <?php include('includes/pagetitle.php'); ?>
 
-        <!-- Main content -->
-        <section class="content">
-            <div class="container-fluid">
-                <!-- Info boxes -->
-                <div class="row">
-                    <!-- left column -->
-                    <div class="col-md-12">
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- Info boxes -->
+                    <div class="row">
+                        <!-- left column -->
+                        <div class="col-md-12">
 
-                        <?php if ($response['success']): ?>
-                            <div class="alert alert-success alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                <h5><i class="icon fas fa-check"></i> Success</h5>
-                                <?php echo $response['message']; ?>
-                            </div>
-                        <?php elseif (!empty($response['message'])): ?>
-                            <div class="alert alert-danger alert-dismissible">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                <h5><i class="icon fas fa-ban"></i> Error</h5>
-                                <?php echo $response['message']; ?>
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- general form elements -->
-                        <div class="card card-primary">
-                            <div class="card-header">
-                                <h3 class="card-title"><i class="fas fa-keyboard"></i> Edit Member Details</h3>
-                            </div>
-                            <!-- /.card-header -->
-                            <!-- form start -->
-                            <form method="post" action="" enctype="multipart/form-data">
-                            <input type="hidden" name="member_id" value="<?php echo $id; ?>">
-                                <div class="card-body">
-                                    <div class="row">
-                                    <div class="col-sm-6">
-                                    <label for="fullname">Full Name</label>
-                                    <input type="text" class="form-control" id="fullname" name="fullname"
-                                        placeholder="Enter full name" required value="<?php echo $memberDetails['fullname']; ?>">
+                            <?php if ($response['success']): ?>
+                                <div class="alert alert-success alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-check"></i> Success</h5>
+                                    <?php echo $response['message']; ?>
                                 </div>
-                                        <div class="col-sm-3">
-                                            <label for="dob">Date of Birth</label>
-                                            <input type="date" class="form-control" id="dob" name="dob" value="<?php echo $memberDetails['dob']; ?>" required>
-                                        </div>
-                                        
-                                        <div class="col-sm-3">
-                                        <label for="gender">Gender</label>
-                                        <select class="form-control" id="gender" name="gender" required>
-                                            <option value="Male" <?php echo ($memberDetails['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
-                                            <option value="Female" <?php echo ($memberDetails['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
-                                            <option value="Other" <?php echo ($memberDetails['gender'] == 'Other') ? 'selected' : ''; ?>>Other</option>
-                                        </select>
-                                    </div>
+                            <?php elseif (!empty($response['message'])): ?>
+                                <div class="alert alert-danger alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <h5><i class="icon fas fa-ban"></i> Error</h5>
+                                    <?php echo $response['message']; ?>
+                                </div>
+                            <?php endif; ?>
 
-                                    </div>
+                            <!-- general form elements -->
+                            <div class="card bg-[#ececec]">
+                                <div class="card-header  bg-[#aeb3b3]">
+                                    <h3 class="card-title"><i class="fas fa-keyboard"></i> Edit Member Details</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                                <form method="post" action="" enctype="multipart/form-data">
+                                    <input type="hidden" name="member_id" value="<?php echo $id; ?>">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label for="fullname">Full Name</label>
+                                                <input type="text" class="form-control" id="fullname" name="fullname"
+                                                    placeholder="Enter full name" required value="<?php echo $memberDetails['fullname']; ?>">
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label for="dob">Date of Birth</label>
+                                                <input type="date" class="form-control" id="dob" name="dob" value="<?php echo $memberDetails['dob']; ?>" required>
+                                            </div>
+
+                                            <div class="col-sm-3">
+                                                <label for="gender">Gender</label>
+                                                <select class="form-control" id="gender" name="gender" required>
+                                                    <option value="Male" <?php echo ($memberDetails['gender'] == 'Male') ? 'selected' : ''; ?>>Male</option>
+                                                    <option value="Female" <?php echo ($memberDetails['gender'] == 'Female') ? 'selected' : ''; ?>>Female</option>
+                                                    <option value="Other" <?php echo ($memberDetails['gender'] == 'Other') ? 'selected' : ''; ?>>Other</option>
+                                                </select>
+                                            </div>
+
+                                        </div>
 
 
-                                    <div class="row mt-3">
-                                        <div class="col-sm-6">
-                                            <label for="contactNumber">Contact Number</label>
-                                            <input type="tel" class="form-control" id="contactNumber"
-                                                   name="contactNumber" placeholder="Enter contact number" value="<?php echo $memberDetails['contact_number']; ?>" required>
+                                        <div class="row mt-3">
+                                            <div class="col-sm-6">
+                                                <label for="contactNumber">Contact Number</label>
+                                                <input type="tel" class="form-control" id="contactNumber"
+                                                    name="contactNumber" placeholder="Enter contact number" value="<?php echo $memberDetails['contact_number']; ?>" required>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label for="email">Email</label>
+                                                <input type="email" class="form-control" id="email" name="email"
+                                                    placeholder="Enter email" value="<?php echo $memberDetails['email']; ?>" required>
+                                            </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <label for="email">Email</label>
-                                            <input type="email" class="form-control" id="email" name="email"
-                                                   placeholder="Enter email" value="<?php echo $memberDetails['email']; ?>" required>
-                                        </div>
-                                    </div>
 
-                                    <div class="row mt-3">
-                                        <div class="col-sm-6">
-                                            <label for="address">Address</label>
-                                            <input type="text" class="form-control" id="address" name="address"
-                                                   placeholder="Enter address" value="<?php echo $memberDetails['address']; ?>" required>
-                                        </div>
-                                        <!-- <div class="col-sm-6">
+                                        <div class="row mt-3">
+                                            <div class="col-sm-6">
+                                                <label for="address">Address</label>
+                                                <input type="text" class="form-control" id="address" name="address"
+                                                    placeholder="Enter address" value="<?php echo $memberDetails['address']; ?>" required>
+                                            </div>
+                                            <!-- <div class="col-sm-6">
                                             <label for="country">Country</label>
                                             <input type="text" class="form-control" id="country" name="country"
                                                    placeholder="Enter country" value="<?php echo $memberDetails['country']; ?>" required>
                                         </div> -->
+                                        </div>
+ 
                                     </div>
+                                    <!-- /.card-body -->
 
-                                    <!-- <div class="row mt-3">
-                                        <div class="col-sm-6">
-                                            <label for="postcode">Postcode</label>
-                                            <input type="text" class="form-control" id="postcode" name="postcode"
-                                                   placeholder="Enter postcode" value="<?php echo $memberDetails['postcode']; ?>" required>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <label for="occupation">Occupation</label>
-                                            <input type="text" class="form-control" id="occupation" name="occupation"
-                                                   placeholder="Enter occupation" value="<?php echo $memberDetails['occupation']; ?>" required>
-                                        </div>
-                                    </div> -->
-                                    
-                                    <div class="row mt-3">
-                                    <!-- <div class="col-sm-6">
-                                        <label for="photo">Member Photo</label>
-                                        <input type="file" class="form-control" id="photo" name="photo">
-                                        <small class="text-muted">Leave it blank if you don't want to change the photo.</small>
-                                    </div> -->
-                                </div>
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn  bg-[#20333c] text-white">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- /.card -->
 
-                                </div>
-                                <!-- /.card-body -->
-
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-                            </form>
                         </div>
-                        <!-- /.card -->
+                        <!--/.col (left) -->
 
                     </div>
-                    <!--/.col (left) -->
-
-                </div>
-                <!-- /.row -->
+                    <!-- /.row -->
 
 
-            </div><!--/. container-fluid -->
-        </section>
-        <!-- /.content -->
+                </div><!--/. container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+
+        <!-- Main Footer -->
+        <footer class="main-footer  bg-[#364a53]">
+            <strong> &copy; <?php echo date('Y'); ?> Camalig Fitness Gym</a> </strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Developed By</b> <a href="https://www.facebook.com/camaligfitnessgym">CFG</a>
+            </div>
+        </footer>
     </div>
-    <!-- /.content-wrapper -->
+    <!-- ./wrapper -->
 
-    <!-- Control Sidebar -->
-    <aside class="control-sidebar control-sidebar-dark">
-        <!-- Control sidebar content goes here -->
-    </aside>
-    <!-- /.control-sidebar -->
-
-    <!-- Main Footer -->
-    <footer class="main-footer"> 
-  <strong> &copy; <?php echo date('Y');?> Camalig Fitness Gym</a> </strong>
-  All rights reserved.
-  <div class="float-right d-none d-sm-inline-block">
-    <b>Developed By</b> <a href="https://www.facebook.com/camaligfitnessgym">CFG</a>
-  </div>
-</footer>
-</div>
-<!-- ./wrapper -->
-
-<?php include('includes/footer.php'); ?>
+    <?php include('includes/footer.php'); ?>
 </body>
+
 </html>

@@ -51,8 +51,7 @@
           $pageTitle = 'Edit Equipment';
         } elseif (strpos($_SERVER['REQUEST_URI'], 'payment.php') !== false) {
           $pageTitle = 'Payment Transaction';
-        } 
-        elseif (strpos($_SERVER['REQUEST_URI'], 'user_qr_code.php') !== false) {
+        } elseif (strpos($_SERVER['REQUEST_URI'], 'user_qr_code.php') !== false) {
           $pageTitle = 'My QR Code';
         } elseif (strpos($_SERVER['REQUEST_URI'], 'dashboard.php') !== false) {
           $pageTitle = 'Dashboard';
@@ -61,13 +60,13 @@
         } elseif (strpos($_SERVER['REQUEST_URI'], 'user_profile.php') !== false) {
           $pageTitle = 'User Profile';
         }
-        echo '<h1 class="m-0 text-dark">' . $pageTitle . '</h1>';
+        echo '<h1 class="m-0 text-[#d2daa8]">' . $pageTitle . '</h1>';
         ?>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <ol class="breadcrumb float-sm-right">
-          <li class="breadcrumb-item"><a href="#">Home</a></li>
-          <li class="breadcrumb-item active"><?php echo $pageTitle; ?></li>
+          <li class="breadcrumb-item text-[#d2daa8]"><a href="#">Home</a></li>
+          <li class="breadcrumb-item   text-[#d2daa8]"><?php echo $pageTitle; ?></li>
         </ol>
       </div><!-- /.col -->
     </div><!-- /.row -->

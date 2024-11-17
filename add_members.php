@@ -135,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php include('includes/sidebar.php'); ?>
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper  bg-[#364a53]">
             <?php include('includes/pagetitle.php'); ?>
 
             <!-- Main content -->
@@ -161,8 +161,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <?php endif; ?>
 
                             <!-- general form elements -->
-                            <div class="card card-primary">
-                                <div class="card-header">
+                            <div class="card bg-[#ececec]">
+                                <div class="card-header  bg-[#aeb3b3]">
                                     <h3 class="card-title"><i class="fas fa-keyboard"></i> Add Members Form</h3>
                                 </div>
                                 <!-- /.card-header -->
@@ -297,7 +297,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <!-- /.card-body -->
 
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="submit" class="btn bg-[#20333c] text-white">Submit</button>
                                     </div>
                                 </form>
                             </div>
@@ -322,7 +322,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- /.control-sidebar -->
 
         <!-- Main Footer -->
-        <footer class="main-footer">
+        <footer class="main-footer bg-[#364a53]">
             <strong> &copy; <?php echo date('Y'); ?>Camalig Fitness Gym</a> </strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">

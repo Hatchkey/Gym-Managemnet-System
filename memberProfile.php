@@ -33,7 +33,7 @@ if (isset($_GET['id'])) {
 }
 ?>
 
-<?php include('includes/header.php');?>
+<?php include('includes/header.php'); ?>
 
 <style>
     @media print {
@@ -87,21 +87,21 @@ if (isset($_GET['id'])) {
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
     <div class="wrapper">
-        <?php include('includes/nav.php');?>
+        <?php include('includes/nav.php'); ?>
 
-        <?php include('includes/sidebar.php');?>
+        <?php include('includes/sidebar.php'); ?>
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper   bg-[#364a53]">
 
-            <?php include('includes/pagetitle.php');?>
+            <?php include('includes/pagetitle.php'); ?>
 
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
                     <!-- Member Profile Card -->
-                    <div class="card">
-                        <div class="card-header">
+                    <div class="card bg-[#ececec]">
+                        <div class="card-header  bg-[#aeb3b3]">
                             <h3 class="card-title">Member Profile</h3>
                             <!-- Add Print Button -->
                             <div class="card-tools">
@@ -133,16 +133,16 @@ if (isset($_GET['id'])) {
                                     <p><strong>Status:</strong> <?php echo $membershipStatus; ?></p>
                                 </div>
                                 <div class="col-md-2">
-                                <?php
-                                if (!empty($memberDetails['photo'])) {
-                                    $photoPath = 'uploads/member_photos/' . $memberDetails['photo'];
-                                    echo '<img src="' . $photoPath . '" class="img-thumbnail" alt="Member Photo">';
-                                } else {
-                                    echo '<p>No photo available</p>';
-                                }
-                                ?>
+                                    <?php
+                                    if (!empty($memberDetails['photo'])) {
+                                        $photoPath = 'uploads/member_photos/' . $memberDetails['photo'];
+                                        echo '<img src="' . $photoPath . '" class="img-thumbnail" alt="Member Photo">';
+                                    } else {
+                                        echo '<p>No photo available</p>';
+                                    }
+                                    ?>
                                 </div>
-                                <a href="print_membership_card.php?id=<?php echo $memberId; ?>" target="_blank" class="print-button"><button class="btn btn-info"><i class="fas fa-id-card"></i> Membership Card</button></a>
+                                <a href="print_membership_card.php?id=<?php echo $memberId; ?>" target="_blank" class="print-button"><button class="btn  bg-[#20333c] text-white mt-4"><i class="fas fa-id-card"></i> Membership Card</button></a>
 
                             </div>
                         </div>
@@ -162,17 +162,17 @@ if (isset($_GET['id'])) {
         <!-- /.control-sidebar -->
 
         <!-- Main Footer -->
-        <footer class="main-footer"> 
-  <strong> &copy; <?php echo date('Y');?> Camalig Fitness Gym</a> </strong>
-  All rights reserved.
-  <div class="float-right d-none d-sm-inline-block">
-    <b>Developed By</b> <a href="https://www.facebook.com/camaligfitnessgym">CFG</a>
-  </div>
-</footer>
-</div>
+        <footer class="main-footer   bg-[#364a53]">
+            <strong> &copy; <?php echo date('Y'); ?> Camalig Fitness Gym</a> </strong>
+            All rights reserved.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Developed By</b> <a href="https://www.facebook.com/camaligfitnessgym">CFG</a>
+            </div>
+        </footer>
+    </div>
     <!-- ./wrapper -->
 
-    <?php include('includes/footer.php');?>
+    <?php include('includes/footer.php'); ?>
 
     <!-- JavaScript to handle printing -->
     <script>
@@ -182,4 +182,5 @@ if (isset($_GET['id'])) {
     </script>
 
 </body>
+
 </html>

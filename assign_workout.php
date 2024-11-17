@@ -14,31 +14,6 @@ $workout_list_result = $conn->query($workout_list_query);
 //get all the members from the database
 $members_query = "SELECT * FROM members";
 $members_result = $conn->query($members_query);
-//Old codes
-//TODO: remove if done
-// if ($_SERVER["REQUEST_METHOD"] == "POST") {
-//     $fullname = $_POST['workout_name'];
-//     $equipment_type = $_POST['equipment_type'];
-//     $target_muscle = $_POST['target_muscle'];
-//     $sets = $_POST['sets'];
-//     $reps = $_POST['reps'];
-//     $duration_time = $_POST['duration_time'];
-
-
-//     // $membershipNumber = 'CA-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
-
-//     $insertQuery = "INSERT INTO workout_list (workout_name,  equipment_type, target_muscle_group,sets,reps,duration_time) 
-//                     VALUES ( '$fullname', '$equipment_type', '$target_muscle', '$sets', '$reps', '$duration_time')";
-
-//     if ($conn->query($insertQuery) === TRUE) {
-//         $response['success'] = true;
-//         $response['message'] = 'Workout list added successfully! 
-//          ';
-//     } else {
-//         $response['success'] = false;
-//         $response['message'] = 'Error: ' . $conn->error;
-//     }
-// }
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $workout_id = $_POST['workout_id']; //so is this correct?`x
     $assign_to = $_POST['assign_to'];
@@ -70,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php include('includes/sidebar.php'); ?>
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper bg-[#364a53]">
             <?php include('includes/pagetitle.php'); ?>
 
             <!-- Main content -->
@@ -96,8 +71,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <?php endif; ?>
 
                             <!-- general form elements -->
-                            <div class="card card-primary">
-                                <div class="card-header">
+                            <div class="card bg-[#ececec]">
+                                <div class="card-header  bg-[#aeb3b3]">
                                     <h3 class="card-title"><i class="fas fa-keyboard"></i> Assign Workout Program Form</h3>
                                 </div>
                                 <!-- /.card-header -->
@@ -178,7 +153,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </div>
 
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <button type="submit" class="btn bg-[#20333c] text-white">Submit</button>
                                     </div>
                                     <!-- /.card-body -->
 
