@@ -102,6 +102,7 @@ $result = $conn->query($selectQuery);
                                         <th>Membership #</th>
                                         <th>Fullname</th>
                                         <th>Date</th>
+                                        <th>Checkin</th>
                                     </tr>
                                 </thead>
 
@@ -121,12 +122,13 @@ $result = $conn->query($selectQuery);
                                         $membershipTypeResult = $conn->query($membershipTypeQuery);
                                         $membershipTypeRow = $membershipTypeResult->fetch_assoc();
                                         $membershipTypeName = ($membershipTypeRow) ? $membershipTypeRow['type'] : 'Unknown';
+                                        $createdAtTime = date('h:i A', strtotime($row['created_at']));
 
                                         echo "<tr>";
                                         echo "<td>{$row['membership_number']}</td>";
                                         echo "<td>{$row['fullname']}</td>";
                                         echo "<td>{$row['date']}</td>";
-
+                                        echo "<td>{$createdAtTime}</td>";
 
 
                                         echo "</tr>";
