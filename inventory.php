@@ -144,7 +144,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </body>
 <script>
     function deleteMember(id) {
-        if (confirm("Are you sure you want to delete this member?")) {
+        if (confirm("Are you sure you want to delete this equipment?")) {
             window.location.href = 'delete_inventory.php?id=' + id;
         }
     }

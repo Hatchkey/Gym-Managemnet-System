@@ -155,15 +155,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                                         while ($row = $workout_list_result->fetch_assoc()) {
 
-                                                            $selected = ($row['workout_id'] == $row['workout_id']) ? 'selected' : '';
-
+                                                            // $selected = ($row['workout_id'] == $row['workout_id']) ? 'selected' : '';
+                                                            $selected = ($row['workout_id'] == $workout_id) ? 'selected' : '';
                                                             echo '<option value="' . htmlspecialchars($row['workout_id']) . '" ' . $selected . '>' . htmlspecialchars($row['workout_name']) . '</option>';
                                                         }
                                                     } else {
                                                         echo '<option value="">No Workouts Available</option>';
                                                     }
                                                     ?>
-                                                </select>
+                                                </select>   
 
                                             </div>
                                             <div class="col-sm-6">
