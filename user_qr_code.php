@@ -53,7 +53,7 @@ $qrCodePath = generateQrCodeForMember($conn);
         <?php include('includes/sidebar.php'); ?>
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper bg-[#364a53]">
             <?php include('includes/pagetitle.php'); ?>
             <!-- Main content -->
             <section class="content">
@@ -69,7 +69,7 @@ $qrCodePath = generateQrCodeForMember($conn);
                                 <!-- <div class="card-body p-0 flex justify-center ">
                                     <img src="uploads/cfg-logo.png" alt="..." class="img-thumbnail" width="40%" height="300">
                                 </div> -->
-                              
+
                                 <div class="card-body p-0 flex justify-center">
                                     <?php if (file_exists($qrCodePath)) : ?>
                                         <!-- Display the QR code if it was generated -->
@@ -97,7 +97,7 @@ $qrCodePath = generateQrCodeForMember($conn);
         <!-- /.control-sidebar -->
 
         <!-- Main Footer -->
-        <footer class="main-footer">
+        <footer class="main-footer bg-[#364a53]">
             <strong> &copy; <?php echo date('Y'); ?> Camalig Fitness Gym</a> -</strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
