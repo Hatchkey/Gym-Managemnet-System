@@ -108,9 +108,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                     name="quantity" placeholder="Enter quantity" value="<?php echo $inventoryDetails['quantity']; ?>" required>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label for="price">Price</label>
-                                                <input type="text" class="form-control" id="price" name="price"
-                                                    placeholder="Enter price" value="<?php echo $inventoryDetails['price']; ?>" required>
+                                              
+                                                <div class="form-group">
+                                                    <label for="price">Price</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-text">₱</span>
+                                                        <input type="text" class="form-control" id="price" name="price" placeholder="Enter price" required value="<?php echo $inventoryDetails['price']; ?>">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -77,7 +77,7 @@ $result = $conn->query($selectQuery);
 
                                                 echo "<tr>";
                                                 echo "<td>{$row['fullname']}</td>";
-                                                echo "<td>{$row['total_amount']}</td>";
+                                                echo "<td>₱{$row['total_amount']}</td>";
                                                 echo "<td>{$row['mode']}</td>";
                                                 echo "<td>{$row['type']}</td>";
                                                 echo "<td>{$row['date']}</td>";
