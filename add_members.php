@@ -12,13 +12,13 @@ $response = array('success' => false, 'message' => '');
 $membershipTypesQuery = "SELECT id, type, amount FROM membership_types";
 $membershipTypesResult = $conn->query($membershipTypesQuery);
 
-function generateUniqueFileName($originalName)
-{
-    $timestamp = time();
-    $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-    $uniqueName = $timestamp . '_' . uniqid() . '.' . $extension;
-    return $uniqueName;
-}
+// function generateUniqueFileName($originalName)
+// {
+//     $timestamp = time();
+//     $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+//     $uniqueName = $timestamp . '_' . uniqid() . '.' . $extension;
+//     return $uniqueName;
+// }
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmtPayment->bind_param("is", $lastInsertedMemberId, $currentDate);
 
                 if ($stmtPayment->execute()) {
-                    echo "Record inserted into payment successfully.";
+                    // echo "Record inserted into payment successfully.";
                     $response['success'] = true;
                     $response['message'] = 'Member added successfully! Membership Number: ' . $membershipNumber;
                 } else {
@@ -341,8 +341,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             var renewDuration = parseFloat($('#extend').val());
 
-            console.log(membershipTypeAmount);
-            console.log(renewDuration);
+         
 
             var totalAmount = membershipTypeAmount * renewDuration;
 
