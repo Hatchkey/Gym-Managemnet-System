@@ -23,6 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($conn->query($insertQuery) === TRUE) {
         $response['success'] = true;
+        $response['message'] = 'Equipment added successfully! 
+         ';
     }
 }
 ?>
