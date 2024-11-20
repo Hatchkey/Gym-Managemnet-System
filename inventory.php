@@ -80,8 +80,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 echo "<tr>";
                                                 echo "<td>{$row['id']}</td>";
                                                 echo "<td>{$row['equipment']}</td>";
+                                                echo "<td>₱{$row['price']}</td>";
                                                 echo "<td>{$row['quantity']}</td>";
-                                                echo "<td>{$row['price']}</td>";
                                                 echo "<td>{$row['purchase_date']}</td>";
                                                 echo "<td>";
                                                 // if ($_SESSION['role'] == 'admin') {
