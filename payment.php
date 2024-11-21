@@ -8,10 +8,10 @@ if (!isset($_SESSION['user_id'])) {
 }
 global $conn;
 
-    // $selectQuery = "SELECT payment.id, fullname, reference, date, mode, total_amount FROM payment
-    //                 INNER JOIN members ON payment.member = members.id
-    //                 INNER JOIN renew ON renew.payment_id = payment.id
-    //                 ORDER BY payment.created_at DESC";
+// $selectQuery = "SELECT payment.id, fullname, reference, date, mode, total_amount FROM payment
+//                 INNER JOIN members ON payment.member = members.id
+//                 INNER JOIN renew ON renew.payment_id = payment.id
+//                 ORDER BY payment.created_at DESC";
 
 
     $selectQuery = "SELECT payment.id, fullname, type, reference, date, mode, total_amount FROM payment
@@ -20,7 +20,7 @@ global $conn;
                 INNER JOIN membership_types ON membership_types.id = renew.membership_type
                 ORDER BY payment.created_at DESC";
 $result = $conn->query($selectQuery);
- 
+
 ?>
 
 <?php include('includes/header.php'); ?>
@@ -32,7 +32,7 @@ $result = $conn->query($selectQuery);
         <?php include('includes/sidebar.php'); ?>
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
+        <div class="content-wrapper bg-[#364a53]">
             <?php include('includes/pagetitle.php'); ?>
 
             <!-- Main content -->
@@ -42,11 +42,8 @@ $result = $conn->query($selectQuery);
                     <div class="row">
                         <!-- left column -->
                         <div class="col-md-12">
-
-                            <div class="card">
-                                <div class="card-header">
-
-
+                            <div class="card bg-[#ececec]">
+                                <div class="card-header  bg-[#aeb3b3]">
                                     <h3 class="card-title">Payment Transaction DataTable</h3>
 
                                 </div>
@@ -80,7 +77,7 @@ $result = $conn->query($selectQuery);
 
                                                 echo "<tr>";
                                                 echo "<td>{$row['fullname']}</td>";
-                                                echo "<td>{$row['total_amount']}</td>";
+                                                echo "<td>₱{$row['total_amount']}</td>";
                                                 echo "<td>{$row['mode']}</td>";
                                                 echo "<td>{$row['type']}</td>";
                                                 echo "<td>{$row['date']}</td>";
@@ -132,7 +129,7 @@ $result = $conn->query($selectQuery);
         <!-- /.control-sidebar -->
 
         <!-- Main Footer -->
-        <footer class="main-footer">
+        <footer class="main-footer bg-[#364a53]">
             <strong> &copy; <?php echo date('Y'); ?>Camalig Fitness Gym</a> </strong>
             All rights reserved.
             <div class="float-right d-none d-sm-inline-block">
@@ -143,6 +140,17 @@ $result = $conn->query($selectQuery);
     <!-- ./wrapper -->
 
     <?php include('includes/footer.php'); ?>
+
+    <script>
+    $(function() {
+      $("#example1").DataTable({
+        "responsive": true,
+        "autoWidth": false,
+
+      });
+    });
+  </script>
+
 </body>
 
 </html>

@@ -19,9 +19,28 @@ if ($countResult && $countResult->num_rows > 0) {
 }
 ?>
 
+<head>
+  <style>
+    /* Change the color of active nav link */
+    .nav-item .nav-link.active {
+      color: #374a55 !important;
+      background-color: #aeb3b3 !important;
+      border-radius: 20px;
+      /* Set your desired color */
+    }
+
+    .nav-item .nav-link:hover,
+    .nav-item .nav-link:focus {
+      color: #374a55 !important;
+      /* #364a53 */
+      background-color: #aeb3b3 !important;
+      border-radius: 20px;
+    }
+  </style>
+</head>
 
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar sidebar-light-blue elevation-4">
+<aside class="main-sidebar sidebar-light-blue elevation-2 bg-[#c9cece]  ">
   <?php
   function getSystemName()
   {
@@ -84,13 +103,12 @@ if ($countResult && $countResult->num_rows > 0) {
     <!-- <img src="uploads/cfg-logo.png" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
     <div class="flex justify-center items-center ">
       <img src="uploads/cfg-logo.png" alt="" class="h-32  w-24">
-
     </div>
     <!-- <span class="brand-text font-weight-light"><?php echo getSystemName(); ?></span> -->
   </a>
 
   <!-- Sidebar -->
-  <div class="  p-2 overflow-y-auto h-[530px]  " >
+  <div class="p-2 overflow-y-auto h-[530px]   ">
     <!-- Sidebar user panel (optional) -->
 
 
@@ -105,9 +123,15 @@ if ($countResult && $countResult->num_rows > 0) {
           <li class="nav-item">
             <a href="dashboard.php" class="nav-link <?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>Dashboard</p>
+              <p class="">Dashboard</p>
             </a>
           </li>
+          <!-- <li class="nav-item">
+            <a href="dashboard.php" class="flex bg-[#aeb3b3] py-2 font-mediym items-center rounded-full <?php echo ($current_page == 'dashboard.php') ? 'active' : ''; ?>">
+              <i class="nav-icon fas fa-tachometer-alt ml-3"></i>
+              <p>Dashboard</p>
+            </a>
+          </li> -->
 
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link <?php echo ($current_page == 'add_type.php' || $current_page == 'view_type.php' || $current_page == 'edit_type.php') ? 'active' : ''; ?>">
@@ -117,7 +141,7 @@ if ($countResult && $countResult->num_rows > 0) {
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
-            <ul class="nav nav-treeview">
+            <ul class=" nav-treeview">
               <li class="nav-item">
                 <a href="add_type.php" class="nav-link">
                   <i class="fas fa-circle-notch nav-icon"></i>
@@ -161,15 +185,15 @@ if ($countResult && $countResult->num_rows > 0) {
             </a>
           </li>
 
-          <li class="nav-item">
+          <!-- <li class="nav-item">
             <a href="revenue_report.php" class="nav-link <?php echo ($current_page == 'revenue_report.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-money-check"></i>
               <p>Revenue Report</p>
             </a>
-          </li>
+          </li> -->
 
 
-          <li class="nav-item has-treeview">
+          <li class="nav-item has-treeview w-full">
             <a href="#" class="nav-link <?php echo ($current_page == 'add_workout.php' || $current_page == 'manage_workout.php' || $current_page == 'edit_workout.php' || $current_page == 'assign_workout.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-clipboard-list"></i>
               <p>
@@ -211,7 +235,7 @@ if ($countResult && $countResult->num_rows > 0) {
           <li class="nav-item">
             <a href="payment.php" class="nav-link <?php echo ($current_page == 'payment.php') ? 'active' : ''; ?>">
               <i class="nav-icon fas fa-credit-card"></i>
-              <p>Payment Transaction</p>
+              <p>Revenue Report</p>
             </a>
           </li>
           <ul class="nav nav-treeview">
