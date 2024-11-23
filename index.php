@@ -75,7 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         <div class="wrapper form-style">
             <form action="" method="POST" class="">
-                <h1>Welcome Back</h1>
                 <h1>Login</h1>
                 <?php
                 if (isset($error_message)) {
