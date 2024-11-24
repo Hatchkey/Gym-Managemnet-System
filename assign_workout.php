@@ -12,7 +12,7 @@ $workout_list_query = "SELECT * FROM workout_lists";
 $workout_list_result = $conn->query($workout_list_query);
 
 //get all the members from the database
-$members_query = "SELECT * FROM members";
+$members_query = "SELECT * FROM members WHERE role='user'";
 $members_result = $conn->query($members_query);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $workout_id = $_POST['workout_id']; //so is this correct?`x
@@ -131,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                             echo '<option value="' . htmlspecialchars($row['id']) . '">' . htmlspecialchars($row['fullname']) . '</option>';
                                                         }
                                                     } else {
-                                                        echo '<option value="">No Workouts Available</option>';
+                                                        echo '<option value="">No active member found</option>';
                                                     }
                                                     ?>
 
