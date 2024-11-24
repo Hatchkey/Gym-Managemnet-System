@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 24, 2024 at 01:23 PM
+-- Generation Time: Nov 24, 2024 at 01:37 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -109,7 +109,8 @@ INSERT INTO `members` (`id`, `fullname`, `email`, `password`, `dob`, `gender`, `
 (46, 'Clint De Villa', 'clintnapadevilla@gmail.com', '', '2001-11-16', 'Male', '09277404709', 'Tagaytay, Camalig, Albay', '', '', '', 1, 'CA-870580', '2024-11-24 11:11:24', '', '2025-11-24', 'Clint De Villa17324466831732446683.9566', 'user'),
 (47, 'Aaron Bonaobra', 'aaronbonaobra@gmail.com', '', '2003-01-27', 'Male', '09637076992', 'Cabangan, Legazpi, Albay', '', '', '', 12, 'CA-312621', '2024-11-24 11:13:02', '', '2024-12-24', 'Aaron Bonaobra17324467821732446782.2415', 'user'),
 (48, 'Corazon Noveno', 'corazonnoveno@gmail.com', '', '1960-09-19', 'Female', '09193456781', 'Brgy. 1 Camalig, Albay', '', '', '', 13, 'CA-459258', '2024-11-24 11:15:03', '', '2024-12-24', 'Corazon Noveno17324469031732446903.7746', 'user'),
-(49, 'Hazel Anne Retuerma', 'retuermahazel@gmail.com', '', '2002-10-11', 'Female', '09274985622', 'Masarawag, Guinobatan, Albay', '', '', '', 12, 'CA-416314', '2024-11-24 11:16:57', '', '2025-02-24', 'Hazel Anne Retuerma17324470171732447017.0556', 'user');
+(49, 'Hazel Anne Retuerma', 'retuermahazel@gmail.com', '', '2002-10-11', 'Female', '09274985622', 'Masarawag, Guinobatan, Albay', '', '', '', 12, 'CA-416314', '2024-11-24 11:16:57', '', '2025-02-24', 'Hazel Anne Retuerma17324470171732447017.0556', 'user'),
+(52, 'Loraine Jane Naje', 'lorainejanen@gmail.com', '', '2007-02-27', 'Female', '09928826576', 'Baligang, Camalig, Albay', '', '', '', 16, 'CA-991138', '2024-11-24 12:30:31', '', '2024-11-25', 'Loraine Jane Naje17324514311732451431.1398', 'user');
 
 -- --------------------------------------------------------
 
@@ -163,7 +164,8 @@ INSERT INTO `payment` (`id`, `member`, `date`, `mode`, `reference`, `created_at`
 (40, '48', '2024-11-24', 'Cash', '', '2024-11-24 11:15:03'),
 (41, '49', '2024-11-24', 'Gcash', '2654890371', '2024-11-24 11:16:57'),
 (42, '50', '2024-11-24', 'cash', '', '2024-11-24 11:36:45'),
-(43, '51', '2024-11-24', 'cash', '', '2024-11-24 12:20:03');
+(43, '51', '2024-11-24', 'cash', '', '2024-11-24 12:20:03'),
+(44, '52', '2024-11-24', 'Cash', '', '2024-11-24 12:30:31');
 
 -- --------------------------------------------------------
 
@@ -194,7 +196,8 @@ INSERT INTO `renew` (`id`, `member_id`, `total_amount`, `membership_type`, `upto
 (55, 46, 9600.00, 1, '12', 38, '2024-11-24'),
 (56, 47, 700.00, 12, '1', 39, '2024-11-24'),
 (57, 48, 600.00, 13, '1', 40, '2024-11-24'),
-(58, 49, 2100.00, 12, '3', 41, '2024-11-24');
+(58, 49, 2100.00, 12, '3', 41, '2024-11-24'),
+(61, 52, 100.00, 16, '111', 44, '2024-11-24');
 
 -- --------------------------------------------------------
 
@@ -248,7 +251,8 @@ INSERT INTO `users` (`id`, `email`, `password`, `member_id`, `registration_date`
 (80, 'corazonnoveno@gmail.com', '202cb962ac59075b964b07152d234b70', NULL, '2024-11-24 11:15:03', '2024-11-24 11:15:03'),
 (81, 'retuermahazel@gmail.com', '202cb962ac59075b964b07152d234b70', NULL, '2024-11-24 11:16:57', '2024-11-24 11:16:57'),
 (82, 'test@gmail.com', '202cb962ac59075b964b07152d234b70', NULL, '2024-11-24 11:36:45', '2024-11-24 11:36:45'),
-(83, 'testicles@gmail.com', '202cb962ac59075b964b07152d234b70', NULL, '2024-11-24 12:20:03', '2024-11-24 12:20:03');
+(83, 'testicles@gmail.com', '202cb962ac59075b964b07152d234b70', NULL, '2024-11-24 12:20:03', '2024-11-24 12:20:03'),
+(84, 'lorainejanen@gmail.com', '202cb962ac59075b964b07152d234b70', NULL, '2024-11-24 12:30:31', '2024-11-24 12:30:31');
 
 -- --------------------------------------------------------
 
@@ -386,7 +390,7 @@ ALTER TABLE `inventory`
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT for table `membership_types`
@@ -398,13 +402,13 @@ ALTER TABLE `membership_types`
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `renew`
 --
 ALTER TABLE `renew`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `settings`
@@ -416,7 +420,7 @@ ALTER TABLE `settings`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT for table `workout_lists`
