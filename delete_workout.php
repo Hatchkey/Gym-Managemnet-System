@@ -31,7 +31,7 @@ include('includes/config.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['id'])) {
     $workoutId = $_GET['id'];
-    $deleteMemberQuery = "DELETE FROM workout_program WHERE workout_id = $workoutId";
+    $deleteMemberQuery = "DELETE FROM workout_program WHERE id = $workoutId";
     if ($conn->query($deleteMemberQuery) === TRUE) {
         header("Location: manage_workout.php");
         exit();

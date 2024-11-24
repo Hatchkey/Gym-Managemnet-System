@@ -105,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="wrapper">
         <?php include('includes/nav.php'); ?>
         <?php include('includes/sidebar.php'); ?>
- 
+
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper body-container">
             <?php include('includes/pagetitle.php'); ?>
@@ -163,7 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                         echo '<option value="">No Workouts Available</option>';
                                                     }
                                                     ?>
-                                                </select>   
+                                                </select>
 
                                             </div>
                                             <div class="col-sm-6">
@@ -216,6 +216,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                         <option value="Upper" <?= ($workout_split == 'Upper') ? 'selected' : '' ?>>Upper</option>
                                                         <option value="Full Body" <?= ($workout_split == 'Full Body') ? 'selected' : '' ?>>Full Body</option>
                                                         <option value="Chest" <?= ($workout_split == 'Chest') ? 'selected' : '' ?>>Chest</option>
+                                                        <option value="Lower" <?= ($workout_split == 'Lower') ? 'selected' : '' ?>>Lower</option>
+                                                        <option value="Legs" <?= ($workout_split == 'Legs') ? 'selected' : '' ?>>Legs</option>
+                                                        <option value="Shoulder" <?= ($workout_split == 'Shoulder') ? 'selected' : '' ?>>Shoulder</option>
+                                                        <option value="Back" <?= ($workout_split == 'Back') ? 'selected' : '' ?>>Back</option>
+                                                        <option value="Arms" <?= ($workout_split == 'Arms') ? 'selected' : '' ?>>Arms</option>
+                                                        <option value="Pull" <?= ($workout_split == 'Pull') ? 'selected' : '' ?>>Pull</option>
                                                     </select>
                                                 </div>
 
@@ -243,7 +249,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <!-- /.content-wrapper -->
 
         <!-- Control Sidebar -->
-   
+
         <!-- /.control-sidebar -->
 
         <!-- Main Footer -->
