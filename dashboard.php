@@ -304,7 +304,7 @@ if ($fetchLogoResult->num_rows > 0) {
               <!-- Member LIST -->
               <?php
               // Fetch recently joined members
-              $recentMembersQuery = "SELECT * FROM members ORDER BY created_at DESC LIMIT 4";
+              $recentMembersQuery = "SELECT * FROM members WHERE role='user' ORDER BY created_at DESC LIMIT 4";
               $recentMembersResult = $conn->query($recentMembersQuery);
               ?>
 
