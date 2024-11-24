@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $membershipTypeQuery = "SELECT type FROM membership_types WHERE id = $membershipTypeId";
                         $membershipTypeResult = $conn->query($membershipTypeQuery);
                         $membershipTypeRow = $membershipTypeResult->fetch_assoc();
-                        $membershipTypeName = ($membershipTypeRow) ? $membershipTypeRow['type'] : 'Unknown';
+                        $membershipTypeName = ($membershipTypeRow) ? $membershipTypeRow['type'] : '';
 
                         echo "<tr>";
                         echo "<td> {$row['membership_number']}</td>";
