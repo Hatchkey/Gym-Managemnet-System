@@ -54,14 +54,14 @@ $result = $conn->query($selectQuery);
                                         <thead>
                                             <tr>
                                                 <th class=''>Fullname</th>
-                                                <th class=''>Amount</th>
-                                                <th class=' '>Mode </th>
                                                 <th>Membership Type</th>
+                                                <th class=' '>Mode </th>
+                    
                                                 <th>Paid Date</th>
 
 
                                                 <th class=''>Reference</th>
-
+                                                <th class=''>Amount</th>
                                                 <?php if ($_SESSION['role'] == 'admin') { ?>
                                                     <!-- <th>Actions</th> -->
                                                 <?php } ?>
@@ -77,11 +77,12 @@ $result = $conn->query($selectQuery);
 
                                                 echo "<tr>";
                                                 echo "<td>{$row['fullname']}</td>";
-                                                echo "<td>₱{$row['total_amount']}</td>";
-                                                echo "<td>{$row['mode']}</td>";
                                                 echo "<td>{$row['type']}</td>";
+                                                echo "<td>{$row['mode']}</td>";
+                                               
                                                 echo "<td>{$row['date']}</td>";
                                                 echo "<td>{$row['reference']}</td>";
+                                                echo "<td>₱{$row['total_amount']}</td>";
                                                 // echo "<td>";
                                                 // if ($_SESSION['role'] == 'admin') {
                                                 //     echo "
