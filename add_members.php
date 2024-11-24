@@ -175,9 +175,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </div>
                                         <div class="row mt-3">
                                             <div class="col-sm-6">
-                                                <label for="fullname">Full Name</label>
+                                                <label for="fullname">Name</label>
                                                 <input type="text" class="form-control" id="fullname" name="fullname"
-                                                    placeholder="Enter full name" required>
+                                                    placeholder="Enter name" required>
                                             </div>
                                             <div class="col-sm-3">
                                                 <label for="dob">Date of Birth</label>
