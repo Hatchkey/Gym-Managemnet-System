@@ -122,7 +122,7 @@ if ($fetchSettingsResult->num_rows > 0) {
                                                 required>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group hidden">
                                             <label for="logo">Logo:</label>
                                             <input type="file" id="logo" name="logo" class="form-control">
                                         </div>
