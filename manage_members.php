@@ -1,7 +1,7 @@
 <?php
 include('includes/config.php');
 
-$selectQuery = "SELECT * FROM members ORDER BY created_at DESC";
+$selectQuery = "SELECT * FROM members WHERE role = 'user' ORDER BY created_at DESC";
 $result = $conn->query($selectQuery);
 
 
