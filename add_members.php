@@ -59,7 +59,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $lastInsertedUserId = $conn->insert_id; // Get the last inserted ID from the users table
 
             $extendDays = (int)$_POST['extend']; //Convert into int
-            $expiryDate = date('Y-m-d', strtotime("+$extendDays month"));
+            if ($_POST['extend'] == '111') {
+                $expiryDate = date('Y-m-d', strtotime("+1 day"));
+            } else {
+                $expiryDate = date('Y-m-d', strtotime("+$extendDays month"));
+            }
+     
             $insertMemberQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, address,  
             membership_type, membership_number, qrcode, created_at, role, expiry_date) 
             VALUES (?, ?,  ?, ?, ?, ?, ?, ?, ?,  NOW(), ?, ?)";
@@ -228,6 +233,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <div class="col-sm-6">
                                                 <label for="extendate">Renew Up to</label>
                                                 <select class="form-control" id="extend" name="extend" required>
+                                                    <option value="111">One Day</option>
                                                     <option value="1">One Month</option>
                                                     <option value="3">Three Months</option>
                                                     <option value="6">Six Months</option>
@@ -338,20 +344,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $(document).ready(function() {
         function updateTotalAmount() {
             var membershipTypeAmount = parseFloat($('#membershipType option:selected').text().split('-').pop());
-
+ 
             var renewDuration = parseFloat($('#extend').val());
+            if (renewDuration === 111) {
+                $('#totalAmount').val(100);
 
-         
+            } else {
+                var totalAmount = membershipTypeAmount * renewDuration;
+                console.log("totalAmount", renewDuration)
 
-            var totalAmount = membershipTypeAmount * renewDuration;
-
-            $('#totalAmount').val(totalAmount.toFixed(2));
+                $('#totalAmount').val(totalAmount.toFixed(2));
+            }
+            
         }
 
         $('#membershipType, #extend').change(updateTotalAmount);
 
         updateTotalAmount();
     });
+
 </script>
 
 </html>
