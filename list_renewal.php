@@ -36,7 +36,7 @@ if (!isset($_SESSION['user_id'])) {
 
               <div class="card bg-[#ececec]">
                 <div class="card-header  bg-[#aeb3b3]">
-                  <h3 class="card-title">Members DataTable</h3>
+                <h3 class="card-title"><i class="fas fa-keyboard"></i> Members Data</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">
@@ -44,7 +44,7 @@ if (!isset($_SESSION['user_id'])) {
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th>Fullname</th>
+                        <th>Name</th>
                         <th>Contact</th>
                         <th>Email</th>
                         <th>Type</th>

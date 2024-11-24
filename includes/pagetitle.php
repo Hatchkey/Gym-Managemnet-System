@@ -40,7 +40,7 @@
         } elseif (strpos($_SERVER['REQUEST_URI'], 'add_type.php') !== false) {
           $pageTitle = 'Add Membership Type';
         } elseif (strpos($_SERVER['REQUEST_URI'], 'add_workout.php') !== false) {
-          $pageTitle = 'Add Workout List';
+          $pageTitle = 'Add Workout Program';
         } elseif (strpos($_SERVER['REQUEST_URI'], 'assign_workout.php') !== false) {
           $pageTitle = 'Assign Workout Program';
         } elseif (strpos($_SERVER['REQUEST_URI'], 'add_equipment.php') !== false) {

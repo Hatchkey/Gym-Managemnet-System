@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
               <div class="card bg-[#ececec]">
                 <div class="card-header  bg-[#aeb3b3]">
-                  <h3 class="card-title">Members DataTable</h3>
+                <h3 class="card-title"><i class="fas fa-keyboard"></i> Members Data</h3>
                 </div>
 
                 <!-- /.card-header -->
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <thead>
                       <tr>
                         <th>#</th>
-                        <th>Fullname</th>
+                        <th>Name</th>
                         <th>Contact</th>
                         <th>Email</th>
                         <th>Address</th>

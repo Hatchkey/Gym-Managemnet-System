@@ -74,7 +74,7 @@ $result = $conn->query($selectQuery);
 
                             <div class="card  bg-[#ececec]">
                                 <div class="card-header  bg-[#aeb3b3]">
-                                    <h3 class="card-title">Scan QR Code</h3>
+                                <h3 class="card-title"><i class="fas fa-qrcode"></i> Scan QR Code</h3>
                                 </div>
                                 <div class="flex justify-center py-2">
                                     <video id="my_camera" width="320" height="240" autoplay></video>
@@ -94,16 +94,16 @@ $result = $conn->query($selectQuery);
                     <div class="col-md-12">
                         <div class="card  bg-[#ececec]">
                             <div class="card-header  bg-[#aeb3b3]">
-                                <h3 class="card-title">Attendance DataTable</h3>
+                                <h3 class="card-title">Attendance Data</h3>
                             </div>
                             <div class="card-body">
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead class="border-b-2 border-red-900">
                                         <tr>
                                             <th>Membership #</th>
-                                            <th>Fullname</th>
+                                            <th>Name</th>
                                             <th>Date</th>
-                                            <th>Checkin</th>
+                                            <th>Check-in</th>
                                         </tr>
                                     </thead>
 

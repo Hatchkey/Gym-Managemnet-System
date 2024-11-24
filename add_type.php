@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               <!-- general form elements -->
               <div class="card bg-[#ececec]">
                 <div class="card-header bg-[#aeb3b3]">
-                  <h3 class="card-title"><i class="fas fa-keyboard"></i> Add Membership Type form</h3>
+                  <h3 class="card-title"><i class="fas fa-keyboard"></i> Add Membership Type Form</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->

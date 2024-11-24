@@ -205,7 +205,7 @@ if ($countResult && $countResult->num_rows > 0) {
               <li class="nav-item">
                 <a href="add_workout.php" class="nav-link">
                   <i class="fas fa-circle-notch nav-icon"></i>
-                  <p>Add Workout List</p>
+                  <p>Add Workout Program</p>
                 </a>
               </li>
               <li class="nav-item">

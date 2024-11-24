@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <div class="col-md-12">
                             <div class="card bg-[#ececec]">
                                 <div class="card-header  bg-[#aeb3b3]">
-                                    <h3 class="card-title">Equipment List DataTable</h3>
+                                <h3 class="card-title"><i class="fas fa-keyboard"></i> Equipment List Data</h3>
                                 </div>
 
                                 <!-- /.card-header -->

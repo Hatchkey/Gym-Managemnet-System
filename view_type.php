@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
               <div class="card bg-[#ececec]">
                 <div class="card-header bg-[#aeb3b3]">
-                  <h3 class="card-title">Membership Types DataTable</h3>
+                <h3 class="card-title"><i class="fas fa-keyboard"></i> Membership Type Data</h3>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body">

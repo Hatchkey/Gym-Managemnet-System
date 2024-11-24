@@ -91,10 +91,10 @@ if (!isset($_SESSION['user_id'])) {
                             <div class="card bg-[#ececec]">
                                 <div class="card-header  bg-[#aeb3b3]">
                                     <?php if ($_SESSION['role'] == 'admin') { ?>
-                                        <h3 class="card-title">Workout Program List DataTable</h3>
+                                        <h3 class="card-title"><i class="fas fa-keyboard"></i> Workout Program Data</h3>
                                     <?php } ?>
                                     <?php if ($_SESSION['role'] == 'user') { ?>
-                                        <h3 class="card-title">Workout Program List DataTable</h3>
+                                        <h3 class="card-title">Workout Program Data</h3>
                                     <?php } ?>
                                 </div>
 

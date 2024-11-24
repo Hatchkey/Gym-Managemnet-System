@@ -226,7 +226,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </div>
                                         <div class="row mt-3">
                                             <div class="col-sm-6">
-                                                <label for="extendate">Renew Upto</label>
+                                                <label for="extendate">Renew Up to</label>
                                                 <select class="form-control" id="extend" name="extend" required>
                                                     <option value="1">One Month</option>
                                                     <option value="3">Three Months</option>
@@ -288,7 +288,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <div class="col-sm-6">
                                                 <label for="reference">Reference Number</label>
                                                 <input type="text" class="form-control" id="reference" name="reference"
-                                                    placeholder="Enter mode of payment" required>
+                                                    placeholder="Enter reference number">
                                             </div>
                                         </div>
 

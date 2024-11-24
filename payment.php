@@ -44,7 +44,7 @@ $result = $conn->query($selectQuery);
                         <div class="col-md-12">
                             <div class="card bg-[#ececec]">
                                 <div class="card-header  bg-[#aeb3b3]">
-                                    <h3 class="card-title">Payment Transaction DataTable</h3>
+                                <h3 class="card-title"><i class="fas fa-keyboard"></i> Payment Transaction Data</h3>
 
                                 </div>
 
