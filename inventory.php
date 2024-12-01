@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php include('includes/header.php'); ?>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -142,19 +142,41 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <?php include('includes/footer.php'); ?>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function deleteMember(id) {
-        if (confirm("Are you sure you want to delete this equipment?")) {
-            window.location.href = 'delete_inventory.php?id=' + id;
-        }
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to the delete action
+                window.location.href = 'delete_inventory.php?id=' + id;
+            }
+        });
     }
+
     $(function() {
         $("#example1").DataTable({
             "responsive": true,
             "autoWidth": false,
-
         });
     });
+
+    // Check if a success message is set and display it
+    <?php if (isset($_SESSION['delete_success'])) { ?>
+        Swal.fire({
+            title: "Deleted!",
+            text: "<?php echo $_SESSION['delete_success']; ?>",
+            icon: "success"
+        });
+        <?php unset($_SESSION['delete_success']); // Clear the message after displaying ?>
+    <?php } ?>
 </script>
 
 </html>

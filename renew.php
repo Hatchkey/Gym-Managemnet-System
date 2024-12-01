@@ -130,15 +130,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 </select>
                                             </div>
                                             <div class="col-sm-6">
-                                                <label for="extendate">Renew Upto</label>
+                                                <label for="extendate">Renew Up to</label>
                                                 <select class="form-control" id="extend" name="extend" required>
+                                                    <option value="111">One Day</option>
                                                     <option value="1">One Month</option>
                                                     <option value="3">Three Months</option>
                                                     <option value="6">Six Months</option>
                                                     <option value="12">One Year</option>
                                                 </select>
                                             </div>
-
                                         </div>
 
                                         <div class="row mt-3">

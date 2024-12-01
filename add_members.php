@@ -9,17 +9,9 @@ if (!isset($_SESSION['user_id'])) {
 
 $response = array('success' => false, 'message' => '');
 
+// Fetch membership types
 $membershipTypesQuery = "SELECT id, type, amount FROM membership_types";
 $membershipTypesResult = $conn->query($membershipTypesQuery);
-
-// function generateUniqueFileName($originalName)
-// {
-//     $timestamp = time();
-//     $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-//     $uniqueName = $timestamp . '_' . uniqid() . '.' . $extension;
-//     return $uniqueName;
-// }
-
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $currentDate = date('Y-m-d');
@@ -34,44 +26,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $qrText = $_POST['fullname'] . (string)time() . (string)microtime(true);
     $qrCodeImage = 'qrcode/generated_qrcode.png';
     $defaultUserRole = 'user';
+    $branch = $_POST['branch']; // Fetch branch from form input
     QRcode::png($qrText, $qrCodeImage);
     $hashedPassword = md5($password);
     $membershipNumber = 'CA-' . str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
 
+    // Check if email already exists
     $checkQuery = "SELECT * FROM users WHERE email = ?";
     $stmt = $conn->prepare($checkQuery);
-    $stmt->bind_param('s', $email); // 's' indicates the type is string
+    $stmt->bind_param('s', $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $response['success'] = false;
-        $response['message'] = 'Email is already exist: ' . $email;
+        $response['message'] = 'Email already exists: ' . $email;
     } else {
-        // Use prepared statements for inserting into the users table first
+        // Insert into `users` table
         $insertUserQuery = "INSERT INTO users (email, password) VALUES (?, ?)";
-
         $stmtUser = $conn->prepare($insertUserQuery);
         $stmtUser->bind_param("ss", $email, $hashedPassword);
 
-        // Execute the insertion into users table
         if ($stmtUser->execute()) {
-            $lastInsertedUserId = $conn->insert_id; // Get the last inserted ID from the users table
+            $lastInsertedUserId = $conn->insert_id;
 
-            $extendDays = (int)$_POST['extend']; //Convert into int
-            if ($_POST['extend'] == '111') {
-                $expiryDate = date('Y-m-d', strtotime("+1 day"));
-            } else {
-                $expiryDate = date('Y-m-d', strtotime("+$extendDays month"));
-            }
-     
+            // Calculate expiry date
+            $extendDays = (int)$_POST['extend'];
+            $expiryDate = ($_POST['extend'] == '111')
+                ? date('Y-m-d', strtotime("+1 day"))
+                : date('Y-m-d', strtotime("+$extendDays month"));
+
+            // Insert into `members` table
             $insertMemberQuery = "INSERT INTO members (fullname, dob, gender, contact_number, email, address,  
-            membership_type, membership_number, qrcode, created_at, role, expiry_date) 
-            VALUES (?, ?,  ?, ?, ?, ?, ?, ?, ?,  NOW(), ?, ?)";
+            membership_type, membership_number, qrcode, created_at, role, expiry_date, branch) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?)";
 
             $stmtMember = $conn->prepare($insertMemberQuery);
             $stmtMember->bind_param(
-                "sssssssssss",
+                "ssssssssssss",
                 $fullname,
                 $dob,
                 $gender,
@@ -82,52 +74,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $membershipNumber,
                 $qrText,
                 $defaultUserRole,
-                $expiryDate
+                $expiryDate,
+                $branch
             );
 
             if ($stmtMember->execute()) {
                 $lastInsertedMemberId = $conn->insert_id;
+
+                // Insert into `payment` table
                 $mode = $_POST['modepayment'];
                 $reference = $_POST['reference'];
-                $insertPaymentQuery = "INSERT INTO payment (member, date, mode, reference, created_at) VALUES (?, ?, '$mode', '$reference', NOW())";
+                $insertPaymentQuery = "INSERT INTO payment (member, date, mode, reference, created_at) 
+                                       VALUES (?, ?, ?, ?, NOW())";
                 $stmtPayment = $conn->prepare($insertPaymentQuery);
-                $stmtPayment->bind_param("is", $lastInsertedMemberId, $currentDate);
+                $stmtPayment->bind_param("isss", $lastInsertedMemberId, $currentDate, $mode, $reference);
 
                 if ($stmtPayment->execute()) {
-                    // echo "Record inserted into payment successfully.";
-                    $response['success'] = true;
-                    $response['message'] = 'Member added successfully! Membership Number: ' . $membershipNumber;
+                    $lastInsertedPaymentId = $conn->insert_id;
+
+                    // Insert into `renew` table
+                    $totalAmount = $_POST['totalAmount'];
+                    $upto = $_POST['extend'];
+                    $insertRenewQuery = "INSERT INTO renew (member_id, total_amount, membership_type, upto, payment_id, renew_date) 
+                                         VALUES (?, ?, ?, ?, ?, ?)";
+                    $stmtRenew = $conn->prepare($insertRenewQuery);
+                    $stmtRenew->bind_param(
+                        "idssis",
+                        $lastInsertedMemberId,
+                        $totalAmount,
+                        $membershipType,
+                        $upto,
+                        $lastInsertedPaymentId,
+                        $currentDate
+                    );
+
+                    if ($stmtRenew->execute()) {
+                        $response['success'] = true;
+                        $response['message'] = 'Member added successfully! Membership Number: ' . $membershipNumber;
+                    } else {
+                        $response['success'] = false;
+                        $response['message'] = 'Error inserting into renew: ' . $stmtRenew->error;
+                    }
+                    $stmtRenew->close();
                 } else {
                     $response['success'] = false;
                     $response['message'] = 'Error inserting into payment: ' . $stmtPayment->error;
                 }
-                $lastInsertedPaymentId = $conn->insert_id;
-                $totalAmount = $_POST['totalAmount'];
-                $membership_type = $_POST['membershipType'];
-                $upto = $_POST['extend'];
-                $insertRenew = "INSERT INTO renew (member_id, total_amount, membership_type, upto, payment_id, renew_date) 
-                        VALUES ('$lastInsertedMemberId', '$totalAmount', '$membership_type', '$upto', '$lastInsertedPaymentId', '$currentDate')";
-                if ($conn->query($insertRenew) === TRUE) {
-                    $response['success'] = true;
-                }
+                $stmtPayment->close();
             } else {
                 $response['success'] = false;
                 $response['message'] = 'Error inserting into members: ' . $stmtMember->error;
             }
-
-            // Close member statement
             $stmtMember->close();
         } else {
             $response['success'] = false;
             $response['message'] = 'Error inserting into users: ' . $stmtUser->error;
         }
-
-        // Close user and payment statements
         $stmtUser->close();
-        $stmtPayment->close();
     }
+    $stmt->close();
 }
 ?>
+
 
 
 
@@ -285,18 +293,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             </div>
 
                                             <div class="col-sm-6">
-                                                <label for="modepayment">Mode of payment</label>
-                                                <input type="text" class="form-control" id="modepayment" name="modepayment"
-                                                    placeholder="Enter mode of payment" required>
+                                                <label for="modepayment">Mode of Payment</label>
+                                                <select class="form-control" id="modepayment" name="modepayment" required>
+                                                    <option value="" disabled selected>Select mode of payment</option>
+                                                    <option value="1">Cash</option>
+                                                    <option value="2">Gcash</option>
+                                                    <option value="3">PayMaya</option>
+                                                </select>
                                             </div>
+
                                         </div>
-                                        <div class="row mt-3  mt-3">
+
+                                        <div class="row mt-3">
+                                            <div class="col-sm-6">
+                                                <label for="branch">Branch</label>
+                                                <select class="form-control" id="branch" name="branch" required>
+                                                    <option value="" disabled selected>Select branch</option>
+                                                    <option value="Main Branch">Main Branch</option>
+                                                    <option value="Albay Branch">Albay Branch</option>
+                                                </select>
+                                            </div>
+
                                             <div class="col-sm-6">
                                                 <label for="reference">Reference Number</label>
-                                                <input type="text" class="form-control" id="reference" name="reference"
-                                                    placeholder="Enter reference number">
+                                                <input type="text" class="form-control" id="reference" name="reference" placeholder="Enter reference number">
                                             </div>
                                         </div>
+
 
 
                                     </div>
@@ -344,7 +367,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $(document).ready(function() {
         function updateTotalAmount() {
             var membershipTypeAmount = parseFloat($('#membershipType option:selected').text().split('-').pop());
- 
+
             var renewDuration = parseFloat($('#extend').val());
             if (renewDuration === 111) {
                 $('#totalAmount').val(100);
@@ -355,14 +378,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 $('#totalAmount').val(totalAmount.toFixed(2));
             }
-            
+
         }
 
         $('#membershipType, #extend').change(updateTotalAmount);
 
         updateTotalAmount();
     });
-
 </script>
 
 </html>
