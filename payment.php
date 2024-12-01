@@ -53,7 +53,7 @@ $result = $conn->query($selectQuery);
                                     <table id="example1" class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th class=''>Fullname</th>
+                                                <th class=''>Name</th>
                                                 <th>Membership Type</th>
                                                 <th class=' '>Mode </th>
                     
